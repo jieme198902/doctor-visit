@@ -1,0 +1,46 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.doctor.visit",
+      "nativeLanguage": "zh-cn"
+    },
+    "jhipsterVersion": "6.8.0",
+    "applicationType": "microservice",
+    "baseName": "doctorVisit",
+    "packageName": "com.doctor.visit",
+    "packageFolder": "com/doctor/visit",
+    "serverPort": "8081",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": true,
+    "jwtSecretKey": "ZGFmYzc5NWQ1NmMyYmFjYTA2NGQ1ZTc5ODM4OTcwMzZlYjM1ZTNlYWM2MjYwM2QwOGIyMzY0MGQ5YWQwYmU5ZjQwZGJjNGJlZDNlNTFlNjNhOWM1MzQ5NWQ5NjgwNmM2MWIzNmFiZDZhYzQ0NGY1ODVkYTNjMTk0NWFiOWNhZDE=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1585793795549,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-docker",
+        "version": "2.5.0"
+      }
+    ],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "zh-cn",
+    "languages": ["zh-cn"],
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
