@@ -210,12 +210,12 @@ mybatis:
 #分页插件
 pagehelper:
   reasonable: false
-  dialect: mysql
   support-methods-arguments: true
   page-size-zero: true
   params: count=countSql
   offset-as-page-num: true
   row-bounds-with-count: true
+  helper-dialect: mysql
 #通用mapper
 mapper:
   mappers: com.doctor.visit.config.CommMapper

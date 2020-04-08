@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.doctor.visit.repository.SysUserMapper" >
+  <resultMap id="BaseResultMap" type="com.doctor.visit.domain.SysUser" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="YHID" property="yhid" jdbcType="VARCHAR" />
+    <result column="JGID" property="jgid" jdbcType="VARCHAR" />
+    <result column="ACCOUNT" property="account" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="XM" property="xm" jdbcType="VARCHAR" />
+    <result column="XB" property="xb" jdbcType="VARCHAR" />
+    <result column="CSRQ" property="csrq" jdbcType="TIMESTAMP" />
+    <result column="ZJLX" property="zjlx" jdbcType="VARCHAR" />
+    <result column="SFZHM" property="sfzhm" jdbcType="VARCHAR" />
+    <result column="XL" property="xl" jdbcType="VARCHAR" />
+    <result column="ZZMM" property="zzmm" jdbcType="VARCHAR" />
+    <result column="LXFS" property="lxfs" jdbcType="VARCHAR" />
+    <result column="SBBM" property="sbbm" jdbcType="VARCHAR" />
+    <result column="CJR" property="cjr" jdbcType="VARCHAR" />
+    <result column="CJRQ" property="cjrq" jdbcType="TIMESTAMP" />
+    <result column="CJDW" property="cjdw" jdbcType="VARCHAR" />
+    <result column="GXR" property="gxr" jdbcType="VARCHAR" />
+    <result column="GXRQ" property="gxrq" jdbcType="TIMESTAMP" />
+    <result column="GXDW" property="gxdw" jdbcType="VARCHAR" />
+    <result column="YXBZ" property="yxbz" jdbcType="DECIMAL" />
+    <result column="MZ" property="mz" jdbcType="VARCHAR" />
+    <result column="SALT" property="salt" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="IP" property="ip" jdbcType="VARCHAR" />
+    <result column="JGMC" property="jgmc" jdbcType="VARCHAR" />
+    <result column="DEPARTMENT" property="department" jdbcType="VARCHAR" />
+    <result column="lng" property="lng" jdbcType="VARCHAR" />
+    <result column="lat" property="lat" jdbcType="VARCHAR" />
+    <result column="location_type" property="locationType" jdbcType="CHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="is_wgy" property="isWgy" jdbcType="VARCHAR" />
+    <result column="ZHDD" property="zhdd" jdbcType="CHAR" />
+    <result column="XXDZ" property="xxdz" jdbcType="LONGVARCHAR" />
+    <result column="IMG" property="img" jdbcType="LONGVARCHAR" />
+  </resultMap>
+</mapper>

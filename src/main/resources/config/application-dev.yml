@@ -49,7 +49,7 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/doctorVisit?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/zz?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: mysql@123
     hikari:
@@ -96,7 +96,7 @@ spring:
         enabled: true
 
 server:
-  port: 8081
+  port: 8082
 
 # ===================================================================
 # JHipster specific properties
