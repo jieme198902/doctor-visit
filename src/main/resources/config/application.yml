@@ -200,6 +200,27 @@ jhipster:
     contact-email:
     license:
     license-url:
+
+#mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*/*.xml,classpath:mapper/*.xml
+  type-aliases-package: com.doctor.visit.domain
+  configuration:
+    map-underscore-to-camel-case: true
+#分页插件
+pagehelper:
+  reasonable: false
+  dialect: mysql
+  support-methods-arguments: true
+  page-size-zero: true
+  params: count=countSql
+  offset-as-page-num: true
+  row-bounds-with-count: true
+#通用mapper
+mapper:
+  mappers: com.doctor.visit.config.CommMapper
+  not-empty: false
+  identity: MYSQL
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -210,3 +231,4 @@ jhipster:
 # ===================================================================
 
 # application:
+
