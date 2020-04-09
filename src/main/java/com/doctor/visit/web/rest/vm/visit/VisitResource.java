@@ -3,8 +3,8 @@ package com.doctor.visit.web.rest.vm.visit;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.SysUser;
 import com.doctor.visit.service.VisitService;
+import com.doctor.visit.web.rest.util.ComResponse;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +27,7 @@ public class VisitResource {
     }
 
     @PostMapping("list")
-    public ResponseEntity<List<SysUser>> list(HttpServletRequest request, Pageable pageable, String message) {
+    public ComResponse<List<SysUser>> list(HttpServletRequest request, Pageable pageable, String message) {
         return visitService.list(request, pageable, message);
     }
 }
