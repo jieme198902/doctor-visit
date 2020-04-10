@@ -1,21 +1,18 @@
 package com.doctor.visit.web.rest.vm;
 
 import com.doctor.visit.config.Constants;
+import com.doctor.visit.security.AuthoritiesConstants;
 import com.doctor.visit.security.jwt.TokenProvider;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import java.util.Collections;
 
 /**
  * @author kuanwang
@@ -25,6 +22,11 @@ import javax.validation.Valid;
 @RequestMapping(Constants.API_BASE)
 public class UserJWTController {
 
+    private final TokenProvider tokenProvider;
+
+    public UserJWTController(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
 
 
     /**
@@ -36,15 +38,14 @@ public class UserJWTController {
      * @return
      */
     @PostMapping("/authenticate")
-    public ComResponse<JWTToken> authorize(HttpServletRequest request, String account, String password,boolean rememberMe) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(account, password);
-
-//        Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        String jwt = tokenProvider.createToken(authentication, rememberMe);
-//        return ComResponse.OK(new JWTToken(jwt));
-        return null;
+    public ComResponse<JWTToken> authorize(HttpServletRequest request, String account, String password, boolean rememberMe) {
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+            account,
+            password,
+            Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
+        );
+        String jwt = tokenProvider.createToken(authentication, rememberMe);
+        return ComResponse.OK(new JWTToken(jwt));
     }
 
 

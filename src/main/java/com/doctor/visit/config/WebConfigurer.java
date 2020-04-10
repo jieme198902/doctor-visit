@@ -1,9 +1,14 @@
 package com.doctor.visit.config;
 
+import com.doctor.visit.security.jwt.TokenProvider;
+import com.doctor.visit.security.ud.UDUserJWTFilter;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.*;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +32,10 @@ public class WebConfigurer implements ServletContextInitializer {
     private final Environment env;
 
     private final JHipsterProperties jHipsterProperties;
+    @Autowired
+    private TokenProvider tokenProvider;
+    @Value("${custom.excludeLogin}")
+    private String excludeLogin;
 
     public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
         this.env = env;
@@ -41,6 +50,11 @@ public class WebConfigurer implements ServletContextInitializer {
         log.info("Web application fully configured");
     }
 
+    /**
+     * 跨域
+     *
+     * @return
+     */
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -52,6 +66,20 @@ public class WebConfigurer implements ServletContextInitializer {
             source.registerCorsConfiguration("/v2/api-docs", config);
         }
         return new CorsFilter(source);
+    }
+
+    /**
+     * 自定义过滤器
+     *
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        FilterRegistrationBean bean = new FilterRegistrationBean();
+        bean.setFilter(new UDUserJWTFilter(excludeLogin, tokenProvider));
+        bean.addUrlPatterns("/*");
+        bean.setOrder(2);
+        return bean;
     }
 
 }
