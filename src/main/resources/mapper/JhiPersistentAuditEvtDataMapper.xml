@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.doctor.visit.repository.JhiPersistentAuditEvtDataMapper" >
+  <resultMap id="BaseResultMap" type="com.doctor.visit.domain.JhiPersistentAuditEvtData" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="event_id" property="eventId" jdbcType="BIGINT" />
+    <id column="name" property="name" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

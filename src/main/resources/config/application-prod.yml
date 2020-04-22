@@ -158,3 +158,5 @@ jhipster:
 # ===================================================================
 
 # application:
+custom:
+  excludeLogin: 'doctor/authenticate'

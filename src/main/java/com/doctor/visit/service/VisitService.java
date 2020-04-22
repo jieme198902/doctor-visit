@@ -1,38 +1,32 @@
 package com.doctor.visit.service;
 
-import com.doctor.visit.domain.SysUser;
-import com.doctor.visit.repository.SysUserMapper;
+import com.doctor.visit.domain.BusArticle;
+import com.doctor.visit.repository.BusArticleMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Service
 public class VisitService {
 
-    private final SysUserMapper sysUserMapper;
+    private final BusArticleMapper busArticleMapper;
 
-    public VisitService(SysUserMapper sysUserMapper) {
-        this.sysUserMapper = sysUserMapper;
+
+    public VisitService(BusArticleMapper busArticleMapper) {
+        this.busArticleMapper = busArticleMapper;
     }
 
-
     /**
-     * @param request
-     * @param pageable
-     * @param message
+     * 获取文章列表
+     *
      * @return
      */
-    public ComResponse<List<SysUser>> list(HttpServletRequest request, Pageable pageable, String message) {
+    public ComResponse articleList(BusArticle busArticle, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        SysUser record = new SysUser();
-        record.setAccount("admin");
-        Page<SysUser> users = (Page<SysUser>) sysUserMapper.select(record);
-
-        return ComResponse.OK(users.getResult(), users.getTotal());
+        Page<BusArticle> busArticleList = (Page<BusArticle>) busArticleMapper.select(busArticle);
+        return ComResponse.OK(busArticleList.getResult(), busArticleList.getTotal());
     }
 }
