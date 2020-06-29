@@ -1,5 +1,8 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -7,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "bus_user_fav_clinc")
 public class BusUserFavClinc implements Serializable {
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**

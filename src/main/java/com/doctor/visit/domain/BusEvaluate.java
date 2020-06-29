@@ -7,26 +7,37 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "bus_clinc_class")
-public class BusClincClass implements Serializable {
-    /**
-     * 主键
-     */
+@Table(name = "bus_evaluate")
+public class BusEvaluate implements Serializable {
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
-     * 门诊名称
+     * 评分0-5
      */
-    @Column(name = "clinc_class_name")
-    private String clincClassName;
+    private Integer score;
 
     /**
-     * 门诊类别排序
+     * 评价内容
      */
-    @Column(name = "clinc_class_sort")
-    private Integer clincClassSort;
+    private String evaluate;
+
+    /**
+     * 图片
+     */
+    private String img;
+
+    /**
+     * 模块：0医生，1商品
+     */
+    private String module;
+
+    /**
+     * 医生id，商品id
+     */
+    @Column(name = "module_id")
+    private Long moduleId;
 
     /**
      * 创建者id
@@ -73,57 +84,107 @@ public class BusClincClass implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 获取主键
-     *
-     * @return id - 主键
+     * @return id
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * 设置主键
-     *
-     * @param id 主键
+     * @param id
      */
     public void setId(Long id) {
         this.id = id;
     }
 
     /**
-     * 获取门诊名称
+     * 获取评分0-5
      *
-     * @return clinc_class_name - 门诊名称
+     * @return score - 评分0-5
      */
-    public String getClincClassName() {
-        return clincClassName;
+    public Integer getScore() {
+        return score;
     }
 
     /**
-     * 设置门诊名称
+     * 设置评分0-5
      *
-     * @param clincClassName 门诊名称
+     * @param score 评分0-5
      */
-    public void setClincClassName(String clincClassName) {
-        this.clincClassName = clincClassName;
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
     /**
-     * 获取门诊类别排序
+     * 获取评价内容
      *
-     * @return clinc_class_sort - 门诊类别排序
+     * @return evaluate - 评价内容
      */
-    public Integer getClincClassSort() {
-        return clincClassSort;
+    public String getEvaluate() {
+        return evaluate;
     }
 
     /**
-     * 设置门诊类别排序
+     * 设置评价内容
      *
-     * @param clincClassSort 门诊类别排序
+     * @param evaluate 评价内容
      */
-    public void setClincClassSort(Integer clincClassSort) {
-        this.clincClassSort = clincClassSort;
+    public void setEvaluate(String evaluate) {
+        this.evaluate = evaluate;
+    }
+
+    /**
+     * 获取图片
+     *
+     * @return img - 图片
+     */
+    public String getImg() {
+        return img;
+    }
+
+    /**
+     * 设置图片
+     *
+     * @param img 图片
+     */
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    /**
+     * 获取模块：0医生，1商品
+     *
+     * @return module - 模块：0医生，1商品
+     */
+    public String getModule() {
+        return module;
+    }
+
+    /**
+     * 设置模块：0医生，1商品
+     *
+     * @param module 模块：0医生，1商品
+     */
+    public void setModule(String module) {
+        this.module = module;
+    }
+
+    /**
+     * 获取医生id，商品id
+     *
+     * @return module_id - 医生id，商品id
+     */
+    public Long getModuleId() {
+        return moduleId;
+    }
+
+    /**
+     * 设置医生id，商品id
+     *
+     * @param moduleId 医生id，商品id
+     */
+    public void setModuleId(Long moduleId) {
+        this.moduleId = moduleId;
     }
 
     /**

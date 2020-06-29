@@ -1,11 +1,15 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
 @Table(name = "bus_relation_user_doctor")
 public class BusRelationUserDoctor implements Serializable {
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**

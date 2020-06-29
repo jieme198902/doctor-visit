@@ -1,5 +1,8 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -7,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "bus_user")
 public class BusUser implements Serializable {
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
@@ -21,7 +25,7 @@ public class BusUser implements Serializable {
     private String wechatOpenid;
 
     /**
-     * 储存获取到session_key 
+     * 储存获取到session_key
      */
     @Column(name = "wechat_session_key")
     private String wechatSessionKey;
@@ -142,18 +146,18 @@ public class BusUser implements Serializable {
     }
 
     /**
-     * 获取储存获取到session_key 
+     * 获取储存获取到session_key
      *
-     * @return wechat_session_key - 储存获取到session_key 
+     * @return wechat_session_key - 储存获取到session_key
      */
     public String getWechatSessionKey() {
         return wechatSessionKey;
     }
 
     /**
-     * 设置储存获取到session_key 
+     * 设置储存获取到session_key
      *
-     * @param wechatSessionKey 储存获取到session_key 
+     * @param wechatSessionKey 储存获取到session_key
      */
     public void setWechatSessionKey(String wechatSessionKey) {
         this.wechatSessionKey = wechatSessionKey;
