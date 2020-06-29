@@ -123,6 +123,22 @@ public class ArticleService {
     }
 
     /**
+     * 获取文章列表
+     *
+     * @param busArticle
+     * @param pageable
+     * @return
+     */
+    public ComResponse<List<BusArticle>> listFavArticle(BusArticle busArticle, Pageable pageable) {
+        if (null == busArticle.getId()) {
+            return ComResponse.failBadRequest();
+        }
+        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        Page<BusArticle> busArticleList = (Page<BusArticle>) busArticleMapper.selectFavArticle(busArticle.getId());
+        return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
+    }
+
+    /**
      * 新增或者更新文章
      * FIXME 静态化文章生成url
      *

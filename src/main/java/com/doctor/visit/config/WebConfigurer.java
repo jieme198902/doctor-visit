@@ -34,6 +34,7 @@ public class WebConfigurer implements ServletContextInitializer {
     private final JHipsterProperties jHipsterProperties;
     @Autowired
     private TokenProvider tokenProvider;
+
     @Value("${custom.excludeLogin}")
     private String excludeLogin;
 
@@ -77,7 +78,7 @@ public class WebConfigurer implements ServletContextInitializer {
     public FilterRegistrationBean filterRegistrationBean() {
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setFilter(new UDUserJWTFilter(excludeLogin, tokenProvider));
-        bean.addUrlPatterns("/*");
+        bean.addUrlPatterns(Constants.API_BASE_FRONT+"/*");
         bean.setOrder(2);
         return bean;
     }

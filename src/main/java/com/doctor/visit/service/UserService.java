@@ -1,8 +1,11 @@
 package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
+import com.doctor.visit.config.domain.JWTToken;
 import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.repository.BusUserMapper;
+import com.doctor.visit.security.AuthoritiesConstants;
+import com.doctor.visit.security.jwt.TokenProvider;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.google.gson.Gson;
@@ -12,10 +15,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -30,10 +36,12 @@ public class UserService {
     private String authCode2Session;
 
     private final CommonService commonService;
+    private final TokenProvider tokenProvider;
     private final BusUserMapper busUserMapper;
 
-    public UserService(CommonService commonService, BusUserMapper busUserMapper) {
+    public UserService(CommonService commonService, TokenProvider tokenProvider, BusUserMapper busUserMapper) {
         this.commonService = commonService;
+        this.tokenProvider = tokenProvider;
         this.busUserMapper = busUserMapper;
     }
 
@@ -43,7 +51,7 @@ public class UserService {
      * @param jsCode
      * @return
      */
-    public ComResponse<BusUser> authenticate(String jsCode, HttpServletRequest httpServletRequest) {
+    public ComResponse<JWTToken> authenticate(String jsCode, HttpServletRequest httpServletRequest) {
         if (StringUtils.isBlank(jsCode)) {
             return ComResponse.failBadRequest();
         }
@@ -93,7 +101,13 @@ public class UserService {
                     //更新
                     busUserMapper.updateByPrimaryKeySelective(busUser);
                 }
-                return ComResponse.ok(busUser);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    busUser.getId(),
+                    busUser.getWechatOpenid(),
+                    Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
+                );
+                String jwt = tokenProvider.createToken(authentication, true);
+                return ComResponse.ok(new JWTToken(jwt));
             } else {
                 return ComResponse.fail();
             }

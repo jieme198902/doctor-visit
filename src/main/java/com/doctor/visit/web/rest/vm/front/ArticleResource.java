@@ -47,6 +47,22 @@ public class ArticleResource {
     }
 
     /**
+     * 获取收藏的文章列表
+     *
+     * @param busArticle
+     * @param pageable
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusArticle.class)
+    })
+    @PostMapping("getFavArticleList")
+    @ApiOperation(value = "获取收藏的文章列表")
+    public Object getFavArticleList(BusArticle busArticle, Pageable pageable) {
+        return articleService.listFavArticle(busArticle, pageable);
+    }
+
+    /**
      * 收藏文章
      *
      * @param busArticle

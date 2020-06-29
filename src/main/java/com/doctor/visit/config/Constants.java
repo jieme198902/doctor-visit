@@ -18,7 +18,7 @@ public final class Constants {
     public static final String WX_SUCCESS_CODE = "0";
     public static final String WX_OPEN_ID = "openid";
     public static final String WX_SESSION_KEY = "session_key";
-    public static final String WX_ERR_CODE ="errcode";
+    public static final String WX_ERR_CODE = "errcode";
 
 
     /**
@@ -30,10 +30,12 @@ public final class Constants {
      */
     public static final String EXIST = "1";
     /**
-     * api_base 开头，暂时不以api开头，先不走jwt验证
+     * 前端的微信端 可以不登录
      */
-    public static final String API_BASE_FRONT = "/doctor";
+    public static final String API_BASE_FRONT = "/front";
 
-
+    /**
+     * 后台的都需要登录
+     */
     public static final String API_BASE_SYS = "/api";
 }
