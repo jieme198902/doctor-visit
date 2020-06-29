@@ -3,10 +3,11 @@ package com.doctor.visit.service;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArticle;
 import com.doctor.visit.domain.BusArticleClass;
+import com.doctor.visit.domain.BusRelationUserArticle;
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusArticleClassMapper;
 import com.doctor.visit.repository.BusArticleMapper;
-import com.doctor.visit.repository.JhiUserMapper;
+import com.doctor.visit.repository.BusRelationUserArticleMapper;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -28,14 +29,17 @@ import java.util.Optional;
 @Service
 public class ArticleService {
 
+    private final CommonService commonService;
+    //
     private final BusArticleClassMapper busArticleClassMapper;
     private final BusArticleMapper busArticleMapper;
-    private final CommonService commonService;
+    private final BusRelationUserArticleMapper busRelationUserArticleMapper;
 
-    public ArticleService(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService) {
+    public ArticleService(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService, BusRelationUserArticleMapper busRelationUserArticleMapper) {
         this.busArticleClassMapper = busArticleClassMapper;
         this.busArticleMapper = busArticleMapper;
         this.commonService = commonService;
+        this.busRelationUserArticleMapper = busRelationUserArticleMapper;
     }
 
 
@@ -48,6 +52,7 @@ public class ArticleService {
      */
     public ComResponse listArticleClass(BusArticleClass busArticleClass, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        busArticleClass.setIsDel(Constants.EXIST);
         Page<BusArticleClass> busArticleClassList = (Page<BusArticleClass>) busArticleClassMapper.select(busArticleClass);
         return ComResponse.ok(busArticleClassList.getResult(), busArticleClassList.getTotal());
     }
@@ -104,7 +109,7 @@ public class ArticleService {
 
 
     /**
-     * 获取文章列表
+     * 获取文章列表 FIXME 获取用户的收藏状态
      *
      * @param busArticle
      * @param pageable
@@ -112,12 +117,14 @@ public class ArticleService {
      */
     public ComResponse<List<BusArticle>> listArticle(BusArticle busArticle, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        busArticle.setIsDel(Constants.EXIST);
         Page<BusArticle> busArticleList = (Page<BusArticle>) busArticleMapper.select(busArticle);
         return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
     }
 
     /**
      * 新增或者更新文章
+     * FIXME 静态化文章生成url
      *
      * @param busArticle
      * @return
@@ -165,6 +172,22 @@ public class ArticleService {
             }
         }
         return ComResponse.ok(delIds);
+    }
+
+    /**
+     * 删除或者修改用户收藏的文章
+     *
+     * @param busRelationUserArticle
+     * @return
+     */
+    public ComResponse insertOrUpdateRelationUserArticle(BusRelationUserArticle busRelationUserArticle) {
+        if (null == busRelationUserArticle.getId()) {
+            busRelationUserArticle.setId(IDKeyUtil.generateId());
+            busRelationUserArticleMapper.insertSelective(busRelationUserArticle);
+        } else {
+            busRelationUserArticleMapper.updateByPrimaryKeySelective(busRelationUserArticle);
+        }
+        return ComResponse.ok();
     }
 
 }

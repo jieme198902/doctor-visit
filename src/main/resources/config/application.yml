@@ -231,4 +231,8 @@ mapper:
 # ===================================================================
 
 # application:
-
+my:
+  wx:
+    appid: ''
+    secret: ''
+    auth-code2session: https://api.weixin.qq.com/sns/jscode2session?appid=${my.wx.appid}&secret=${my.wx.secret}&js_code=JSCODE&grant_type=authorization_code

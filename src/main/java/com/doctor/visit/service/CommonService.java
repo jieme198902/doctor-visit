@@ -1,6 +1,8 @@
 package com.doctor.visit.service;
 
+import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.JhiUser;
+import com.doctor.visit.repository.BusUserMapper;
 import com.doctor.visit.repository.JhiUserMapper;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +12,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommonService {
     private final JhiUserMapper jhiUserMapper;
+    private final BusUserMapper busUserMapper;
 
-    public CommonService(JhiUserMapper jhiUserMapper) {
+    public CommonService(JhiUserMapper jhiUserMapper, BusUserMapper busUserMapper) {
         this.jhiUserMapper = jhiUserMapper;
+        this.busUserMapper = busUserMapper;
     }
 
     /**
-     * 获取用户信息
+     * 获取后台用户信息
      *
      * @param username
      * @return
@@ -25,5 +29,17 @@ public class CommonService {
         JhiUser record = new JhiUser();
         record.setLogin(username);
         return jhiUserMapper.selectOne(record);
+    }
+
+    /**
+     * 获取前端用户信息
+     *
+     * @param openid
+     * @return
+     */
+    public BusUser getBusUser(String openid) {
+        BusUser record = new BusUser();
+        record.setWechatOpenid(openid);
+        return busUserMapper.selectOne(record);
     }
 }

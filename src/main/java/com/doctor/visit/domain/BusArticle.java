@@ -1,5 +1,8 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -7,12 +10,13 @@ import javax.persistence.*;
 @Table(name = "bus_article")
 public class BusArticle implements Serializable {
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
      * 文章名称
      */
-    private String name;
+    private String title;
 
     /**
      * 文章类型id
@@ -30,6 +34,11 @@ public class BusArticle implements Serializable {
      * 文章内容url
      */
     private String url;
+    /**
+     * 文章转发哪里
+     */
+    @Column(name = "forward_from")
+    private String forwardFrom;
 
     /**
      * 创建者id
@@ -92,19 +101,33 @@ public class BusArticle implements Serializable {
     /**
      * 获取文章名称
      *
-     * @return name - 文章名称
+     * @return title- 文章名称
      */
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     /**
      * 设置文章名称
      *
-     * @param name 文章名称
+     * @param title 文章名称
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * 文章转发哪里
+     */
+    public String getForwardFrom() {
+        return forwardFrom;
+    }
+
+    /**
+     * 文章转发哪里
+     */
+    public void setForwardFrom(String forwardFrom) {
+        this.forwardFrom = forwardFrom;
     }
 
     /**

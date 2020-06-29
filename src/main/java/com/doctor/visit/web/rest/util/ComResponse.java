@@ -1,5 +1,6 @@
 package com.doctor.visit.web.rest.util;
 
+import com.doctor.visit.listener.StarDataListener;
 import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
@@ -14,6 +15,13 @@ public final class ComResponse<T> implements Serializable {
     private String message;
     private T data;
     private Long total;
+
+    public ComResponse<T> setStarDataListener(StarDataListener<T> starDataListener) {
+        if (null != this.data) {
+            this.data = starDataListener.star(this.data);
+        }
+        return this;
+    }
 
     public String getMessage() {
         return message;
@@ -76,6 +84,16 @@ public final class ComResponse<T> implements Serializable {
     }
 
     /**
+     * ok 200
+     *
+     * @param
+     * @return
+     */
+    public static <T> ComResponse<T> ok() {
+        return ok(null, 0L);
+    }
+
+    /**
      * fail 500
      *
      * @param <T>
@@ -83,6 +101,15 @@ public final class ComResponse<T> implements Serializable {
      */
     public static <T> ComResponse<T> fail() {
         return of(null, HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), 0L);
+    }
+    /**
+     * fail 500
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> ComResponse<T> fail(String message) {
+        return of(null, HttpStatus.INTERNAL_SERVER_ERROR.value(), message, 0L);
     }
 
     /**
@@ -96,7 +123,7 @@ public final class ComResponse<T> implements Serializable {
     }
 
     /**
-     * fail 401
+     * fail 404
      *
      * @param <T>
      * @return
@@ -106,7 +133,19 @@ public final class ComResponse<T> implements Serializable {
     }
 
     /**
-     * all
+     * fail 400
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> ComResponse<T> failBadRequest() {
+        return of(null, HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), 0L);
+    }
+
+
+
+    /**
+     * of
      *
      * @param data
      * @param status
