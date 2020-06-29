@@ -1,9 +1,10 @@
-package com.doctor.visit.web.rest.vm.front.user;
+package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArticle;
 import com.doctor.visit.domain.BusRelationUserArticle;
 import com.doctor.visit.service.ArticleService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author kuanwang
  * @date 2020-04-02
  */
+@Api("微信文章的接口")
 @RestController
 @RequestMapping(Constants.API_BASE_FRONT + "/article")
 public class ArticleResource {
@@ -51,7 +53,7 @@ public class ArticleResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusArticle.class)
+        @ApiImplicitParam(dataTypeClass = BusRelationUserArticle.class)
     })
     @PostMapping("favArticle")
     @ApiOperation(value = "收藏文章")
@@ -67,7 +69,7 @@ public class ArticleResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusArticle.class)
+        @ApiImplicitParam(dataTypeClass = BusRelationUserArticle.class)
     })
     @PostMapping("cancelFavArticle")
     @ApiOperation(value = "取消收藏文章")

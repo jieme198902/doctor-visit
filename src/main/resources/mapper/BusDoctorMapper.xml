@@ -23,4 +23,19 @@
     <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="CHAR" />
   </resultMap>
+
+  <select id="selectFavDoctor" resultMap="BaseResultMap">
+
+      SELECT
+            d.*
+        FROM
+            bus_relation_user_doctor ud
+            LEFT JOIN bus_doctor d ON ud.doctor_id = d.id
+        WHERE
+            1 = 1
+            AND ud.is_del = '0'
+            AND ud.user_id = #{userId};
+
+  </select>
+
 </mapper>
