@@ -5,7 +5,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="wechat_openid" property="wechatOpenid" jdbcType="VARCHAR" />
     <result column="wechat_session_key" property="wechatSessionKey" jdbcType="VARCHAR" />
@@ -13,10 +13,10 @@
     <result column="last_login_info" property="lastLoginInfo" jdbcType="VARCHAR" />
     <result column="idcard" property="idcard" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_by" property="createBy" jdbcType="BIGINT" />
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="edit_by" property="editBy" jdbcType="INTEGER" />
+    <result column="edit_by" property="editBy" jdbcType="BIGINT" />
     <result column="edit_name" property="editName" jdbcType="VARCHAR" />
     <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="CHAR" />

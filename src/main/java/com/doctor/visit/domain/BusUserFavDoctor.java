@@ -7,25 +7,25 @@ import javax.persistence.*;
 @Table(name = "bus_user_fav_doctor")
 public class BusUserFavDoctor implements Serializable {
     @Id
-    private Integer id;
+    private Long id;
 
     /**
      * 医生id
      */
     @Column(name = "doctor_id")
-    private Integer doctorId;
+    private Long doctorId;
 
     /**
      * 用户id
      */
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     /**
      * 创建者id
      */
     @Column(name = "create_by")
-    private Integer createBy;
+    private Long createBy;
 
     /**
      * 创建者姓名
@@ -43,7 +43,7 @@ public class BusUserFavDoctor implements Serializable {
      * 修改人
      */
     @Column(name = "edit_by")
-    private Integer editBy;
+    private Long editBy;
 
     /**
      * 修改人姓名
@@ -68,14 +68,14 @@ public class BusUserFavDoctor implements Serializable {
     /**
      * @return id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -84,7 +84,7 @@ public class BusUserFavDoctor implements Serializable {
      *
      * @return doctor_id - 医生id
      */
-    public Integer getDoctorId() {
+    public Long getDoctorId() {
         return doctorId;
     }
 
@@ -93,7 +93,7 @@ public class BusUserFavDoctor implements Serializable {
      *
      * @param doctorId 医生id
      */
-    public void setDoctorId(Integer doctorId) {
+    public void setDoctorId(Long doctorId) {
         this.doctorId = doctorId;
     }
 
@@ -102,7 +102,7 @@ public class BusUserFavDoctor implements Serializable {
      *
      * @return user_id - 用户id
      */
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
@@ -111,7 +111,7 @@ public class BusUserFavDoctor implements Serializable {
      *
      * @param userId 用户id
      */
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -120,7 +120,7 @@ public class BusUserFavDoctor implements Serializable {
      *
      * @return create_by - 创建者id
      */
-    public Integer getCreateBy() {
+    public Long getCreateBy() {
         return createBy;
     }
 
@@ -129,7 +129,7 @@ public class BusUserFavDoctor implements Serializable {
      *
      * @param createBy 创建者id
      */
-    public void setCreateBy(Integer createBy) {
+    public void setCreateBy(Long createBy) {
         this.createBy = createBy;
     }
 
@@ -174,7 +174,7 @@ public class BusUserFavDoctor implements Serializable {
      *
      * @return edit_by - 修改人
      */
-    public Integer getEditBy() {
+    public Long getEditBy() {
         return editBy;
     }
 
@@ -183,7 +183,7 @@ public class BusUserFavDoctor implements Serializable {
      *
      * @param editBy 修改人
      */
-    public void setEditBy(Integer editBy) {
+    public void setEditBy(Long editBy) {
         this.editBy = editBy;
     }
 

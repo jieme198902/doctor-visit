@@ -5,20 +5,20 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="professional_title" property="professionalTitle" jdbcType="VARCHAR" />
     <result column="hospital_name" property="hospitalName" jdbcType="VARCHAR" />
-    <result column="hospital_id" property="hospitalId" jdbcType="INTEGER" />
+    <result column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
     <result column="good_at" property="goodAt" jdbcType="VARCHAR" />
     <result column="inquiries" property="inquiries" jdbcType="INTEGER" />
     <result column="consulting_fees" property="consultingFees" jdbcType="INTEGER" />
     <result column="clinc_name" property="clincName" jdbcType="VARCHAR" />
-    <result column="clinc_id" property="clincId" jdbcType="INTEGER" />
-    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="clinc_id" property="clincId" jdbcType="BIGINT" />
+    <result column="create_by" property="createBy" jdbcType="BIGINT" />
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="edit_by" property="editBy" jdbcType="INTEGER" />
+    <result column="edit_by" property="editBy" jdbcType="BIGINT" />
     <result column="edit_name" property="editName" jdbcType="VARCHAR" />
     <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="CHAR" />

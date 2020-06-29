@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Table(name = "bus_user")
 public class BusUser implements Serializable {
     @Id
-    private Integer id;
+    private Long id;
 
     /**
      * 名字
@@ -51,7 +51,7 @@ public class BusUser implements Serializable {
      * 创建者id
      */
     @Column(name = "create_by")
-    private Integer createBy;
+    private Long createBy;
 
     /**
      * 创建者姓名
@@ -69,7 +69,7 @@ public class BusUser implements Serializable {
      * 修改人
      */
     @Column(name = "edit_by")
-    private Integer editBy;
+    private Long editBy;
 
     /**
      * 修改人姓名
@@ -94,14 +94,14 @@ public class BusUser implements Serializable {
     /**
      * @return id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -236,7 +236,7 @@ public class BusUser implements Serializable {
      *
      * @return create_by - 创建者id
      */
-    public Integer getCreateBy() {
+    public Long getCreateBy() {
         return createBy;
     }
 
@@ -245,7 +245,7 @@ public class BusUser implements Serializable {
      *
      * @param createBy 创建者id
      */
-    public void setCreateBy(Integer createBy) {
+    public void setCreateBy(Long createBy) {
         this.createBy = createBy;
     }
 
@@ -290,7 +290,7 @@ public class BusUser implements Serializable {
      *
      * @return edit_by - 修改人
      */
-    public Integer getEditBy() {
+    public Long getEditBy() {
         return editBy;
     }
 
@@ -299,7 +299,7 @@ public class BusUser implements Serializable {
      *
      * @param editBy 修改人
      */
-    public void setEditBy(Integer editBy) {
+    public void setEditBy(Long editBy) {
         this.editBy = editBy;
     }
 

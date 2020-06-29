@@ -4,27 +4,56 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "bus_good_class")
-public class BusGoodClass implements Serializable {
+@Table(name = "bus_goods")
+public class BusGoods implements Serializable {
     @Id
-    private Integer id;
+    private Long id;
 
     /**
-     * 商品分类名称
+     * 商品名称
      */
     private String name;
 
     /**
-     * 商品分类排序
+     * 商品原价（单位分）
      */
-    @Column(name = "class_sort")
-    private Integer classSort;
+    @Column(name = "original_price")
+    private Integer originalPrice;
+
+    /**
+     * 商品现价（单位分）
+     */
+    @Column(name = "current_price")
+    private Integer currentPrice;
+
+    /**
+     * 商品销售量
+     */
+    @Column(name = "sales_volume")
+    private Integer salesVolume;
+
+    /**
+     * 商品所属分类id
+     */
+    @Column(name = "class_id")
+    private Long classId;
+
+    /**
+     * 商品所属分类名称
+     */
+    @Column(name = "class_name")
+    private String className;
+
+    /**
+     * 商品介绍url
+     */
+    private String url;
 
     /**
      * 创建者id
      */
     @Column(name = "create_by")
-    private Integer createBy;
+    private Long createBy;
 
     /**
      * 创建者姓名
@@ -42,7 +71,7 @@ public class BusGoodClass implements Serializable {
      * 修改人
      */
     @Column(name = "edit_by")
-    private Integer editBy;
+    private Long editBy;
 
     /**
      * 修改人姓名
@@ -67,51 +96,141 @@ public class BusGoodClass implements Serializable {
     /**
      * @return id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     /**
-     * 获取商品分类名称
+     * 获取商品名称
      *
-     * @return name - 商品分类名称
+     * @return name - 商品名称
      */
     public String getName() {
         return name;
     }
 
     /**
-     * 设置商品分类名称
+     * 设置商品名称
      *
-     * @param name 商品分类名称
+     * @param name 商品名称
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * 获取商品分类排序
+     * 获取商品原价（单位分）
      *
-     * @return class_sort - 商品分类排序
+     * @return original_price - 商品原价（单位分）
      */
-    public Integer getClassSort() {
-        return classSort;
+    public Integer getOriginalPrice() {
+        return originalPrice;
     }
 
     /**
-     * 设置商品分类排序
+     * 设置商品原价（单位分）
      *
-     * @param classSort 商品分类排序
+     * @param originalPrice 商品原价（单位分）
      */
-    public void setClassSort(Integer classSort) {
-        this.classSort = classSort;
+    public void setOriginalPrice(Integer originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    /**
+     * 获取商品现价（单位分）
+     *
+     * @return current_price - 商品现价（单位分）
+     */
+    public Integer getCurrentPrice() {
+        return currentPrice;
+    }
+
+    /**
+     * 设置商品现价（单位分）
+     *
+     * @param currentPrice 商品现价（单位分）
+     */
+    public void setCurrentPrice(Integer currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    /**
+     * 获取商品销售量
+     *
+     * @return sales_volume - 商品销售量
+     */
+    public Integer getSalesVolume() {
+        return salesVolume;
+    }
+
+    /**
+     * 设置商品销售量
+     *
+     * @param salesVolume 商品销售量
+     */
+    public void setSalesVolume(Integer salesVolume) {
+        this.salesVolume = salesVolume;
+    }
+
+    /**
+     * 获取商品所属分类id
+     *
+     * @return class_id - 商品所属分类id
+     */
+    public Long getClassId() {
+        return classId;
+    }
+
+    /**
+     * 设置商品所属分类id
+     *
+     * @param classId 商品所属分类id
+     */
+    public void setClassId(Long classId) {
+        this.classId = classId;
+    }
+
+    /**
+     * 获取商品所属分类名称
+     *
+     * @return class_name - 商品所属分类名称
+     */
+    public String getClassName() {
+        return className;
+    }
+
+    /**
+     * 设置商品所属分类名称
+     *
+     * @param className 商品所属分类名称
+     */
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    /**
+     * 获取商品介绍url
+     *
+     * @return url - 商品介绍url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * 设置商品介绍url
+     *
+     * @param url 商品介绍url
+     */
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     /**
@@ -119,7 +238,7 @@ public class BusGoodClass implements Serializable {
      *
      * @return create_by - 创建者id
      */
-    public Integer getCreateBy() {
+    public Long getCreateBy() {
         return createBy;
     }
 
@@ -128,7 +247,7 @@ public class BusGoodClass implements Serializable {
      *
      * @param createBy 创建者id
      */
-    public void setCreateBy(Integer createBy) {
+    public void setCreateBy(Long createBy) {
         this.createBy = createBy;
     }
 
@@ -173,7 +292,7 @@ public class BusGoodClass implements Serializable {
      *
      * @return edit_by - 修改人
      */
-    public Integer getEditBy() {
+    public Long getEditBy() {
         return editBy;
     }
 
@@ -182,7 +301,7 @@ public class BusGoodClass implements Serializable {
      *
      * @param editBy 修改人
      */
-    public void setEditBy(Integer editBy) {
+    public void setEditBy(Long editBy) {
         this.editBy = editBy;
     }
 

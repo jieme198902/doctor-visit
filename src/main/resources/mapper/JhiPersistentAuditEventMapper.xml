@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doctor.visit.repository.JhiPersistentAuditEventMapper" >
-  <resultMap id="BaseResultMap" type="com.doctor.visit.domain.JhiPersistentAuditEvent" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.doctor.visit.repository.JhiPersistentAuditEventMapper">
+  <resultMap id="BaseResultMap" type="com.doctor.visit.domain.JhiPersistentAuditEvent">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="event_id" property="eventId" jdbcType="BIGINT" />
-    <result column="principal" property="principal" jdbcType="VARCHAR" />
-    <result column="event_date" property="eventDate" jdbcType="TIMESTAMP" />
-    <result column="event_type" property="eventType" jdbcType="VARCHAR" />
+    <id column="event_id" jdbcType="BIGINT" property="eventId" />
+    <result column="principal" jdbcType="VARCHAR" property="principal" />
+    <result column="event_date" jdbcType="TIMESTAMP" property="eventDate" />
+    <result column="event_type" jdbcType="VARCHAR" property="eventType" />
   </resultMap>
+
 </mapper>

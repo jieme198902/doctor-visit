@@ -7,19 +7,19 @@ import javax.persistence.*;
 @Table(name = "bus_user_fav_clinc")
 public class BusUserFavClinc implements Serializable {
     @Id
-    private Integer id;
+    private Long id;
 
     /**
      * 用户id
      */
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     /**
      * 门诊科室id
      */
     @Column(name = "clinc_class_id")
-    private Integer clincClassId;
+    private Long clincClassId;
 
     /**
      * 门诊科室名称
@@ -31,7 +31,7 @@ public class BusUserFavClinc implements Serializable {
      * 创建者id
      */
     @Column(name = "create_by")
-    private Integer createBy;
+    private Long createBy;
 
     /**
      * 创建者姓名
@@ -49,7 +49,7 @@ public class BusUserFavClinc implements Serializable {
      * 修改人
      */
     @Column(name = "edit_by")
-    private Integer editBy;
+    private Long editBy;
 
     /**
      * 修改人姓名
@@ -74,14 +74,14 @@ public class BusUserFavClinc implements Serializable {
     /**
      * @return id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -90,7 +90,7 @@ public class BusUserFavClinc implements Serializable {
      *
      * @return user_id - 用户id
      */
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
@@ -99,7 +99,7 @@ public class BusUserFavClinc implements Serializable {
      *
      * @param userId 用户id
      */
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -108,7 +108,7 @@ public class BusUserFavClinc implements Serializable {
      *
      * @return clinc_class_id - 门诊科室id
      */
-    public Integer getClincClassId() {
+    public Long getClincClassId() {
         return clincClassId;
     }
 
@@ -117,7 +117,7 @@ public class BusUserFavClinc implements Serializable {
      *
      * @param clincClassId 门诊科室id
      */
-    public void setClincClassId(Integer clincClassId) {
+    public void setClincClassId(Long clincClassId) {
         this.clincClassId = clincClassId;
     }
 
@@ -144,7 +144,7 @@ public class BusUserFavClinc implements Serializable {
      *
      * @return create_by - 创建者id
      */
-    public Integer getCreateBy() {
+    public Long getCreateBy() {
         return createBy;
     }
 
@@ -153,7 +153,7 @@ public class BusUserFavClinc implements Serializable {
      *
      * @param createBy 创建者id
      */
-    public void setCreateBy(Integer createBy) {
+    public void setCreateBy(Long createBy) {
         this.createBy = createBy;
     }
 
@@ -198,7 +198,7 @@ public class BusUserFavClinc implements Serializable {
      *
      * @return edit_by - 修改人
      */
-    public Integer getEditBy() {
+    public Long getEditBy() {
         return editBy;
     }
 
@@ -207,7 +207,7 @@ public class BusUserFavClinc implements Serializable {
      *
      * @param editBy 修改人
      */
-    public void setEditBy(Integer editBy) {
+    public void setEditBy(Long editBy) {
         this.editBy = editBy;
     }
 

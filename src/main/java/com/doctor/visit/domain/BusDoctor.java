@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Table(name = "bus_doctor")
 public class BusDoctor implements Serializable {
     @Id
-    private Integer id;
+    private Long id;
 
     /**
      * 医师姓名
@@ -30,7 +30,7 @@ public class BusDoctor implements Serializable {
      * 医生所属医院id
      */
     @Column(name = "hospital_id")
-    private Integer hospitalId;
+    private Long hospitalId;
 
     /**
      * 擅长描述
@@ -59,13 +59,13 @@ public class BusDoctor implements Serializable {
      * 门诊科室id
      */
     @Column(name = "clinc_id")
-    private Integer clincId;
+    private Long clincId;
 
     /**
      * 创建者id
      */
     @Column(name = "create_by")
-    private Integer createBy;
+    private Long createBy;
 
     /**
      * 创建者姓名
@@ -83,7 +83,7 @@ public class BusDoctor implements Serializable {
      * 修改人
      */
     @Column(name = "edit_by")
-    private Integer editBy;
+    private Long editBy;
 
     /**
      * 修改人姓名
@@ -108,14 +108,14 @@ public class BusDoctor implements Serializable {
     /**
      * @return id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -178,7 +178,7 @@ public class BusDoctor implements Serializable {
      *
      * @return hospital_id - 医生所属医院id
      */
-    public Integer getHospitalId() {
+    public Long getHospitalId() {
         return hospitalId;
     }
 
@@ -187,7 +187,7 @@ public class BusDoctor implements Serializable {
      *
      * @param hospitalId 医生所属医院id
      */
-    public void setHospitalId(Integer hospitalId) {
+    public void setHospitalId(Long hospitalId) {
         this.hospitalId = hospitalId;
     }
 
@@ -268,7 +268,7 @@ public class BusDoctor implements Serializable {
      *
      * @return clinc_id - 门诊科室id
      */
-    public Integer getClincId() {
+    public Long getClincId() {
         return clincId;
     }
 
@@ -277,7 +277,7 @@ public class BusDoctor implements Serializable {
      *
      * @param clincId 门诊科室id
      */
-    public void setClincId(Integer clincId) {
+    public void setClincId(Long clincId) {
         this.clincId = clincId;
     }
 
@@ -286,7 +286,7 @@ public class BusDoctor implements Serializable {
      *
      * @return create_by - 创建者id
      */
-    public Integer getCreateBy() {
+    public Long getCreateBy() {
         return createBy;
     }
 
@@ -295,7 +295,7 @@ public class BusDoctor implements Serializable {
      *
      * @param createBy 创建者id
      */
-    public void setCreateBy(Integer createBy) {
+    public void setCreateBy(Long createBy) {
         this.createBy = createBy;
     }
 
@@ -340,7 +340,7 @@ public class BusDoctor implements Serializable {
      *
      * @return edit_by - 修改人
      */
-    public Integer getEditBy() {
+    public Long getEditBy() {
         return editBy;
     }
 
@@ -349,7 +349,7 @@ public class BusDoctor implements Serializable {
      *
      * @param editBy 修改人
      */
-    public void setEditBy(Integer editBy) {
+    public void setEditBy(Long editBy) {
         this.editBy = editBy;
     }
 

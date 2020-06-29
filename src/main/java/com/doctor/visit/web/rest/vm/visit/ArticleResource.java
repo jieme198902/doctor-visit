@@ -2,8 +2,7 @@ package com.doctor.visit.web.rest.vm.visit;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArticle;
-import com.doctor.visit.service.VisitService;
-import com.doctor.visit.web.rest.util.ComResponse;
+import com.doctor.visit.service.ArticleService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -13,20 +12,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 获取文章列表
+ *
  * @author kuanwang
  * @date 2020-04-02
  */
 @RestController
-@RequestMapping(Constants.API_BASE + "/visit")
-public class VisitResource {
+@RequestMapping(Constants.API_BASE + "/article")
+public class ArticleResource {
 
-    private final VisitService visitService;
+    private final ArticleService articleService;
 
-    public VisitResource(VisitService visitService) {
-        this.visitService = visitService;
+    public ArticleResource(ArticleService articleService) {
+        this.articleService = articleService;
     }
 
     /**
+     * 获取文章列表
+     *
      * @param busArticle
      * @param pageable
      * @return
@@ -34,10 +37,10 @@ public class VisitResource {
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = BusArticle.class)
     })
-    @PostMapping("articleList")
+    @PostMapping("getArticleList")
     @ApiOperation(value = "文章列表")
-    public Object articleList(BusArticle busArticle, Pageable pageable) {
-        return visitService.articleList(busArticle, pageable);
+    public Object getArticleList(BusArticle busArticle, Pageable pageable) {
+        return articleService.listArticle(busArticle, pageable);
     }
 
 }
