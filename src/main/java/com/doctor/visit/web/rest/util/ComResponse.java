@@ -61,8 +61,8 @@ public final class ComResponse<T> implements Serializable {
      * @param total
      * @return
      */
-    public static <T> ComResponse<T> OK(T data, Long total) {
-        return ALL(data, HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), total);
+    public static <T> ComResponse<T> ok(T data, Long total) {
+        return of(data, HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), total);
     }
 
     /**
@@ -71,8 +71,8 @@ public final class ComResponse<T> implements Serializable {
      * @param data
      * @return
      */
-    public static <T> ComResponse<T> OK(T data) {
-        return OK(data, 0L);
+    public static <T> ComResponse<T> ok(T data) {
+        return ok(data, 0L);
     }
 
     /**
@@ -81,8 +81,28 @@ public final class ComResponse<T> implements Serializable {
      * @param <T>
      * @return
      */
-    public static <T> ComResponse<T> FAIL() {
-        return ALL(null, HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), 0L);
+    public static <T> ComResponse<T> fail() {
+        return of(null, HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), 0L);
+    }
+
+    /**
+     * fail 401
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> ComResponse<T> failUnauthorized() {
+        return of(null, HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), 0L);
+    }
+
+    /**
+     * fail 401
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> ComResponse<T> failNotFound() {
+        return of(null, HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), 0L);
     }
 
     /**
@@ -95,7 +115,7 @@ public final class ComResponse<T> implements Serializable {
      * @param <T>
      * @return
      */
-    public static <T> ComResponse<T> ALL(T data, int status, String message, Long total) {
+    public static <T> ComResponse<T> of(T data, int status, String message, Long total) {
         return new ComResponse<>(data, status, message, total);
     }
 
