@@ -3,9 +3,7 @@ package com.doctor.visit.service;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusEvaluate;
 import com.doctor.visit.domain.BusUser;
-import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusEvaluateMapper;
-import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 我的业务层
@@ -36,15 +33,15 @@ public class MineService {
     /**
      * 后台 - 获取评价列表
      *
-     * @param busEvaluate
+     * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusEvaluate>> listEvaluate(BusEvaluate busEvaluate, Pageable pageable) {
+    public ComResponse<List<BusEvaluate>> listEvaluate(BusEvaluate bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        busEvaluate.setIsDel(Constants.EXIST);
+        bus.setIsDel(Constants.EXIST);
 
-        Page<BusEvaluate> busEvaluateList = (Page<BusEvaluate>) busEvaluateMapper.select(busEvaluate);
+        Page<BusEvaluate> busEvaluateList = (Page<BusEvaluate>) busEvaluateMapper.select(bus);
         return ComResponse.ok(busEvaluateList.getResult(), busEvaluateList.getTotal());
     }
 
@@ -52,31 +49,31 @@ public class MineService {
      * 前台 - 新增或者更新评价
      * FIXME
      *
-     * @param busEvaluate
+     * @param bus
      * @param request     这里需要处理文件
      * @return
      */
-    public ComResponse<BusEvaluate> insertOrUpdateEvaluate(BusEvaluate busEvaluate, HttpServletRequest request) {
-        BusUser busUser = commonService.getBusUser(busEvaluate.getCreateBy());
+    public ComResponse<BusEvaluate> insertOrUpdateEvaluate(BusEvaluate bus, HttpServletRequest request) {
+        BusUser busUser = commonService.getBusUser(bus.getCreateBy());
         if (null == busUser) {
             return ComResponse.failUnauthorized();
         }
-        busEvaluate.setEditBy(busUser.getId());
-        busEvaluate.setEditTime(new Date());
-        busEvaluate.setEditName(busUser.getName());
-        if (null != busEvaluate.getId()) {
+        bus.setEditBy(busUser.getId());
+        bus.setEditTime(new Date());
+        bus.setEditName(busUser.getName());
+        if (null != bus.getId()) {
             //修改评价
-            busEvaluateMapper.updateByPrimaryKeySelective(busEvaluate);
+            busEvaluateMapper.updateByPrimaryKeySelective(bus);
         } else {
             //新增评价
-            busEvaluate.setId(IDKeyUtil.generateId());
-            busEvaluate.setCreateBy(busUser.getId());
-            busEvaluate.setCreateTime(new Date());
-            busEvaluate.setCreateName(busUser.getName());
-            busEvaluateMapper.insertSelective(busEvaluate);
+            bus.setId(IDKeyUtil.generateId());
+            bus.setCreateBy(busUser.getId());
+            bus.setCreateTime(new Date());
+            bus.setCreateName(busUser.getName());
+            busEvaluateMapper.insertSelective(bus);
         }
 
-        return ComResponse.ok(busEvaluate);
+        return ComResponse.ok(bus);
     }
 
 

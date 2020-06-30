@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 前端 我的接口
+ * 前端 微信我的接口
  */
 @RestController
 @Api("微信我的的接口")
@@ -55,6 +55,21 @@ public class FrontMineResource {
     @ApiOperation(value = "评价接口，评价医生、商品 --> module  模块：0医生，1商品")
     public Object insertOrUpdateEvaluate(BusEvaluate bus, HttpServletRequest request) {
         return mineService.insertOrUpdateEvaluate(bus, request);
+    }
+
+    /**
+     * 根据id删除评价
+     *
+     * @param ids
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusEvaluate.class)
+    })
+    @PostMapping("deleteEvaluate")
+    @ApiOperation(value = "根据id删除评价")
+    public Object deleteEvaluate(String ids) {
+        return mineService.deleteEvaluate(ids);
     }
 
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 微信医院的接口
+ * 医院的接口
  *
  * @author kuanwang
  * @date 2020-04-02

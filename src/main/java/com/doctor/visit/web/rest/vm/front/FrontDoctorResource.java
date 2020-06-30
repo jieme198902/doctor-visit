@@ -1,9 +1,7 @@
 package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusArticle;
 import com.doctor.visit.domain.BusDoctor;
-import com.doctor.visit.domain.BusRelationUserArticle;
 import com.doctor.visit.domain.BusRelationUserDoctor;
 import com.doctor.visit.service.DoctorService;
 import io.swagger.annotations.Api;
@@ -86,7 +84,7 @@ public class FrontDoctorResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusArticle.class)
+        @ApiImplicitParam(dataTypeClass = BusRelationUserDoctor.class)
     })
     @PostMapping("cancelFavDoctor")
     @ApiOperation(value = "取消关注医生")

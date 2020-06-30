@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 微信科室的接口
+ * 科室的接口
  *
  * @author kuanwang
  * @date 2020-04-02
  */
-@Api("微信科室的接口")
+@Api("科室的接口")
 @RestController
 @RequestMapping(Constants.API_BASE_SYS + "/clincClass")
 public class SysClincClassResource {

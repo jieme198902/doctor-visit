@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 商品规格的接口
+ * 微信商品规格的接口
  *
  * @author kuanwang
  * @date 2020-04-02
  */
-@Api("商品规格的接口")
+@Api("微信商品规格的接口")
 @RestController
 @RequestMapping(Constants.API_BASE_FRONT + "/goods/specification")
 public class FrontGoodsSpecificationResource {

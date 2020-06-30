@@ -2,9 +2,10 @@ package com.doctor.visit.web.rest.vm.front;
 
 
 import com.doctor.visit.config.Constants;
+import com.doctor.visit.domain.BusFeedback;
 import com.doctor.visit.domain.BusUser;
+import com.doctor.visit.service.FeedbackService;
 import com.doctor.visit.service.UserService;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,13 +25,16 @@ import javax.servlet.http.HttpServletRequest;
 public class FrontUserResource {
 
     private final UserService userService;
+    private final FeedbackService feedbackService;
 
-    public FrontUserResource(UserService userService) {
+    public FrontUserResource(UserService userService, FeedbackService feedbackService) {
         this.userService = userService;
+        this.feedbackService = feedbackService;
     }
 
     /**
      * 登录接口
+     *
      * @param jsCode
      * @return
      */
@@ -42,4 +46,22 @@ public class FrontUserResource {
     public Object authenticate(String jsCode, HttpServletRequest request) {
         return userService.authenticate(jsCode, request);
     }
+
+
+    /**
+     * 前端 - 新增或者更新意见反馈
+     *
+     * @param bus
+     * @param request
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusFeedback.class)
+    })
+    @PostMapping("insertOrUpdateFeedback")
+    @ApiOperation(value = "前端 - 新增或者更新意见反馈")
+    public Object insertOrUpdateFeedback(BusFeedback bus, HttpServletRequest request) {
+        return feedbackService.insertOrUpdateFeedback(bus, request);
+    }
+
 }

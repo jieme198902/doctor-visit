@@ -38,13 +38,13 @@ public class ClincClassService {
     /**
      * 获取科室列表
      *
-     * @param BusClincClass
+     * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusClincClass>> listClincClass(BusClincClass BusClincClass, Pageable pageable) {
+    public ComResponse<List<BusClincClass>> listClincClass(BusClincClass bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        BusClincClass.setIsDel(Constants.EXIST);
+        bus.setIsDel(Constants.EXIST);
         Example example = new Example(BusClincClass.class);
         Example.Criteria criteria = example.createCriteria();
 
@@ -56,31 +56,31 @@ public class ClincClassService {
      * 新增或者更新科室
      * FIXME
      *
-     * @param BusClincClass
+     * @param bus
      * @param request       这里需要处理文件
      * @return
      */
-    public ComResponse<BusClincClass> insertOrUpdateClincClass(BusClincClass BusClincClass, HttpServletRequest request) {
+    public ComResponse<BusClincClass> insertOrUpdateClincClass(BusClincClass bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
             JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
             if (null == jhiUser) {
                 return ComResponse.failNotFound();
             }
-            BusClincClass.setEditTime(new Date());
-            BusClincClass.setEditBy(jhiUser.getId());
-            BusClincClass.setEditName(jhiUser.getFirstName());
-            if (null != BusClincClass.getId()) {
-                busClincClassMapper.updateByPrimaryKeySelective(BusClincClass);
+            bus.setEditTime(new Date());
+            bus.setEditBy(jhiUser.getId());
+            bus.setEditName(jhiUser.getFirstName());
+            if (null != bus.getId()) {
+                busClincClassMapper.updateByPrimaryKeySelective(bus);
             } else {
-                BusClincClass.setId(IDKeyUtil.generateId());
-                busClincClassMapper.insertSelective(BusClincClass);
+                bus.setId(IDKeyUtil.generateId());
+                busClincClassMapper.insertSelective(bus);
             }
         } else {
             return ComResponse.failUnauthorized();
         }
 
-        return ComResponse.ok(BusClincClass);
+        return ComResponse.ok(bus);
     }
 
 

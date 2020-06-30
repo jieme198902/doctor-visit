@@ -35,48 +35,48 @@ public class GoodsSpecificationService {
     /**
      * 前台 - 获取商品规格列表
      *
-     * @param busGoodsSpecification
+     * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusGoodsSpecification>> listGoodsSpecification(BusGoodsSpecification busGoodsSpecification, Pageable pageable) {
+    public ComResponse<List<BusGoodsSpecification>> listGoodsSpecification(BusGoodsSpecification bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        busGoodsSpecification.setIsDel(Constants.EXIST);
+        bus.setIsDel(Constants.EXIST);
 
-        Page<BusGoodsSpecification> busList = (Page<BusGoodsSpecification>) busGoodsSpecificationMapper.select(busGoodsSpecification);
+        Page<BusGoodsSpecification> busList = (Page<BusGoodsSpecification>) busGoodsSpecificationMapper.select(bus);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**
      * 新增或者更新商品规格
      *
-     * @param busGoodsSpecification
+     * @param bus
      * @param request
      * @return
      */
-    public ComResponse<BusGoodsSpecification> insertOrUpdateGoodsSpecification(BusGoodsSpecification busGoodsSpecification, HttpServletRequest request) {
+    public ComResponse<BusGoodsSpecification> insertOrUpdateGoodsSpecification(BusGoodsSpecification bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
             JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
             if (null == jhiUser) {
                 return ComResponse.failNotFound();
             }
-            busGoodsSpecification.setEditTime(new Date());
-            busGoodsSpecification.setEditBy(jhiUser.getId());
-            busGoodsSpecification.setEditName(jhiUser.getFirstName());
-            if (null != busGoodsSpecification.getId()) {
-                busGoodsSpecificationMapper.updateByPrimaryKeySelective(busGoodsSpecification);
+            bus.setEditTime(new Date());
+            bus.setEditBy(jhiUser.getId());
+            bus.setEditName(jhiUser.getFirstName());
+            if (null != bus.getId()) {
+                busGoodsSpecificationMapper.updateByPrimaryKeySelective(bus);
             } else {
-                busGoodsSpecification.setId(IDKeyUtil.generateId());
-                busGoodsSpecification.setCreateTime(new Date());
-                busGoodsSpecification.setCreateBy(jhiUser.getId());
-                busGoodsSpecification.setCreateName(jhiUser.getFirstName());
-                busGoodsSpecificationMapper.insertSelective(busGoodsSpecification);
+                bus.setId(IDKeyUtil.generateId());
+                bus.setCreateTime(new Date());
+                bus.setCreateBy(jhiUser.getId());
+                bus.setCreateName(jhiUser.getFirstName());
+                busGoodsSpecificationMapper.insertSelective(bus);
             }
         } else {
             return ComResponse.failUnauthorized();
         }
-        return ComResponse.ok(busGoodsSpecification);
+        return ComResponse.ok(bus);
     }
 
 

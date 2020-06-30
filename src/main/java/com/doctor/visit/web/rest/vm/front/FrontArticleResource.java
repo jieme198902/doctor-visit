@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 获取文章列表
+ * 微信文章的接口
  *
  * @author kuanwang
  * @date 2020-04-02

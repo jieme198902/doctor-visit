@@ -39,18 +39,18 @@ public class HospitalService {
     /**
      * 前台 - 获取医院列表
      *
-     * @param busHospital
+     * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusHospital>> listHospital(BusHospital busHospital, Pageable pageable) {
+    public ComResponse<List<BusHospital>> listHospital(BusHospital bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        busHospital.setIsDel(Constants.EXIST);
+        bus.setIsDel(Constants.EXIST);
         Example example = new Example(BusHospital.class);
         Example.Criteria criteria = example.createCriteria();
 
-        if (StringUtils.isNotBlank(busHospital.getName())) {
-            criteria.andLike("name", busHospital.getName() + "%");
+        if (StringUtils.isNotBlank(bus.getName())) {
+            criteria.andLike("name", bus.getName() + "%");
         }
 
         Page<BusHospital> busList = (Page<BusHospital>) busHospitalMapper.selectByExample(example);
@@ -61,34 +61,34 @@ public class HospitalService {
      * 新增或者更新医院
      * FIXME
      *
-     * @param busHospital
+     * @param bus
      * @param request     这里需要处理文件
      * @return
      */
-    public ComResponse<BusHospital> insertOrUpdateHospital(BusHospital busHospital, HttpServletRequest request) {
+    public ComResponse<BusHospital> insertOrUpdateHospital(BusHospital bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
             JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
             if (null == jhiUser) {
                 return ComResponse.failNotFound();
             }
-            busHospital.setEditTime(new Date());
-            busHospital.setEditBy(jhiUser.getId());
-            busHospital.setEditName(jhiUser.getFirstName());
-            if (null != busHospital.getId()) {
-                busHospitalMapper.updateByPrimaryKeySelective(busHospital);
+            bus.setEditTime(new Date());
+            bus.setEditBy(jhiUser.getId());
+            bus.setEditName(jhiUser.getFirstName());
+            if (null != bus.getId()) {
+                busHospitalMapper.updateByPrimaryKeySelective(bus);
             } else {
-                busHospital.setId(IDKeyUtil.generateId());
-                busHospital.setCreateTime(new Date());
-                busHospital.setCreateBy(jhiUser.getId());
-                busHospital.setCreateName(jhiUser.getFirstName());
-                busHospitalMapper.insertSelective(busHospital);
+                bus.setId(IDKeyUtil.generateId());
+                bus.setCreateTime(new Date());
+                bus.setCreateBy(jhiUser.getId());
+                bus.setCreateName(jhiUser.getFirstName());
+                busHospitalMapper.insertSelective(bus);
             }
         } else {
             return ComResponse.failUnauthorized();
         }
 
-        return ComResponse.ok(busHospital);
+        return ComResponse.ok(bus);
     }
 
 

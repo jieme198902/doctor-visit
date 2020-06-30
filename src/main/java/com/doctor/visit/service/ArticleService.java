@@ -46,44 +46,44 @@ public class ArticleService {
     /**
      * 查询文章分类列表
      *
-     * @param busArticleClass
+     * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse listArticleClass(BusArticleClass busArticleClass, Pageable pageable) {
+    public ComResponse listArticleClass(BusArticleClass bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        busArticleClass.setIsDel(Constants.EXIST);
-        Page<BusArticleClass> busArticleClassList = (Page<BusArticleClass>) busArticleClassMapper.select(busArticleClass);
+        bus.setIsDel(Constants.EXIST);
+        Page<BusArticleClass> busArticleClassList = (Page<BusArticleClass>) busArticleClassMapper.select(bus);
         return ComResponse.ok(busArticleClassList.getResult(), busArticleClassList.getTotal());
     }
 
     /**
      * 新增或者更新文章分类
      *
-     * @param busArticleClass
+     * @param bus
      * @return
      */
-    public ComResponse<BusArticleClass> insertOrUpdateArticleClass(BusArticleClass busArticleClass) {
+    public ComResponse<BusArticleClass> insertOrUpdateArticleClass(BusArticleClass bus) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
             JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
             if (null == jhiUser) {
                 return ComResponse.failNotFound();
             }
-            busArticleClass.setEditTime(new Date());
-            busArticleClass.setEditBy(jhiUser.getId());
-            busArticleClass.setEditName(jhiUser.getFirstName());
-            if (null != busArticleClass.getId()) {
-                busArticleClassMapper.updateByPrimaryKeySelective(busArticleClass);
+            bus.setEditTime(new Date());
+            bus.setEditBy(jhiUser.getId());
+            bus.setEditName(jhiUser.getFirstName());
+            if (null != bus.getId()) {
+                busArticleClassMapper.updateByPrimaryKeySelective(bus);
             } else {
-                busArticleClass.setId(IDKeyUtil.generateId());
-                busArticleClassMapper.insertSelective(busArticleClass);
+                bus.setId(IDKeyUtil.generateId());
+                busArticleClassMapper.insertSelective(bus);
             }
         } else {
             return ComResponse.failUnauthorized();
         }
 
-        return ComResponse.ok(busArticleClass);
+        return ComResponse.ok(bus);
     }
 
     /**
@@ -111,30 +111,30 @@ public class ArticleService {
     /**
      * 前台 - 获取文章列表 FIXME 获取用户的收藏状态
      *
-     * @param busArticle
+     * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listArticle(BusArticle busArticle, Pageable pageable) {
+    public ComResponse<List<BusArticle>> listArticle(BusArticle bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        busArticle.setIsDel(Constants.EXIST);
-        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.select(busArticle);
+        bus.setIsDel(Constants.EXIST);
+        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.select(bus);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**
      * 前台 - 获取文章列表
      *
-     * @param busArticle
+     * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listFavArticle(BusArticle busArticle, Pageable pageable) {
-        if (null == busArticle.getCreateBy()) {
+    public ComResponse<List<BusArticle>> listFavArticle(BusArticle bus, Pageable pageable) {
+        if (null == bus.getCreateBy()) {
             return ComResponse.failBadRequest();
         }
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectFavArticle(busArticle.getCreateBy());
+        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectFavArticle(bus.getCreateBy());
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
@@ -142,30 +142,30 @@ public class ArticleService {
      * 新增或者更新文章
      * FIXME 静态化文章生成url
      *
-     * @param busArticle
+     * @param bus
      * @return
      */
-    public ComResponse<BusArticle> insertOrUpdateArticle(BusArticle busArticle) {
+    public ComResponse<BusArticle> insertOrUpdateArticle(BusArticle bus) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
             JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
             if (null == jhiUser) {
                 return ComResponse.failNotFound();
             }
-            busArticle.setEditTime(new Date());
-            busArticle.setEditBy(jhiUser.getId());
-            busArticle.setEditName(jhiUser.getFirstName());
-            if (null != busArticle.getId()) {
-                busArticleMapper.updateByPrimaryKeySelective(busArticle);
+            bus.setEditTime(new Date());
+            bus.setEditBy(jhiUser.getId());
+            bus.setEditName(jhiUser.getFirstName());
+            if (null != bus.getId()) {
+                busArticleMapper.updateByPrimaryKeySelective(bus);
             } else {
-                busArticle.setId(IDKeyUtil.generateId());
-                busArticleMapper.insertSelective(busArticle);
+                bus.setId(IDKeyUtil.generateId());
+                busArticleMapper.insertSelective(bus);
             }
         } else {
             return ComResponse.failUnauthorized();
         }
 
-        return ComResponse.ok(busArticle);
+        return ComResponse.ok(bus);
     }
 
 
@@ -193,15 +193,15 @@ public class ArticleService {
     /**
      * 前台 - 删除或者修改用户收藏的文章
      *
-     * @param busRelationUserArticle
+     * @param bus
      * @return
      */
-    public ComResponse insertOrUpdateRelationUserArticle(BusRelationUserArticle busRelationUserArticle) {
-        if (null == busRelationUserArticle.getId()) {
-            busRelationUserArticle.setId(IDKeyUtil.generateId());
-            busRelationUserArticleMapper.insertSelective(busRelationUserArticle);
+    public ComResponse insertOrUpdateRelationUserArticle(BusRelationUserArticle bus) {
+        if (null == bus.getId()) {
+            bus.setId(IDKeyUtil.generateId());
+            busRelationUserArticleMapper.insertSelective(bus);
         } else {
-            busRelationUserArticleMapper.updateByPrimaryKeySelective(busRelationUserArticle);
+            busRelationUserArticleMapper.updateByPrimaryKeySelective(bus);
         }
         return ComResponse.ok();
     }
