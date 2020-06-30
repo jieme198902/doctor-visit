@@ -7,45 +7,35 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "bus_user_shipping_address")
-public class BusUserShippingAddress implements Serializable {
+@Table(name = "bus_user_shopping_cart")
+public class BusUserShoppingCart implements Serializable {
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
-     * 姓名
+     * 商品id
      */
-    private String name;
+    @Column(name = "goods_id")
+    private Integer goodsId;
 
     /**
-     * 手机号码
+     * 商品标题
      */
-    private String mobile;
+    @Column(name = "goods_name")
+    private String goodsName;
 
     /**
-     * 地区编码
+     * 购买商品数量
      */
-    @Column(name = "address_code")
-    private String addressCode;
+    @Column(name = "goods_num")
+    private Integer goodsNum;
 
     /**
-     * 地区名称
+     * 商品规格
      */
-    @Column(name = "address_name")
-    private String addressName;
-
-    /**
-     * 详细地址
-     */
-    @Column(name = "address_detail")
-    private String addressDetail;
-
-    /**
-     * 是否默认地址：1是，0否
-     */
-    @Column(name = "default_address")
-    private String defaultAddress;
+    @Column(name = "goods_specification")
+    private Long goodsSpecification;
 
     /**
      * 创建者id
@@ -106,111 +96,75 @@ public class BusUserShippingAddress implements Serializable {
     }
 
     /**
-     * 获取姓名
+     * 获取商品id
      *
-     * @return name - 姓名
+     * @return goods_id - 商品id
      */
-    public String getName() {
-        return name;
+    public Integer getGoodsId() {
+        return goodsId;
     }
 
     /**
-     * 设置姓名
+     * 设置商品id
      *
-     * @param name 姓名
+     * @param goodsId 商品id
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setGoodsId(Integer goodsId) {
+        this.goodsId = goodsId;
     }
 
     /**
-     * 获取手机号码
+     * 获取商品标题
      *
-     * @return mobile - 手机号码
+     * @return goods_name - 商品标题
      */
-    public String getMobile() {
-        return mobile;
+    public String getGoodsName() {
+        return goodsName;
     }
 
     /**
-     * 设置手机号码
+     * 设置商品标题
      *
-     * @param mobile 手机号码
+     * @param goodsName 商品标题
      */
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
     /**
-     * 获取地区编码
+     * 获取购买商品数量
      *
-     * @return address_code - 地区编码
+     * @return goods_num - 购买商品数量
      */
-    public String getAddressCode() {
-        return addressCode;
+    public Integer getGoodsNum() {
+        return goodsNum;
     }
 
     /**
-     * 设置地区编码
+     * 设置购买商品数量
      *
-     * @param addressCode 地区编码
+     * @param goodsNum 购买商品数量
      */
-    public void setAddressCode(String addressCode) {
-        this.addressCode = addressCode;
+    public void setGoodsNum(Integer goodsNum) {
+        this.goodsNum = goodsNum;
     }
 
     /**
-     * 获取地区名称
+     * 获取商品规格
      *
-     * @return address_name - 地区名称
+     * @return goods_specification - 商品规格
      */
-    public String getAddressName() {
-        return addressName;
+    public Long getGoodsSpecification() {
+        return goodsSpecification;
     }
 
     /**
-     * 设置地区名称
+     * 设置商品规格
      *
-     * @param addressName 地区名称
+     * @param goodsSpecification 商品规格
      */
-    public void setAddressName(String addressName) {
-        this.addressName = addressName;
-    }
-
-    /**
-     * 获取详细地址
-     *
-     * @return address_detail - 详细地址
-     */
-    public String getAddressDetail() {
-        return addressDetail;
-    }
-
-    /**
-     * 设置详细地址
-     *
-     * @param addressDetail 详细地址
-     */
-    public void setAddressDetail(String addressDetail) {
-        this.addressDetail = addressDetail;
-    }
-
-    /**
-     * 获取是否默认地址：1是，0否
-     *
-     * @return default_address - 是否默认地址：1是，0否
-     */
-    public String getDefaultAddress() {
-        return defaultAddress;
-    }
-
-    /**
-     * 设置是否默认地址：1是，0否
-     *
-     * @param defaultAddress 是否默认地址：1是，0否
-     */
-    public void setDefaultAddress(String defaultAddress) {
-        this.defaultAddress = defaultAddress;
+    public void setGoodsSpecification(Long goodsSpecification) {
+        this.goodsSpecification = goodsSpecification;
     }
 
     /**

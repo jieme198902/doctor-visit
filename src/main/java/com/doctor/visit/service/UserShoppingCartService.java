@@ -3,13 +3,13 @@ package com.doctor.visit.service;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusPatient;
 import com.doctor.visit.domain.BusUser;
-import com.doctor.visit.domain.BusUserShippingAddress;
-import com.doctor.visit.repository.BusUserShippingAddressMapper;
+import com.doctor.visit.domain.BusUserShoppingCart;
+import com.doctor.visit.domain.BusUserShoppingCart;
+import com.doctor.visit.repository.BusUserShoppingCartMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -19,29 +19,29 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 用户地址管理
+ * 购物车
  */
 @Service
-public class UserShippingAddressService {
+public class UserShoppingCartService {
     private final CommonService commonService;
-    private final BusUserShippingAddressMapper busUserShippingAddressMapper;
+    private final BusUserShoppingCartMapper busUserShoppingCartMapper;
 
-    public UserShippingAddressService(CommonService commonService, BusUserShippingAddressMapper busUserShippingAddressMapper) {
+    public UserShoppingCartService(CommonService commonService, BusUserShoppingCartMapper busUserShoppingCartMapper) {
         this.commonService = commonService;
-        this.busUserShippingAddressMapper = busUserShippingAddressMapper;
+        this.busUserShoppingCartMapper = busUserShoppingCartMapper;
     }
 
     /**
-     * 前台 - 获取用户地址列表
+     * 前台 - 获取用户购物车列表
      *
      * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusUserShippingAddress>> listUserShippingAddress(BusUserShippingAddress bus, Pageable pageable) {
+    public ComResponse<List<BusUserShoppingCart>> listUserShoppingCart(BusUserShoppingCart bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
-        Example example = new Example(BusPatient.class);
+        Example example = new Example(BusUserShoppingCart.class);
         Example.Criteria criteria = example.createCriteria();
 
         //创建者
@@ -49,18 +49,18 @@ public class UserShippingAddressService {
             criteria.andEqualTo("createBy", bus.getCreateBy());
         }
 
-        Page<BusUserShippingAddress> busList = (Page<BusUserShippingAddress>) busUserShippingAddressMapper.selectByExample(example);
+        Page<BusUserShoppingCart> busList = (Page<BusUserShoppingCart>) busUserShoppingCartMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**
-     * 前台 - 新增或者更新用户地址
+     * 前台 - 新增或者更新用户购物车
      *
      * @param bus
      * @param request
      * @return
      */
-    public ComResponse<BusUserShippingAddress> insertOrUpdateUserShippingAddress(BusUserShippingAddress bus, HttpServletRequest request) {
+    public ComResponse<BusUserShoppingCart> insertOrUpdateUserShoppingCart(BusUserShoppingCart bus, HttpServletRequest request) {
         if (null == bus.getCreateBy()) {
             return ComResponse.failBadRequest();
         }
@@ -72,13 +72,13 @@ public class UserShippingAddressService {
         bus.setEditBy(busUser.getId());
         bus.setEditName(busUser.getName());
         if (null != bus.getId()) {
-            busUserShippingAddressMapper.updateByPrimaryKeySelective(bus);
+            busUserShoppingCartMapper.updateByPrimaryKeySelective(bus);
         } else {
             bus.setId(IDKeyUtil.generateId());
             bus.setCreateTime(new Date());
             bus.setCreateBy(busUser.getId());
             bus.setCreateName(busUser.getName());
-            busUserShippingAddressMapper.insertSelective(bus);
+            busUserShoppingCartMapper.insertSelective(bus);
         }
 
         return ComResponse.ok(bus);
@@ -86,19 +86,19 @@ public class UserShippingAddressService {
 
 
     /**
-     * 前台 - 根据id删除用户地址
+     * 前台 - 根据id删除用户购物车
      *
      * @param ids
      * @return
      */
-    public ComResponse<StringBuilder> deleteUserShippingAddress(String ids) {
+    public ComResponse<StringBuilder> deleteUserShoppingCart(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
         for (String id : idsAry) {
-            BusUserShippingAddress delRecord = new BusUserShippingAddress();
+            BusUserShoppingCart delRecord = new BusUserShoppingCart();
             delRecord.setIsDel(Constants.DELETE);
             delRecord.setId(Long.parseLong(id));
-            int i = busUserShippingAddressMapper.updateByPrimaryKeySelective(delRecord);
+            int i = busUserShoppingCartMapper.updateByPrimaryKeySelective(delRecord);
             if (1 == i) {
                 delIds.append(id);
             }

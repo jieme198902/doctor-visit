@@ -4,9 +4,11 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusEvaluate;
 import com.doctor.visit.domain.BusPatient;
 import com.doctor.visit.domain.BusUserShippingAddress;
+import com.doctor.visit.domain.BusUserShoppingCart;
 import com.doctor.visit.service.MineService;
 import com.doctor.visit.service.PatientService;
 import com.doctor.visit.service.UserShippingAddressService;
+import com.doctor.visit.service.UserShoppingCartService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -29,10 +31,12 @@ public class FrontMineResource {
     private final MineService mineService;
     private final PatientService patientService;
     private final UserShippingAddressService userShippingAddressService;
-    public FrontMineResource(MineService mineService, PatientService patientService, UserShippingAddressService userShippingAddressService) {
+    private final UserShoppingCartService userShoppingCartService;
+    public FrontMineResource(MineService mineService, PatientService patientService, UserShippingAddressService userShippingAddressService, UserShoppingCartService userShoppingCartService) {
         this.mineService = mineService;
         this.patientService = patientService;
         this.userShippingAddressService = userShippingAddressService;
+        this.userShoppingCartService = userShoppingCartService;
     }
 
 
@@ -151,6 +155,54 @@ public class FrontMineResource {
         return userShippingAddressService.deleteUserShippingAddress(ids);
     }
 
+
+    /**
+     * 前台 - 获取购物车的商品列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusUserShoppingCart.class)
+    })
+    @PostMapping("listUserShippingCart")
+    @ApiOperation(value = "前台 - 获取购物车的商品列表")
+    public Object listUserShippingCart(BusUserShoppingCart bus, Pageable pageable) {
+        return userShoppingCartService.listUserShoppingCart(bus, pageable);
+    }
+
+
+    /**
+     * 前台 - 新增或者更新购物车里的商品
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+    })
+    @PostMapping("insertOrUpdateUserShoppingCart")
+    @ApiOperation(value = "前台 - 新增或者更新购物车里的商品")
+    public Object insertOrUpdateUserShippingAddress(BusUserShoppingCart bus, HttpServletRequest request) {
+        return userShoppingCartService.insertOrUpdateUserShoppingCart(bus, request);
+    }
+
+
+    /**
+     * 前台 - 根据id删除购物车里的商品
+     *
+     * @param ids
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+    })
+    @PostMapping("deleteUserShoppingCart")
+    @ApiOperation(value = "前台 - 根据id删除购物车里的商品")
+    public Object deleteUserShoppingCart(String ids) {
+        return userShoppingCartService.deleteUserShoppingCart(ids);
+    }
 
 
 }
