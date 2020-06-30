@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("微信医生的接口")
 @RestController
 @RequestMapping(Constants.API_BASE_FRONT + "/doctor")
-public class DoctorResource {
+public class FrontDoctorResource {
     private final DoctorService doctorService;
 
-    public DoctorResource(DoctorService doctorService) {
+    public FrontDoctorResource(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
 

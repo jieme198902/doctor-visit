@@ -23,13 +23,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Api("微信医院的接口")
 @RestController
-@RequestMapping(Constants.API_BASE_FRONT + "/hospital")
-public class HospitalResource {
+@RequestMapping(Constants.API_BASE_SYS + "/hospital")
+public class SysHospitalResource {
 
     private final HospitalService hospitalService;
 
 
-    public HospitalResource(HospitalService hospitalService) {
+    public SysHospitalResource(HospitalService hospitalService) {
         this.hospitalService = hospitalService;
     }
 

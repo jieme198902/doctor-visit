@@ -22,12 +22,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Api("微信科室的接口")
 @RestController
-@RequestMapping(Constants.API_BASE_FRONT + "/clincClass")
-public class ClincClassResource {
+@RequestMapping(Constants.API_BASE_SYS + "/clincClass")
+public class SysClincClassResource {
 
     private final ClincClassService clincClassService;
 
-    public ClincClassResource(ClincClassService clincClassService) {
+    public SysClincClassResource(ClincClassService clincClassService) {
         this.clincClassService = clincClassService;
     }
 

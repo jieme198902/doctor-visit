@@ -79,6 +79,9 @@ public class HospitalService {
                 busHospitalMapper.updateByPrimaryKeySelective(busHospital);
             } else {
                 busHospital.setId(IDKeyUtil.generateId());
+                busHospital.setCreateTime(new Date());
+                busHospital.setCreateBy(jhiUser.getId());
+                busHospital.setCreateName(jhiUser.getFirstName());
                 busHospitalMapper.insertSelective(busHospital);
             }
         } else {

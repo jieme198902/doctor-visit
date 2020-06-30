@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("微信医院的接口")
 @RestController
 @RequestMapping(Constants.API_BASE_FRONT + "/hospital")
-public class HospitalResource {
+public class FrontHospitalResource {
 
     private final HospitalService hospitalService;
 
 
-    public HospitalResource(HospitalService hospitalService) {
+    public FrontHospitalResource(HospitalService hospitalService) {
         this.hospitalService = hospitalService;
     }
 
@@ -39,9 +39,9 @@ public class HospitalResource {
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = BusHospital.class)
     })
-    @PostMapping("listBusHospital")
+    @PostMapping("listHospital")
     @ApiOperation(value = "查询医院列表")
-    public Object listBusHospital(BusHospital busHospital, Pageable pageable) {
+    public Object listHospital(BusHospital busHospital, Pageable pageable) {
         return hospitalService.listHospital(busHospital, pageable);
     }
 }

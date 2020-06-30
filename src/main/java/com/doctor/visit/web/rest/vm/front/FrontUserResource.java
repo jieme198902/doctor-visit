@@ -21,11 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @Api("微信用户的接口")
 @RequestMapping(Constants.API_BASE_FRONT + "/user")
-public class UserResource {
+public class FrontUserResource {
 
     private final UserService userService;
 
-    public UserResource(UserService userService) {
+    public FrontUserResource(UserService userService) {
         this.userService = userService;
     }
 

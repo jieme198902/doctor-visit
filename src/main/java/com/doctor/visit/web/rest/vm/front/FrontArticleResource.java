@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("微信文章的接口")
 @RestController
 @RequestMapping(Constants.API_BASE_FRONT + "/article")
-public class ArticleResource {
+public class FrontArticleResource {
     private final ArticleService articleService;
 
-    public ArticleResource(ArticleService articleService) {
+    public FrontArticleResource(ArticleService articleService) {
         this.articleService = articleService;
     }
 

@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(Constants.API_BASE_SYS + "/article")
-public class ArticleResource {
+public class SysArticleResource {
 
     private final ArticleService articleService;
 
-    public ArticleResource(ArticleService articleService) {
+    public SysArticleResource(ArticleService articleService) {
         this.articleService = articleService;
     }
 
