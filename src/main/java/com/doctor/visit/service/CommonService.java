@@ -42,4 +42,15 @@ public class CommonService {
         record.setWechatOpenid(openid);
         return busUserMapper.selectOne(record);
     }
+
+
+    /**
+     * 获取前端用户信息
+     *
+     * @param id
+     * @return
+     */
+    public BusUser getBusUser(Long id) {
+        return busUserMapper.selectByPrimaryKey(id);
+    }
 }

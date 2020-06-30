@@ -38,7 +38,7 @@ public class DoctorService {
     }
 
     /**
-     * 获取医生列表
+     * 前台 - 获取医生列表
      * FIXME 关注状态
      *
      * @param busDoctor
@@ -53,18 +53,18 @@ public class DoctorService {
     }
 
     /**
-     * 获取关注的医生列表
+     * 前台 - 获取关注的医生列表
      *
      * @param busDoctor
      * @param pageable
      * @return
      */
     public ComResponse<List<BusDoctor>> listFavDoctor(BusDoctor busDoctor, Pageable pageable) {
-        if (null == busDoctor.getId()) {
+        if (null == busDoctor.getCreateBy()) {
             return ComResponse.failBadRequest();
         }
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        Page<BusDoctor> busArticleList = (Page<BusDoctor>) busDoctorMapper.selectFavDoctor(busDoctor.getId());
+        Page<BusDoctor> busArticleList = (Page<BusDoctor>) busDoctorMapper.selectFavDoctor(busDoctor.getCreateBy());
         return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
     }
 
@@ -122,7 +122,7 @@ public class DoctorService {
     }
 
     /**
-     * 删除或者修改用户关注的医生
+     * 前台 - 删除或者修改用户关注的医生
      *
      * @param busRelationUserDoctor
      * @return

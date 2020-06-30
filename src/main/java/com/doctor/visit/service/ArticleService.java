@@ -109,7 +109,7 @@ public class ArticleService {
 
 
     /**
-     * 获取文章列表 FIXME 获取用户的收藏状态
+     * 前台 - 获取文章列表 FIXME 获取用户的收藏状态
      *
      * @param busArticle
      * @param pageable
@@ -123,18 +123,18 @@ public class ArticleService {
     }
 
     /**
-     * 获取文章列表
+     * 前台 - 获取文章列表
      *
      * @param busArticle
      * @param pageable
      * @return
      */
     public ComResponse<List<BusArticle>> listFavArticle(BusArticle busArticle, Pageable pageable) {
-        if (null == busArticle.getId()) {
+        if (null == busArticle.getCreateBy()) {
             return ComResponse.failBadRequest();
         }
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        Page<BusArticle> busArticleList = (Page<BusArticle>) busArticleMapper.selectFavArticle(busArticle.getId());
+        Page<BusArticle> busArticleList = (Page<BusArticle>) busArticleMapper.selectFavArticle(busArticle.getCreateBy());
         return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
     }
 
@@ -191,7 +191,7 @@ public class ArticleService {
     }
 
     /**
-     * 删除或者修改用户收藏的文章
+     * 前台 - 删除或者修改用户收藏的文章
      *
      * @param busRelationUserArticle
      * @return

@@ -51,7 +51,7 @@ public class UserService {
      * @param jsCode
      * @return
      */
-    public ComResponse<JWTToken> authenticate(String jsCode, HttpServletRequest httpServletRequest) {
+    public ComResponse<BusUser> authenticate(String jsCode, HttpServletRequest httpServletRequest) {
         if (StringUtils.isBlank(jsCode)) {
             return ComResponse.failBadRequest();
         }
@@ -101,13 +101,7 @@ public class UserService {
                     //更新
                     busUserMapper.updateByPrimaryKeySelective(busUser);
                 }
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    busUser.getId(),
-                    busUser.getWechatOpenid(),
-                    Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
-                );
-                String jwt = tokenProvider.createToken(authentication, true);
-                return ComResponse.ok(new JWTToken(jwt));
+                return ComResponse.ok(busUser);
             } else {
                 return ComResponse.fail();
             }

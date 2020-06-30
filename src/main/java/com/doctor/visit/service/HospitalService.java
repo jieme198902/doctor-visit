@@ -37,7 +37,7 @@ public class HospitalService {
     }
 
     /**
-     * 获取医院列表
+     * 前台 - 获取医院列表
      *
      * @param busHospital
      * @param pageable
