@@ -118,8 +118,8 @@ public class ArticleService {
     public ComResponse<List<BusArticle>> listArticle(BusArticle busArticle, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         busArticle.setIsDel(Constants.EXIST);
-        Page<BusArticle> busArticleList = (Page<BusArticle>) busArticleMapper.select(busArticle);
-        return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
+        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.select(busArticle);
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**
@@ -134,8 +134,8 @@ public class ArticleService {
             return ComResponse.failBadRequest();
         }
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        Page<BusArticle> busArticleList = (Page<BusArticle>) busArticleMapper.selectFavArticle(busArticle.getCreateBy());
-        return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
+        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectFavArticle(busArticle.getCreateBy());
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**

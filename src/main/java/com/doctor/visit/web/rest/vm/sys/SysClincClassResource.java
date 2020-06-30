@@ -34,7 +34,7 @@ public class SysClincClassResource {
     /**
      * 查询科室列表
      *
-     * @param busClincClass
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -42,14 +42,14 @@ public class SysClincClassResource {
     })
     @PostMapping("listClincClass")
     @ApiOperation(value = "查询科室列表")
-    public Object listClincClass(BusClincClass busClincClass, Pageable pageable) {
-        return clincClassService.listClincClass(busClincClass, pageable);
+    public Object listClincClass(BusClincClass bus, Pageable pageable) {
+        return clincClassService.listClincClass(bus, pageable);
     }
 
     /**
      * 新增或者修改科室
      *
-     * @param busClincClass
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -57,8 +57,8 @@ public class SysClincClassResource {
     })
     @PostMapping("insertOrUpdateClincClass")
     @ApiOperation(value = "新增或者修改科室")
-    public Object insertOrUpdateClincClass(BusClincClass busClincClass, HttpServletRequest request) {
-        return clincClassService.insertOrUpdateClincClass(busClincClass, request);
+    public Object insertOrUpdateClincClass(BusClincClass bus, HttpServletRequest request) {
+        return clincClassService.insertOrUpdateClincClass(bus, request);
     }
 
     /**

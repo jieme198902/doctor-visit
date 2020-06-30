@@ -31,7 +31,7 @@ public class SysArticleResource {
     /**
      * 查询文章分类列表
      *
-     * @param busArticleClass
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -39,14 +39,14 @@ public class SysArticleResource {
     })
     @PostMapping("listArticleClass")
     @ApiOperation(value = "查询文章分类列表")
-    public Object listArticleClass(BusArticleClass busArticleClass, Pageable pageable) {
-        return articleService.listArticleClass(busArticleClass, pageable);
+    public Object listArticleClass(BusArticleClass bus, Pageable pageable) {
+        return articleService.listArticleClass(bus, pageable);
     }
 
     /**
      * 新增或者修改文章分类
      *
-     * @param busArticleClass
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -54,8 +54,8 @@ public class SysArticleResource {
     })
     @PostMapping("insertOrUpdateArticleClass")
     @ApiOperation(value = "新增或者修改文章分类")
-    public Object insertOrUpdateArticleClass(BusArticleClass busArticleClass) {
-        return articleService.insertOrUpdateArticleClass(busArticleClass);
+    public Object insertOrUpdateArticleClass(BusArticleClass bus) {
+        return articleService.insertOrUpdateArticleClass(bus);
     }
 
     /**
@@ -76,7 +76,7 @@ public class SysArticleResource {
     /**
      * 获取文章列表
      *
-     * @param busArticle
+     * @param bus
      * @param pageable
      * @return
      */
@@ -85,14 +85,14 @@ public class SysArticleResource {
     })
     @PostMapping("getArticleList")
     @ApiOperation(value = "文章列表")
-    public Object getArticleList(BusArticle busArticle, Pageable pageable) {
-        return articleService.listArticle(busArticle, pageable);
+    public Object getArticleList(BusArticle bus, Pageable pageable) {
+        return articleService.listArticle(bus, pageable);
     }
 
     /**
      * 新增或者修改文章
      *
-     * @param busArticle
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -100,8 +100,8 @@ public class SysArticleResource {
     })
     @PostMapping("insertOrUpdateArticle")
     @ApiOperation(value = "新增或者修改文章")
-    public Object insertOrUpdateArticle(BusArticle busArticle) {
-        return articleService.insertOrUpdateArticle(busArticle);
+    public Object insertOrUpdateArticle(BusArticle bus) {
+        return articleService.insertOrUpdateArticle(bus);
     }
 
     /**

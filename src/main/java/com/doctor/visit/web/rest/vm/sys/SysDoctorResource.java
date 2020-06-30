@@ -35,7 +35,7 @@ public class SysDoctorResource {
     /**
      * 查询医生列表
      *
-     * @param busDoctor
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -43,14 +43,14 @@ public class SysDoctorResource {
     })
     @PostMapping("listDoctor")
     @ApiOperation(value = "查询医生列表")
-    public Object listDoctor(BusDoctor busDoctor, Pageable pageable) {
-        return doctorService.listDoctor(busDoctor, pageable);
+    public Object listDoctor(BusDoctor bus, Pageable pageable) {
+        return doctorService.listDoctor(bus, pageable);
     }
 
     /**
      * 新增或者修改医生
      *
-     * @param busDoctor
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -58,8 +58,8 @@ public class SysDoctorResource {
     })
     @PostMapping("insertOrUpdateDoctor")
     @ApiOperation(value = "新增或者修改医生")
-    public Object insertOrUpdateDoctor(BusDoctor busDoctor, HttpServletRequest request) {
-        return doctorService.insertOrUpdateDoctor(busDoctor, request);
+    public Object insertOrUpdateDoctor(BusDoctor bus, HttpServletRequest request) {
+        return doctorService.insertOrUpdateDoctor(bus, request);
     }
 
     /**

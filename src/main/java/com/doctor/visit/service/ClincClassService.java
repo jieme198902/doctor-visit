@@ -48,8 +48,8 @@ public class ClincClassService {
         Example example = new Example(BusClincClass.class);
         Example.Criteria criteria = example.createCriteria();
 
-        Page<BusClincClass> busArticleList = (Page<BusClincClass>) busClincClassMapper.selectByExample(example);
-        return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
+        Page<BusClincClass> busList = (Page<BusClincClass>) busClincClassMapper.selectByExample(example);
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**

@@ -37,7 +37,7 @@ public class SysHospitalResource {
     /**
      * 查询医院列表
      *
-     * @param busHospital
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -45,14 +45,14 @@ public class SysHospitalResource {
     })
     @PostMapping("listBusHospital")
     @ApiOperation(value = "查询医院列表")
-    public Object listBusHospital(BusHospital busHospital, Pageable pageable) {
-        return hospitalService.listHospital(busHospital, pageable);
+    public Object listBusHospital(BusHospital bus, Pageable pageable) {
+        return hospitalService.listHospital(bus, pageable);
     }
 
     /**
      * 新增或者修改医院
      *
-     * @param busHospital
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -60,8 +60,8 @@ public class SysHospitalResource {
     })
     @PostMapping("insertOrUpdateBusHospital")
     @ApiOperation(value = "新增或者修改医院")
-    public Object insertOrUpdateBusHospital(BusHospital busHospital, HttpServletRequest request) {
-        return hospitalService.insertOrUpdateHospital(busHospital,request);
+    public Object insertOrUpdateBusHospital(BusHospital bus, HttpServletRequest request) {
+        return hospitalService.insertOrUpdateHospital(bus,request);
     }
 
     /**

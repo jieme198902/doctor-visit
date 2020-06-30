@@ -48,8 +48,8 @@ public class DoctorService {
     public ComResponse<List<BusDoctor>> listDoctor(BusDoctor busDoctor, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         busDoctor.setIsDel(Constants.EXIST);
-        Page<BusDoctor> busArticleList = (Page<BusDoctor>) busDoctorMapper.select(busDoctor);
-        return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
+        Page<BusDoctor> busList = (Page<BusDoctor>) busDoctorMapper.select(busDoctor);
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**
@@ -64,8 +64,8 @@ public class DoctorService {
             return ComResponse.failBadRequest();
         }
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        Page<BusDoctor> busArticleList = (Page<BusDoctor>) busDoctorMapper.selectFavDoctor(busDoctor.getCreateBy());
-        return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
+        Page<BusDoctor> busList = (Page<BusDoctor>) busDoctorMapper.selectFavDoctor(busDoctor.getCreateBy());
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
 

@@ -33,7 +33,7 @@ public class FrontArticleResource {
     /**
      * 获取文章列表
      *
-     * @param busArticle
+     * @param bus
      * @param pageable
      * @return
      */
@@ -42,14 +42,14 @@ public class FrontArticleResource {
     })
     @PostMapping("getArticleList")
     @ApiOperation(value = "文章列表")
-    public Object getArticleList(BusArticle busArticle, Pageable pageable) {
-        return articleService.listArticle(busArticle, pageable);
+    public Object getArticleList(BusArticle bus, Pageable pageable) {
+        return articleService.listArticle(bus, pageable);
     }
 
     /**
      * 获取收藏的文章列表
      *
-     * @param busArticle
+     * @param bus
      * @param pageable
      * @return
      */
@@ -58,14 +58,14 @@ public class FrontArticleResource {
     })
     @PostMapping("getFavArticleList")
     @ApiOperation(value = "获取收藏的文章列表")
-    public Object getFavArticleList(BusArticle busArticle, Pageable pageable) {
-        return articleService.listFavArticle(busArticle, pageable);
+    public Object getFavArticleList(BusArticle bus, Pageable pageable) {
+        return articleService.listFavArticle(bus, pageable);
     }
 
     /**
      * 收藏文章
      *
-     * @param busArticle
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -73,15 +73,15 @@ public class FrontArticleResource {
     })
     @PostMapping("favArticle")
     @ApiOperation(value = "收藏文章")
-    public Object favArticle(BusRelationUserArticle busArticle) {
-        busArticle.setIsDel(Constants.EXIST);
-        return articleService.insertOrUpdateRelationUserArticle(busArticle);
+    public Object favArticle(BusRelationUserArticle bus) {
+        bus.setIsDel(Constants.EXIST);
+        return articleService.insertOrUpdateRelationUserArticle(bus);
     }
 
     /**
      * 取消收藏文章
      *
-     * @param busArticle
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -89,9 +89,9 @@ public class FrontArticleResource {
     })
     @PostMapping("cancelFavArticle")
     @ApiOperation(value = "取消收藏文章")
-    public Object cancelFavArticle(BusRelationUserArticle busArticle) {
-        busArticle.setIsDel(Constants.DELETE);
-        return articleService.insertOrUpdateRelationUserArticle(busArticle);
+    public Object cancelFavArticle(BusRelationUserArticle bus) {
+        bus.setIsDel(Constants.DELETE);
+        return articleService.insertOrUpdateRelationUserArticle(bus);
     }
 
 }

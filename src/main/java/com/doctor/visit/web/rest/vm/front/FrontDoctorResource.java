@@ -34,7 +34,7 @@ public class FrontDoctorResource {
     /**
      * 获取医生列表
      *
-     * @param busDoctor
+     * @param bus
      * @param pageable
      * @return
      */
@@ -43,14 +43,14 @@ public class FrontDoctorResource {
     })
     @PostMapping("getDoctorList")
     @ApiOperation(value = "获取医生列表")
-    public Object getDoctorList(BusDoctor busDoctor, Pageable pageable) {
-        return doctorService.listDoctor(busDoctor, pageable);
+    public Object getDoctorList(BusDoctor bus, Pageable pageable) {
+        return doctorService.listDoctor(bus, pageable);
     }
 
     /**
      * 获取关注的医生列表
      *
-     * @param busDoctor
+     * @param bus
      * @param pageable
      * @return
      */
@@ -59,14 +59,14 @@ public class FrontDoctorResource {
     })
     @PostMapping("getFavDoctorList")
     @ApiOperation(value = "获取关注的医生列表")
-    public Object getFavDoctorList(BusDoctor busDoctor, Pageable pageable) {
-        return doctorService.listFavDoctor(busDoctor, pageable);
+    public Object getFavDoctorList(BusDoctor bus, Pageable pageable) {
+        return doctorService.listFavDoctor(bus, pageable);
     }
 
     /**
      * 关注医生
      *
-     * @param busRelationUserDoctor
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -74,15 +74,15 @@ public class FrontDoctorResource {
     })
     @PostMapping("favDoctor")
     @ApiOperation(value = "关注医生")
-    public Object favDoctor(BusRelationUserDoctor busRelationUserDoctor) {
-        busRelationUserDoctor.setIsDel(Constants.EXIST);
-        return doctorService.insertOrUpdateRelationUserDoctor(busRelationUserDoctor);
+    public Object favDoctor(BusRelationUserDoctor bus) {
+        bus.setIsDel(Constants.EXIST);
+        return doctorService.insertOrUpdateRelationUserDoctor(bus);
     }
 
     /**
      * 取消关注医生
      *
-     * @param busRelationUserDoctor
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -90,9 +90,9 @@ public class FrontDoctorResource {
     })
     @PostMapping("cancelFavDoctor")
     @ApiOperation(value = "取消关注医生")
-    public Object cancelFavDoctor(BusRelationUserDoctor busRelationUserDoctor) {
-        busRelationUserDoctor.setIsDel(Constants.DELETE);
-        return doctorService.insertOrUpdateRelationUserDoctor(busRelationUserDoctor);
+    public Object cancelFavDoctor(BusRelationUserDoctor bus) {
+        bus.setIsDel(Constants.DELETE);
+        return doctorService.insertOrUpdateRelationUserDoctor(bus);
     }
 
 }

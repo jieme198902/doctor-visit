@@ -3,8 +3,10 @@ package com.doctor.visit.web.rest.vm.front;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusEvaluate;
 import com.doctor.visit.domain.BusPatient;
+import com.doctor.visit.domain.BusUserShippingAddress;
 import com.doctor.visit.service.MineService;
 import com.doctor.visit.service.PatientService;
+import com.doctor.visit.service.UserShippingAddressService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,10 +28,11 @@ public class FrontMineResource {
 
     private final MineService mineService;
     private final PatientService patientService;
-
-    public FrontMineResource(MineService mineService, PatientService patientService) {
+    private final UserShippingAddressService userShippingAddressService;
+    public FrontMineResource(MineService mineService, PatientService patientService, UserShippingAddressService userShippingAddressService) {
         this.mineService = mineService;
         this.patientService = patientService;
+        this.userShippingAddressService = userShippingAddressService;
     }
 
 
@@ -38,7 +41,7 @@ public class FrontMineResource {
      * <p>
      * module  模块：0医生，1商品
      *
-     * @param busEvaluate
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -46,15 +49,15 @@ public class FrontMineResource {
     })
     @PostMapping("insertOrUpdateEvaluate")
     @ApiOperation(value = "评价接口，评价医生、商品 --> module  模块：0医生，1商品")
-    public Object insertOrUpdateEvaluate(BusEvaluate busEvaluate, HttpServletRequest request) {
-        return mineService.insertOrUpdateEvaluate(busEvaluate, request);
+    public Object insertOrUpdateEvaluate(BusEvaluate bus, HttpServletRequest request) {
+        return mineService.insertOrUpdateEvaluate(bus, request);
     }
 
 
     /**
      * 前台 - 获取患者列表
      *
-     * @param busPatient
+     * @param bus
      * @param pageable
      * @return
      */
@@ -63,15 +66,15 @@ public class FrontMineResource {
     })
     @PostMapping("listPatient")
     @ApiOperation(value = "前台 - 获取患者列表")
-    public Object listPatient(BusPatient busPatient, Pageable pageable) {
-        return patientService.listPatient(busPatient, pageable);
+    public Object listPatient(BusPatient bus, Pageable pageable) {
+        return patientService.listPatient(bus, pageable);
     }
 
 
     /**
      * 前台 - 新增或者更新患者
      *
-     * @param busPatient
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -79,8 +82,8 @@ public class FrontMineResource {
     })
     @PostMapping("insertOrUpdatePatient")
     @ApiOperation(value = "前台 - 新增或者更新患者")
-    public Object insertOrUpdatePatient(BusPatient busPatient, HttpServletRequest request) {
-        return patientService.insertOrUpdatePatient(busPatient, request);
+    public Object insertOrUpdatePatient(BusPatient bus, HttpServletRequest request) {
+        return patientService.insertOrUpdatePatient(bus, request);
     }
 
 
@@ -97,6 +100,55 @@ public class FrontMineResource {
     @ApiOperation(value = "前台 - 根据id删除患者")
     public Object deletePatient(String ids) {
         return patientService.deletePatient(ids);
+    }
+
+
+    /**
+     * 前台 - 获取收货地址列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+    })
+    @PostMapping("listUserShippingAddress")
+    @ApiOperation(value = "前台 - 获取收货地址列表")
+    public Object listUserShippingAddress(BusUserShippingAddress bus, Pageable pageable) {
+        return userShippingAddressService.listUserShippingAddress(bus, pageable);
+    }
+
+
+    /**
+     * 前台 - 新增或者更新收货地址
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+    })
+    @PostMapping("insertOrUpdateUserShippingAddress")
+    @ApiOperation(value = "前台 - 新增或者更新收货地址")
+    public Object insertOrUpdateUserShippingAddress(BusUserShippingAddress bus, HttpServletRequest request) {
+        return userShippingAddressService.insertOrUpdateUserShippingAddress(bus, request);
+    }
+
+
+    /**
+     * 前台 - 根据id删除收货地址
+     *
+     * @param ids
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+    })
+    @PostMapping("deleteUserShippingAddress")
+    @ApiOperation(value = "前台 - 根据id删除收货地址")
+    public Object deleteUserShippingAddress(String ids) {
+        return userShippingAddressService.deleteUserShippingAddress(ids);
     }
 
 

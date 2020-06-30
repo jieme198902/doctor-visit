@@ -33,7 +33,7 @@ public class FrontHospitalResource {
     /**
      * 查询医院列表
      *
-     * @param busHospital
+     * @param bus
      * @return
      */
     @ApiImplicitParams({
@@ -41,7 +41,7 @@ public class FrontHospitalResource {
     })
     @PostMapping("listHospital")
     @ApiOperation(value = "查询医院列表")
-    public Object listHospital(BusHospital busHospital, Pageable pageable) {
-        return hospitalService.listHospital(busHospital, pageable);
+    public Object listHospital(BusHospital bus, Pageable pageable) {
+        return hospitalService.listHospital(bus, pageable);
     }
 }

@@ -43,8 +43,8 @@ public class GoodsSpecificationService {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         busGoodsSpecification.setIsDel(Constants.EXIST);
 
-        Page<BusGoodsSpecification> busArticleList = (Page<BusGoodsSpecification>) busGoodsSpecificationMapper.select(busGoodsSpecification);
-        return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
+        Page<BusGoodsSpecification> busList = (Page<BusGoodsSpecification>) busGoodsSpecificationMapper.select(busGoodsSpecification);
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**

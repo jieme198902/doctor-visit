@@ -36,7 +36,7 @@ public class SysGoodsSpecificationResource {
     /**
      * 获取商品规格列表
      *
-     * @param busGoodsSpecification
+     * @param bus
      * @param pageable
      * @return
      */
@@ -45,15 +45,15 @@ public class SysGoodsSpecificationResource {
     })
     @PostMapping("listGoodsSpecification")
     @ApiOperation(value = "获取商品规格列表")
-    public Object listGoodsSpecification(BusGoodsSpecification busGoodsSpecification, Pageable pageable) {
-        return goodsSpecificationService.listGoodsSpecification(busGoodsSpecification, pageable);
+    public Object listGoodsSpecification(BusGoodsSpecification bus, Pageable pageable) {
+        return goodsSpecificationService.listGoodsSpecification(bus, pageable);
     }
 
 
     /**
      * 新增或者更新商品规格
      *
-     * @param busGoodsSpecification
+     * @param bus
      * @param request
      * @return
      */
@@ -62,8 +62,8 @@ public class SysGoodsSpecificationResource {
     })
     @PostMapping("insertOrUpdateGoodsSpecification")
     @ApiOperation(value = "新增或者更新商品规格")
-    public Object insertOrUpdateGoodsSpecification(BusGoodsSpecification busGoodsSpecification, HttpServletRequest request) {
-        return goodsSpecificationService.insertOrUpdateGoodsSpecification(busGoodsSpecification, request);
+    public Object insertOrUpdateGoodsSpecification(BusGoodsSpecification bus, HttpServletRequest request) {
+        return goodsSpecificationService.insertOrUpdateGoodsSpecification(bus, request);
     }
 
     /**

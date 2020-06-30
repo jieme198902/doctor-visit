@@ -55,8 +55,8 @@ public class PatientService {
             criteria.andEqualTo("createBy", busPatient.getCreateBy());
         }
 
-        Page<BusPatient> busArticleList = (Page<BusPatient>) busPatientMapper.selectByExample(example);
-        return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
+        Page<BusPatient> busList = (Page<BusPatient>) busPatientMapper.selectByExample(example);
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**

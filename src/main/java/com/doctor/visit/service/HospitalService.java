@@ -53,8 +53,8 @@ public class HospitalService {
             criteria.andLike("name", busHospital.getName() + "%");
         }
 
-        Page<BusHospital> busArticleList = (Page<BusHospital>) busHospitalMapper.selectByExample(example);
-        return ComResponse.ok(busArticleList.getResult(), busArticleList.getTotal());
+        Page<BusHospital> busList = (Page<BusHospital>) busHospitalMapper.selectByExample(example);
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**
