@@ -7,21 +7,40 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "bus_feedback")
-public class BusFeedback implements Serializable {
+@Table(name = "bus_goods_inquiry")
+public class BusGoodsInquiry implements Serializable {
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
-     * 手机号
+     * 医生id
      */
-    private String mobile;
+    @Column(name = "doctor_id")
+    private Long doctorId;
 
     /**
-     * 反馈信息
+     * 问诊方式：0电话，1图文，2视频咨询
      */
-    private String content;
+    @Column(name = "ask_type")
+    private String askType;
+
+    /**
+     * 价格
+     */
+    private Integer price;
+
+    /**
+     * 上限次数
+     */
+    @Column(name = "up_limit")
+    private Integer upLimit;
+
+    /**
+     * 有效时间-分钟
+     */
+    @Column(name = "time_limit")
+    private Integer timeLimit;
 
     /**
      * 创建者id
@@ -82,39 +101,93 @@ public class BusFeedback implements Serializable {
     }
 
     /**
-     * 获取手机号
+     * 获取医生id
      *
-     * @return mobile - 手机号
+     * @return doctor_id - 医生id
      */
-    public String getMobile() {
-        return mobile;
+    public Long getDoctorId() {
+        return doctorId;
     }
 
     /**
-     * 设置手机号
+     * 设置医生id
      *
-     * @param mobile 手机号
+     * @param doctorId 医生id
      */
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setDoctorId(Long doctorId) {
+        this.doctorId = doctorId;
     }
 
     /**
-     * 获取反馈信息
+     * 获取问诊方式：0电话，1图文，2视频咨询
      *
-     * @return content - 反馈信息
+     * @return ask_type - 问诊方式：0电话，1图文，2视频咨询
      */
-    public String getContent() {
-        return content;
+    public String getAskType() {
+        return askType;
     }
 
     /**
-     * 设置反馈信息
+     * 设置问诊方式：0电话，1图文，2视频咨询
      *
-     * @param content 反馈信息
+     * @param askType 问诊方式：0电话，1图文，2视频咨询
      */
-    public void setContent(String content) {
-        this.content = content;
+    public void setAskType(String askType) {
+        this.askType = askType;
+    }
+
+    /**
+     * 获取价格
+     *
+     * @return price - 价格
+     */
+    public Integer getPrice() {
+        return price;
+    }
+
+    /**
+     * 设置价格
+     *
+     * @param price 价格
+     */
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    /**
+     * 获取上限次数
+     *
+     * @return up_limit - 上限次数
+     */
+    public Integer getUpLimit() {
+        return upLimit;
+    }
+
+    /**
+     * 设置上限次数
+     *
+     * @param upLimit 上限次数
+     */
+    public void setUpLimit(Integer upLimit) {
+        this.upLimit = upLimit;
+    }
+
+    /**
+     * 获取有效时间-分钟
+     *
+     * @return time_limit - 有效时间-分钟
+     */
+    public Integer getTimeLimit() {
+        return timeLimit;
+    }
+
+    /**
+     * 设置有效时间-分钟
+     *
+     * @param timeLimit 有效时间-分钟
+     */
+    public void setTimeLimit(Integer timeLimit) {
+        this.timeLimit = timeLimit;
     }
 
     /**
