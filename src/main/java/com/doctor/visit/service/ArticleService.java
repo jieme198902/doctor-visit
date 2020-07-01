@@ -1,13 +1,11 @@
 package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusArticle;
-import com.doctor.visit.domain.BusArticleClass;
-import com.doctor.visit.domain.BusRelationUserArticle;
-import com.doctor.visit.domain.JhiUser;
+import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.BusArticleClassMapper;
 import com.doctor.visit.repository.BusArticleMapper;
 import com.doctor.visit.repository.BusRelationUserArticleMapper;
+import com.doctor.visit.repository.BusRelationUserArticleShareMapper;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -31,15 +29,17 @@ public class ArticleService {
 
     private final CommonService commonService;
     //
-    private final BusArticleClassMapper busArticleClassMapper;
     private final BusArticleMapper busArticleMapper;
+    private final BusArticleClassMapper busArticleClassMapper;
     private final BusRelationUserArticleMapper busRelationUserArticleMapper;
+    private final BusRelationUserArticleShareMapper busRelationUserArticleShareMapper;
 
-    public ArticleService(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService, BusRelationUserArticleMapper busRelationUserArticleMapper) {
+    public ArticleService(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService, BusRelationUserArticleMapper busRelationUserArticleMapper, BusRelationUserArticleShareMapper busRelationUserArticleShareMapper) {
         this.busArticleClassMapper = busArticleClassMapper;
         this.busArticleMapper = busArticleMapper;
         this.commonService = commonService;
         this.busRelationUserArticleMapper = busRelationUserArticleMapper;
+        this.busRelationUserArticleShareMapper = busRelationUserArticleShareMapper;
     }
 
 
@@ -191,7 +191,7 @@ public class ArticleService {
     }
 
     /**
-     * 前台 - 删除或者修改用户收藏的文章
+     * 前台 - 新增或者删除用户收藏的文章
      *
      * @param bus
      * @return
@@ -204,6 +204,39 @@ public class ArticleService {
             busRelationUserArticleMapper.updateByPrimaryKeySelective(bus);
         }
         return ComResponse.ok();
+    }
+
+    /**
+     * 前台 - 新增或者删除用户分享的文章
+     *
+     * @param bus
+     * @return
+     */
+    public ComResponse insertOrUpdateRelationUserArticleShare(BusRelationUserArticleShare bus) {
+        if (null == bus.getId()) {
+            bus.setId(IDKeyUtil.generateId());
+            busRelationUserArticleShareMapper.insertSelective(bus);
+        } else {
+            busRelationUserArticleShareMapper.updateByPrimaryKeySelective(bus);
+        }
+        return ComResponse.ok();
+    }
+
+
+    /**
+     * 前台 - 获取我分享的文章列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    public ComResponse<List<BusArticle>> listArticleShare(BusArticle bus, Pageable pageable) {
+        if (null == bus.getCreateBy()) {
+            return ComResponse.failBadRequest();
+        }
+        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectShareArticle(bus.getCreateBy());
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
 }

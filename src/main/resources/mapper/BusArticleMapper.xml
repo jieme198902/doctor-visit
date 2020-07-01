@@ -34,4 +34,19 @@
 
   </select>
 
+
+  <select id="selectShareArticle" resultMap="BaseResultMap">
+
+        SELECT
+            d.*
+        FROM
+            bus_relation_user_article_share ua
+            LEFT JOIN bus_article d ON ua.article_id = d.id
+        WHERE
+            1 = 1
+            AND ua.is_del = '0'
+            AND ua.user_id = #{userId};
+
+  </select>
+
 </mapper>

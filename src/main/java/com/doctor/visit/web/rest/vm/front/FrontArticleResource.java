@@ -3,6 +3,7 @@ package com.doctor.visit.web.rest.vm.front;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArticle;
 import com.doctor.visit.domain.BusRelationUserArticle;
+import com.doctor.visit.domain.BusRelationUserArticleShare;
 import com.doctor.visit.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -92,6 +93,38 @@ public class FrontArticleResource {
     public Object cancelFavArticle(BusRelationUserArticle bus) {
         bus.setIsDel(Constants.DELETE);
         return articleService.insertOrUpdateRelationUserArticle(bus);
+    }
+
+    /**
+     * 分享文章
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusRelationUserArticleShare.class)
+    })
+    @PostMapping("shareArticle")
+    @ApiOperation(value = "分享文章")
+    public Object shareArticle(BusRelationUserArticleShare bus) {
+        bus.setIsDel(Constants.EXIST);
+        return articleService.insertOrUpdateRelationUserArticleShare(bus);
+    }
+
+    /**
+     * 获取我分享的文章列表
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusArticle.class)
+    })
+    @PostMapping("listArticleShare")
+    @ApiOperation(value = "获取我分享的文章列表")
+    public Object listArticleShare(BusArticle bus, Pageable pageable) {
+        bus.setIsDel(Constants.DELETE);
+        return articleService.listArticleShare(bus, pageable);
     }
 
 }
