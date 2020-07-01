@@ -122,3 +122,11 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [openapi-generator]: https://openapi-generator.tech
 [swagger-editor]: https://editor.swagger.io
 [doing api-first development]: https://www.jhipster.tech/documentation-archive/v6.8.0/doing-api-first-development/
+
+
+```sql
+
+UPDATE bus_self_diagnose 
+set fid = CONCAT(left(fid,1),RIGHT(fid,2)) where LENGTH(fid)=4;
+
+```
