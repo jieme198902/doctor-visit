@@ -35,7 +35,7 @@ public class UDUserJWTFilter implements Filter {
         boolean check = true;
         if (exLoginAry.length > 0) {
             for (String url : exLoginAry) {
-                if (httpServletRequest.getRequestURI().endsWith(url)) {
+                if (httpServletRequest.getRequestURI().contains(url)) {
                     filterChain.doFilter(httpServletRequest, servletResponse);
                     check = false;
                     break;

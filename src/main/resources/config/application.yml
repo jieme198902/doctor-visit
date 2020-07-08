@@ -158,6 +158,8 @@ spring:
   output:
     ansi:
       console-available: true
+  liquibase:
+    enabled: false
 
 server:
   servlet:
