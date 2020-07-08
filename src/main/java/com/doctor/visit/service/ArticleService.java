@@ -53,8 +53,8 @@ public class ArticleService {
     public ComResponse listArticleClass(BusArticleClass bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
-        Page<BusArticleClass> busArticleClassList = (Page<BusArticleClass>) busArticleClassMapper.select(bus);
-        return ComResponse.ok(busArticleClassList.getResult(), busArticleClassList.getTotal());
+        Page<BusArticleClass> busList = (Page<BusArticleClass>) busArticleClassMapper.select(bus);
+        return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**
