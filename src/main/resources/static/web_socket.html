@@ -32,9 +32,7 @@
             //获得消息事件
             socket.onmessage = function (msg) {
                 console.log(msg.data);
-
-                $('#contentDiv').append("<p> "+msg.data+"</p>")
-
+                $('#contentDiv').append("<p> " + msg.data + "</p>")
                 //发现消息进入    开始处理前端触发逻辑
             };
             //关闭事件
