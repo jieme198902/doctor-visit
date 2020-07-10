@@ -50,7 +50,7 @@
         <javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}"
                              type="XMLMAPPER"/>
 
-        <table tableName="bus_relation_message_user%">
+        <table tableName="bus_socket_message%">
 <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         </table>
     </context>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.doctor.visit.repository.BusSocketMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.doctor.visit.domain.BusSocketMessage" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="from_user_id" property="fromUserId" jdbcType="BIGINT" />
+    <result column="to_user_id" property="toUserId" jdbcType="BIGINT" />
+    <result column="sys_to_client" property="sysToClient" jdbcType="CHAR" />
+    <result column="message_type" property="messageType" jdbcType="CHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="CHAR" />
+  </resultMap>
+</mapper>

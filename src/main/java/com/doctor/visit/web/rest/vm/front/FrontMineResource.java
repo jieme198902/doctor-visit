@@ -83,8 +83,8 @@ public class FrontMineResource {
     })
     @PostMapping("listPatient")
     @ApiOperation(value = "前台 - 获取患者列表")
-    public Object listPatient(BusPatient bus, Pageable pageable,HttpServletRequest request) {
-        return patientService.listPatient(bus, pageable);
+    public Object listPatient(BusPatient bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        return patientService.listPatient(bus, pageable,request);
     }
 
 
