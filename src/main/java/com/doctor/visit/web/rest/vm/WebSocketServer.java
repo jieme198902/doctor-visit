@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.web.rest.vm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
