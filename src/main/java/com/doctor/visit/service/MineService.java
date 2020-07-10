@@ -6,6 +6,7 @@ import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.repository.BusEvaluateMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
+import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.data.domain.Pageable;
@@ -30,20 +31,7 @@ public class MineService {
         this.busEvaluateMapper = busEvaluateMapper;
     }
 
-    /**
-     * 后台 - 获取评价列表
-     *
-     * @param bus
-     * @param pageable
-     * @return
-     */
-    public ComResponse<List<BusEvaluate>> listEvaluate(BusEvaluate bus, Pageable pageable) {
-        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
 
-        Page<BusEvaluate> busEvaluateList = (Page<BusEvaluate>) busEvaluateMapper.select(bus);
-        return ComResponse.ok(busEvaluateList.getResult(), busEvaluateList.getTotal());
-    }
 
     /**
      * 前台 - 新增或者更新评价
@@ -53,8 +41,8 @@ public class MineService {
      * @param request     这里需要处理文件
      * @return
      */
-    public ComResponse<BusEvaluate> insertOrUpdateEvaluate(BusEvaluate bus, HttpServletRequest request) {
-        BusUser busUser = commonService.getBusUser(bus.getCreateBy());
+    public ComResponse<BusEvaluate> insertOrUpdateEvaluate(BusEvaluate bus, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
             return ComResponse.failUnauthorized();
         }

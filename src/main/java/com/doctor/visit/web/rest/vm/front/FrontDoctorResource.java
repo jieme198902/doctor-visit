@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 微信医生的接口
  *
@@ -57,8 +59,8 @@ public class FrontDoctorResource {
     })
     @PostMapping("getFavDoctorList")
     @ApiOperation(value = "获取关注的医生列表")
-    public Object getFavDoctorList(BusDoctor bus, Pageable pageable) {
-        return doctorService.listFavDoctor(bus, pageable);
+    public Object getFavDoctorList(BusDoctor bus, Pageable pageable, HttpServletRequest request) throws Exception {
+        return doctorService.listFavDoctor(bus, pageable,request);
     }
 
     /**
@@ -72,9 +74,9 @@ public class FrontDoctorResource {
     })
     @PostMapping("favDoctor")
     @ApiOperation(value = "关注医生")
-    public Object favDoctor(BusRelationUserDoctor bus) {
+    public Object favDoctor(BusRelationUserDoctor bus,HttpServletRequest request) throws Exception {
         bus.setIsDel(Constants.EXIST);
-        return doctorService.insertOrUpdateRelationUserDoctor(bus);
+        return doctorService.insertOrUpdateRelationUserDoctor(bus,request);
     }
 
     /**
@@ -88,9 +90,9 @@ public class FrontDoctorResource {
     })
     @PostMapping("cancelFavDoctor")
     @ApiOperation(value = "取消关注医生")
-    public Object cancelFavDoctor(BusRelationUserDoctor bus) {
+    public Object cancelFavDoctor(BusRelationUserDoctor bus,HttpServletRequest request) throws Exception {
         bus.setIsDel(Constants.DELETE);
-        return doctorService.insertOrUpdateRelationUserDoctor(bus);
+        return doctorService.insertOrUpdateRelationUserDoctor(bus,request);
     }
 
 }

@@ -9,11 +9,13 @@ import com.doctor.visit.repository.BusRelationUserArticleShareMapper;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
+import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -123,13 +125,15 @@ public class ArticleService {
     }
 
     /**
-     * 前台 - 获取文章列表
+     * 前台 - 获取我收藏的文章列表
      *
      * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listFavArticle(BusArticle bus, Pageable pageable) {
+    public ComResponse<List<BusArticle>> listFavArticle(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
+        //获取用户的id
+        bus.setCreateBy(Utils.getUserId(request));
         if (null == bus.getCreateBy()) {
             return ComResponse.failBadRequest();
         }
@@ -196,11 +200,15 @@ public class ArticleService {
      * @param bus
      * @return
      */
-    public ComResponse insertOrUpdateRelationUserArticle(BusRelationUserArticle bus) {
+    public ComResponse insertOrUpdateRelationUserArticle(BusRelationUserArticle bus,HttpServletRequest request) throws Exception {
+        //获取用户的id
+        Long userId = Utils.getUserId(request);
         if (null == bus.getId()) {
             bus.setId(IDKeyUtil.generateId());
+            bus.setUserId(userId);
             busRelationUserArticleMapper.insertSelective(bus);
         } else {
+            bus.setUserId(userId);
             busRelationUserArticleMapper.updateByPrimaryKeySelective(bus);
         }
         return ComResponse.ok();
@@ -212,11 +220,15 @@ public class ArticleService {
      * @param bus
      * @return
      */
-    public ComResponse insertOrUpdateRelationUserArticleShare(BusRelationUserArticleShare bus) {
+    public ComResponse insertOrUpdateRelationUserArticleShare(BusRelationUserArticleShare bus,HttpServletRequest request) throws Exception {
+        //获取用户的id
+        Long userId = Utils.getUserId(request);
         if (null == bus.getId()) {
             bus.setId(IDKeyUtil.generateId());
+            bus.setUserId(userId);
             busRelationUserArticleShareMapper.insertSelective(bus);
         } else {
+            bus.setUserId(userId);
             busRelationUserArticleShareMapper.updateByPrimaryKeySelective(bus);
         }
         return ComResponse.ok();
@@ -230,7 +242,10 @@ public class ArticleService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listArticleShare(BusArticle bus, Pageable pageable) {
+    public ComResponse<List<BusArticle>> listArticleShare(BusArticle bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        //获取用户的id
+        Long userId = Utils.getUserId(request);
+        bus.setCreateBy(userId);
         if (null == bus.getCreateBy()) {
             return ComResponse.failBadRequest();
         }

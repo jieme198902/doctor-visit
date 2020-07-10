@@ -9,4 +9,8 @@ public class UnAuthorizedException extends RuntimeException {
     public UnAuthorizedException() {
         super(HttpStatus.UNAUTHORIZED.getReasonPhrase());
     }
+
+    public UnAuthorizedException(String message) {
+        super(message);
+    }
 }

@@ -3,6 +3,7 @@ package com.doctor.visit.web.rest.vm.front;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusOrderInquiry;
 import com.doctor.visit.service.OrderInquiryService;
+import com.doctor.visit.web.rest.util.Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -28,7 +29,7 @@ public class FrontOrderInquiryResource {
     }
 
     /**
-     * 获取问诊订单列表
+     * 前端 - 获取问诊订单列表
      *
      * @param bus
      * @param pageable
@@ -38,8 +39,9 @@ public class FrontOrderInquiryResource {
         @ApiImplicitParam(dataTypeClass = BusOrderInquiry.class)
     })
     @PostMapping("listOrderInquiry")
-    @ApiOperation(value = "获取问诊订单列表")
-    public Object listOrderInquiry(BusOrderInquiry bus, Pageable pageable) {
+    @ApiOperation(value = "前端 - 获取问诊订单列表")
+    public Object listOrderInquiry(BusOrderInquiry bus, Pageable pageable, HttpServletRequest request) throws Exception {
+        bus.setCreateBy(Utils.getUserId(request));
         return orderInquiryService.listOrderInquiry(bus, pageable);
     }
 
@@ -56,7 +58,7 @@ public class FrontOrderInquiryResource {
     })
     @PostMapping("insertOrUpdateOrderInquiry")
     @ApiOperation(value = "新增或者更新问诊订单")
-    public Object insertOrUpdateOrderInquiry(BusOrderInquiry bus, HttpServletRequest request) {
+    public Object insertOrUpdateOrderInquiry(BusOrderInquiry bus, HttpServletRequest request) throws Exception {
         return orderInquiryService.insertOrUpdateOrderInquiry(bus, request);
     }
 

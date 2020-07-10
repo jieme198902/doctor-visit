@@ -43,7 +43,7 @@ public class FrontUserResource {
     })
     @PostMapping("authenticate")
     @ApiOperation(value = "登录接口")
-    public Object authenticate(String jsCode, HttpServletRequest request) {
+    public Object authenticate(String jsCode, HttpServletRequest request) throws Exception {
         return userService.authenticate(jsCode, request);
     }
 

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 微信文章的接口
  *
@@ -59,8 +61,8 @@ public class FrontArticleResource {
     })
     @PostMapping("getFavArticleList")
     @ApiOperation(value = "获取收藏的文章列表")
-    public Object getFavArticleList(BusArticle bus, Pageable pageable) {
-        return articleService.listFavArticle(bus, pageable);
+    public Object getFavArticleList(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
+        return articleService.listFavArticle(bus, pageable, request);
     }
 
     /**
@@ -74,9 +76,9 @@ public class FrontArticleResource {
     })
     @PostMapping("favArticle")
     @ApiOperation(value = "收藏文章")
-    public Object favArticle(BusRelationUserArticle bus) {
+    public Object favArticle(BusRelationUserArticle bus, HttpServletRequest request) throws Exception {
         bus.setIsDel(Constants.EXIST);
-        return articleService.insertOrUpdateRelationUserArticle(bus);
+        return articleService.insertOrUpdateRelationUserArticle(bus, request);
     }
 
     /**
@@ -90,9 +92,9 @@ public class FrontArticleResource {
     })
     @PostMapping("cancelFavArticle")
     @ApiOperation(value = "取消收藏文章")
-    public Object cancelFavArticle(BusRelationUserArticle bus) {
+    public Object cancelFavArticle(BusRelationUserArticle bus, HttpServletRequest request) throws Exception {
         bus.setIsDel(Constants.DELETE);
-        return articleService.insertOrUpdateRelationUserArticle(bus);
+        return articleService.insertOrUpdateRelationUserArticle(bus, request);
     }
 
     /**
@@ -106,9 +108,9 @@ public class FrontArticleResource {
     })
     @PostMapping("shareArticle")
     @ApiOperation(value = "分享文章")
-    public Object shareArticle(BusRelationUserArticleShare bus) {
+    public Object shareArticle(BusRelationUserArticleShare bus, HttpServletRequest request) throws Exception {
         bus.setIsDel(Constants.EXIST);
-        return articleService.insertOrUpdateRelationUserArticleShare(bus);
+        return articleService.insertOrUpdateRelationUserArticleShare(bus, request);
     }
 
     /**
@@ -122,9 +124,9 @@ public class FrontArticleResource {
     })
     @PostMapping("listArticleShare")
     @ApiOperation(value = "获取我分享的文章列表")
-    public Object listArticleShare(BusArticle bus, Pageable pageable) {
+    public Object listArticleShare(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
         bus.setIsDel(Constants.DELETE);
-        return articleService.listArticleShare(bus, pageable);
+        return articleService.listArticleShare(bus, pageable, request);
     }
 
 }

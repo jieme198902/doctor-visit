@@ -7,7 +7,9 @@ import com.doctor.visit.repository.BusUserMapper;
 import com.doctor.visit.security.AuthoritiesConstants;
 import com.doctor.visit.security.jwt.TokenProvider;
 import com.doctor.visit.web.rest.util.ComResponse;
+import com.doctor.visit.web.rest.util.Des3Util;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
+import com.doctor.visit.web.rest.util.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import okhttp3.OkHttpClient;
@@ -51,7 +53,7 @@ public class UserService {
      * @param jsCode
      * @return
      */
-    public ComResponse<BusUser> authenticate(String jsCode, HttpServletRequest httpServletRequest) {
+    public ComResponse<BusUser> authenticate(String jsCode, HttpServletRequest httpServletRequest) throws Exception {
         if (StringUtils.isBlank(jsCode)) {
             return ComResponse.failBadRequest();
         }
@@ -101,6 +103,7 @@ public class UserService {
                     //更新
                     busUserMapper.updateByPrimaryKeySelective(busUser);
                 }
+                busUser.setToken(Utils.createToken(busUser.getId()));
                 return ComResponse.ok(busUser);
             } else {
                 return ComResponse.fail();

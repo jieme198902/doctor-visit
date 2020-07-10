@@ -9,6 +9,7 @@ import com.doctor.visit.repository.BusPatientMapper;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
+import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +42,7 @@ public class PatientService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusPatient>> listPatient(BusPatient bus, Pageable pageable) {
+    public ComResponse<List<BusPatient>> listPatient(BusPatient bus, Pageable pageable,HttpServletRequest request) throws Exception {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
         Example example = new Example(BusPatient.class);
@@ -52,7 +53,8 @@ public class PatientService {
         }
         //创建者
         if (null != bus.getCreateBy()) {
-            criteria.andEqualTo("createBy", bus.getCreateBy());
+            Long userId = Utils.getUserId(request);
+            criteria.andEqualTo("createBy", userId);
         }
 
         Page<BusPatient> busList = (Page<BusPatient>) busPatientMapper.selectByExample(example);

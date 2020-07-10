@@ -5,10 +5,7 @@ import com.doctor.visit.domain.BusEvaluate;
 import com.doctor.visit.domain.BusPatient;
 import com.doctor.visit.domain.BusUserShippingAddress;
 import com.doctor.visit.domain.BusUserShoppingCart;
-import com.doctor.visit.service.MineService;
-import com.doctor.visit.service.PatientService;
-import com.doctor.visit.service.UserShippingAddressService;
-import com.doctor.visit.service.UserShoppingCartService;
+import com.doctor.visit.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -32,6 +29,7 @@ public class FrontMineResource {
     private final PatientService patientService;
     private final UserShippingAddressService userShippingAddressService;
     private final UserShoppingCartService userShoppingCartService;
+
     public FrontMineResource(MineService mineService, PatientService patientService, UserShippingAddressService userShippingAddressService, UserShoppingCartService userShoppingCartService) {
         this.mineService = mineService;
         this.patientService = patientService;
@@ -53,7 +51,7 @@ public class FrontMineResource {
     })
     @PostMapping("insertOrUpdateEvaluate")
     @ApiOperation(value = "评价接口，评价医生、商品 --> module  模块：0医生，1商品")
-    public Object insertOrUpdateEvaluate(BusEvaluate bus, HttpServletRequest request) {
+    public Object insertOrUpdateEvaluate(BusEvaluate bus, HttpServletRequest request) throws Exception {
         return mineService.insertOrUpdateEvaluate(bus, request);
     }
 
@@ -85,7 +83,7 @@ public class FrontMineResource {
     })
     @PostMapping("listPatient")
     @ApiOperation(value = "前台 - 获取患者列表")
-    public Object listPatient(BusPatient bus, Pageable pageable) {
+    public Object listPatient(BusPatient bus, Pageable pageable,HttpServletRequest request) {
         return patientService.listPatient(bus, pageable);
     }
 

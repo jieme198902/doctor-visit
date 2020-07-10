@@ -93,7 +93,18 @@ public class BusUser implements Serializable {
     @Column(name = "is_del")
     private String isDel;
 
+    @Transient
+    private String token;
+
     private static final long serialVersionUID = 1L;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     /**
      * @return id

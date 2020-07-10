@@ -6,6 +6,7 @@ import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.repository.BusOrderInquiryMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
+import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +53,8 @@ public class OrderInquiryService {
      * @param request 这里需要处理文件
      * @return
      */
-    public ComResponse<BusOrderInquiry> insertOrUpdateOrderInquiry(BusOrderInquiry bus, HttpServletRequest request) {
+    public ComResponse<BusOrderInquiry> insertOrUpdateOrderInquiry(BusOrderInquiry bus, HttpServletRequest request) throws Exception {
+        bus.setCreateBy(Utils.getUserId(request));
         if (null == bus.getCreateBy()) {
             return ComResponse.failBadRequest();
         }

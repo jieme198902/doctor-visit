@@ -9,6 +9,7 @@ import com.doctor.visit.repository.BusRelationUserDoctorMapper;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
+import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +60,10 @@ public class DoctorService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusDoctor>> listFavDoctor(BusDoctor bus, Pageable pageable) {
+    public ComResponse<List<BusDoctor>> listFavDoctor(BusDoctor bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        //获取用户的id
+        Long userId = Utils.getUserId(request);
+        bus.setCreateBy(userId);
         if (null == bus.getCreateBy()) {
             return ComResponse.failBadRequest();
         }
@@ -127,11 +131,15 @@ public class DoctorService {
      * @param bus
      * @return
      */
-    public ComResponse insertOrUpdateRelationUserDoctor(BusRelationUserDoctor bus) {
+    public ComResponse insertOrUpdateRelationUserDoctor(BusRelationUserDoctor bus,HttpServletRequest request) throws Exception {
+        //获取用户的id
+        Long userId = Utils.getUserId(request);
         if (null == bus.getId()) {
             bus.setId(IDKeyUtil.generateId());
+            bus.setUserId(userId);
             busRelationUserDoctorMapper.insertSelective(bus);
         } else {
+            bus.setUserId(userId);
             busRelationUserDoctorMapper.updateByPrimaryKeySelective(bus);
         }
         return ComResponse.ok();
