@@ -44,19 +44,75 @@ public final class Utils {
         return Long.parseLong(idStr);
     }
 
+    /**
+     * 通过token获取userId，不抛异常
+     *
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    public static Long getUserIdWithException(String token) throws Exception {
+        if (StringUtils.isBlank(token)) {
+            return null;
+        }
+        String idTime = Des3Util.decode(token, Constants.des3Key);
+        if (StringUtils.isBlank(idTime)) {
+            return null;
+        }
+        String idStr = idTime.split(Constants.UNDERLINE)[0];
+        if (StringUtils.isBlank(idStr)) {
+            return null;
+        }
+        return Long.parseLong(idStr);
+    }
+
 
     /**
      * 从header中获取token
+     *
      * @param request
      * @return
      * @throws Exception
      */
     public static Long getUserId(HttpServletRequest request) throws Exception {
         String token = request.getHeader(Constants.TOKEN);
-        if(StringUtils.isBlank(token)){
+        if (StringUtils.isBlank(token)) {
             throw new UnAuthorizedException("token is null . ");
         }
         return getUserId(token);
+    }
+
+    /**
+     * 获取用户id信息，不抛异常
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public static Long getUserIdWithException(HttpServletRequest request) throws Exception {
+        String token = request.getHeader(Constants.TOKEN);
+        if (StringUtils.isBlank(token)) {
+            return null;
+        }
+        return getUserIdWithException(token);
+    }
+
+    /**
+     * 判断id是否为空
+     *
+     * @param id
+     * @return
+     */
+    public static boolean isBlank(Long id) {
+        if (null == id) {
+            return true;
+        } else {
+            if (id <= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
 }

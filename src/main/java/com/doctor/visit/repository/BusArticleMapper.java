@@ -25,4 +25,12 @@ public interface BusArticleMapper extends CommMapper<BusArticle> {
      * @return
      */
     List<BusArticle> selectShareArticle(@Param("userId") Long userId);
+
+    /**
+     * 获取文章列表，包含收藏状态
+     *
+     * @param userId
+     * @return
+     */
+    List<BusArticle> selectArticleListWithFav(@Param("userId") Long userId);
 }

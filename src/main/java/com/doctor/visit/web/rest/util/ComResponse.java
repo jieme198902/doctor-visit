@@ -139,7 +139,7 @@ public final class ComResponse<T> implements Serializable {
      * @return
      */
     public static <T> ComResponse<T> failBadRequest() {
-        return of(null, HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), 0L);
+        return of(null, HttpStatus.BAD_REQUEST.value(), "非法请求", 0L);
     }
 
 

@@ -45,8 +45,8 @@ public class FrontArticleResource {
     })
     @PostMapping("getArticleList")
     @ApiOperation(value = "文章列表")
-    public Object getArticleList(BusArticle bus, Pageable pageable) {
-        return articleService.listArticle(bus, pageable);
+    public Object getArticleList(BusArticle bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        return articleService.listArticle(bus, pageable,request);
     }
 
     /**

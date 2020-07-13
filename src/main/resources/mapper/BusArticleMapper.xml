@@ -49,4 +49,34 @@
 
   </select>
 
+  <select id="selectArticleListWithFav" resultMap="BaseResultMap">
+        SELECT DISTINCT
+            a.id,
+            a.title,
+            a.class_id,
+            a.class_name,
+            a.forward_from,
+            a.url,
+            a.create_name,
+            a.create_time,
+            a.edit_by,
+            a.edit_name,
+            a.edit_time,
+            <if test="null!=userId">
+                (CASE
+                    WHEN rua.user_id = #{userId}
+                    AND rua.is_del = "0" THEN
+                        'true' ELSE 'false'
+                    END
+                    ) AS create_by
+            </if>
+            <if test="null==userId">
+            'false' AS create_by
+            </if>
+
+                FROM
+                bus_article AS a
+            LEFT JOIN bus_relation_user_article AS rua ON a.id = rua.article_id
+  </select>
+
 </mapper>

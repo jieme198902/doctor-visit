@@ -12,8 +12,10 @@ import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -46,7 +48,7 @@ public class ArticleService {
 
 
     /**
-     * 查询文章分类列表
+     * 后台 - 查询文章分类列表
      *
      * @param bus
      * @param pageable
@@ -54,18 +56,26 @@ public class ArticleService {
      */
     public ComResponse listArticleClass(BusArticleClass bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
-        Page<BusArticleClass> busList = (Page<BusArticleClass>) busArticleClassMapper.select(bus);
+        Example example = new Example(BusArticleClass.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDel", Constants.EXIST);
+        if (StringUtils.isNotBlank(bus.getName())) {
+            criteria.andLike("name", bus.getName() + "%");
+        }
+        Page<BusArticleClass> busList = (Page<BusArticleClass>) busArticleClassMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
     /**
-     * 新增或者更新文章分类
+     * 后台 - 新增或者更新文章分类
      *
      * @param bus
      * @return
      */
     public ComResponse<BusArticleClass> insertOrUpdateArticleClass(BusArticleClass bus) {
+        if (StringUtils.isBlank(bus.getName())) {
+            return ComResponse.failBadRequest();
+        }
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
             JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
@@ -79,6 +89,9 @@ public class ArticleService {
                 busArticleClassMapper.updateByPrimaryKeySelective(bus);
             } else {
                 bus.setId(IDKeyUtil.generateId());
+                bus.setCreateBy(jhiUser.getId());
+                bus.setCreateName(jhiUser.getFirstName());
+                bus.setCreateTime(new Date());
                 busArticleClassMapper.insertSelective(bus);
             }
         } else {
@@ -95,6 +108,9 @@ public class ArticleService {
      * @return
      */
     public ComResponse<StringBuilder> deleteArticleClass(String ids) {
+        if (StringUtils.isBlank(ids)) {
+            return ComResponse.fail("ids参数为空。");
+        }
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
         for (String id : idsAry) {
@@ -111,16 +127,17 @@ public class ArticleService {
 
 
     /**
-     * 前台 - 获取文章列表 FIXME 获取用户的收藏状态
+     * 前台 - 获取文章列表
      *
      * @param bus
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listArticle(BusArticle bus, Pageable pageable) {
+    public ComResponse<List<BusArticle>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
-        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.select(bus);
+        Long userId = Utils.getUserIdWithException(request);
+        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
@@ -180,6 +197,9 @@ public class ArticleService {
      * @return
      */
     public ComResponse<StringBuilder> deleteArticle(String ids) {
+        if (StringUtils.isBlank(ids)) {
+            return ComResponse.fail("ids为空");
+        }
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
         for (String id : idsAry) {
@@ -200,7 +220,11 @@ public class ArticleService {
      * @param bus
      * @return
      */
-    public ComResponse insertOrUpdateRelationUserArticle(BusRelationUserArticle bus,HttpServletRequest request) throws Exception {
+    public ComResponse insertOrUpdateRelationUserArticle(BusRelationUserArticle bus, HttpServletRequest request) throws Exception {
+        //获取用户的id
+        if (Utils.isBlank(bus.getArticleId())) {
+            return ComResponse.fail("文章id为空");
+        }
         //获取用户的id
         Long userId = Utils.getUserId(request);
         if (null == bus.getId()) {
@@ -220,8 +244,11 @@ public class ArticleService {
      * @param bus
      * @return
      */
-    public ComResponse insertOrUpdateRelationUserArticleShare(BusRelationUserArticleShare bus,HttpServletRequest request) throws Exception {
+    public ComResponse insertOrUpdateRelationUserArticleShare(BusRelationUserArticleShare bus, HttpServletRequest request) throws Exception {
         //获取用户的id
+        if (Utils.isBlank(bus.getArticleId())) {
+            return ComResponse.fail("文章id为空");
+        }
         Long userId = Utils.getUserId(request);
         if (null == bus.getId()) {
             bus.setId(IDKeyUtil.generateId());
@@ -242,7 +269,7 @@ public class ArticleService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listArticleShare(BusArticle bus, Pageable pageable,HttpServletRequest request) throws Exception {
+    public ComResponse<List<BusArticle>> listArticleShare(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
         //获取用户的id
         Long userId = Utils.getUserId(request);
         bus.setCreateBy(userId);

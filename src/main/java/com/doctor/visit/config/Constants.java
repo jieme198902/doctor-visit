@@ -28,11 +28,11 @@ public final class Constants {
     /**
      * 删除
      */
-    public static final String DELETE = "0";
+    public static final String DELETE = "1";
     /**
      * 存在
      */
-    public static final String EXIST = "1";
+    public static final String EXIST = "0";
     /**
      * 前端的微信端 可以不登录
      */

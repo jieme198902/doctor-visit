@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 获取文章列表
  *
@@ -85,10 +87,10 @@ public class SysArticleResource {
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = BusArticle.class)
     })
-    @PostMapping("getArticleList")
+    @PostMapping("listArticle")
     @ApiOperation(value = "文章列表")
-    public Object getArticleList(BusArticle bus, Pageable pageable) {
-        return articleService.listArticle(bus, pageable);
+    public Object getArticleList(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
+        return articleService.listArticle(bus, pageable,request);
     }
 
     /**
