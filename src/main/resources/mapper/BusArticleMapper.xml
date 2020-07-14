@@ -77,7 +77,7 @@
 
                 FROM
                 bus_article AS a
-            LEFT JOIN bus_relation_user_article AS rua ON a.id = rua.article_id
+            LEFT JOIN bus_relation_user_article AS rua ON a.id = rua.article_id WHERE a.is_del = '0'
   </select>
 
 </mapper>

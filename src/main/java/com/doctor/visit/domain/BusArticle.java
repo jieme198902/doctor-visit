@@ -24,6 +24,7 @@ public class BusArticle implements Serializable {
      * 文章类型id
      */
     @Column(name = "class_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long classId;
 
     /**

@@ -60,6 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(Constants.API_BASE_FRONT + "/**").permitAll()
             //后台的接口需要授权
             .antMatchers("/api/**").authenticated()
+            .antMatchers("/html/**").permitAll()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()

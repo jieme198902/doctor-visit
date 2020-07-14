@@ -112,12 +112,12 @@ jhipster:
   # CORS is disabled by default on microservices, as you should access them through a gateway.
   # If you want to enable it, please uncomment the configuration below.
   cors:
-     allowed-origins: "*"
-     allowed-methods: "*"
-     allowed-headers: "*"
-     exposed-headers: "Authorization,Link,X-Total-Count"
-     allow-credentials: true
-     max-age: 1800
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
+    allow-credentials: true
+    max-age: 1800
   security:
     authentication:
       jwt:
@@ -153,4 +153,6 @@ jhipster:
 
 # application:
 custom:
+  rootPath: '/Users/kuanwang/Documents/workspaces/JavaWebProjects/doctor-visit/src/main/resources/static/'
+  requestPath: 'http://localhost:8082/'
   excludeLogin: 'doctor/authenticate,front/'

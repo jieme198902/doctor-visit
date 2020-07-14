@@ -13,6 +13,7 @@ import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -31,6 +32,11 @@ import java.util.Optional;
 @Service
 public class ArticleService {
 
+    @Value("${custom.rootPath}")
+    private String rootPath;
+    @Value("${custom.requestPath}")
+    private String requestPath;
+    //
     private final CommonService commonService;
     //
     private final BusArticleMapper busArticleMapper;
@@ -135,23 +141,26 @@ public class ArticleService {
      */
     public ComResponse<List<BusArticle>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
         Page<BusArticle> busList = null;
         if (sys) {
             Example example = new Example(BusArticle.class);
             Example.Criteria criteria = example.createCriteria();
-            if(StringUtils.isNotBlank(bus.getTitle())){
-                criteria.andLike("title",bus.getTitle()+"%");
+            criteria.andEqualTo("isDel", Constants.EXIST);
+            if (StringUtils.isNotBlank(bus.getTitle())) {
+                criteria.andLike("title", bus.getTitle() + "%");
             }
-            if(null!=bus.getClassId()){
-                criteria.andEqualTo("classId",bus.getClassId());
+            if (null != bus.getClassId()) {
+                criteria.andEqualTo("classId", bus.getClassId());
             }
-            busList = (Page<BusArticle>)busArticleMapper.selectByExample(example);
+            busList = (Page<BusArticle>) busArticleMapper.selectByExample(example);
         } else {
             Long userId = Utils.getUserIdWithException(request);
             busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId);
         }
-        return ComResponse.ok(busList.getResult(), busList.getTotal());
+        return ComResponse.ok(busList.getResult(), busList.getTotal()).setStarDataListener(list -> {
+            list.forEach(bean -> bean.setUrl(requestPath + bean.getUrl()));
+            return list;
+        });
     }
 
     /**
@@ -174,7 +183,7 @@ public class ArticleService {
 
     /**
      * 新增或者更新文章
-     * FIXME 静态化文章生成url
+     * 静态化文章生成url
      *
      * @param bus
      * @return
@@ -190,12 +199,16 @@ public class ArticleService {
             bus.setEditBy(jhiUser.getId());
             bus.setEditName(jhiUser.getFirstName());
             if (null != bus.getId()) {
+                //设置html的静态化，并且维护url
+                bus.setUrl(Utils.writeHtml(bus, rootPath));
                 busArticleMapper.updateByPrimaryKeySelective(bus);
             } else {
                 bus.setId(IDKeyUtil.generateId());
                 bus.setCreateTime(new Date());
                 bus.setCreateBy(jhiUser.getId());
                 bus.setCreateName(jhiUser.getFirstName());
+                //设置html的静态化，并且维护url
+                bus.setUrl(Utils.writeHtml(bus, rootPath));
                 busArticleMapper.insertSelective(bus);
             }
         } else {

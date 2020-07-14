@@ -1,14 +1,101 @@
 package com.doctor.visit.web.rest.util;
 
 import com.doctor.visit.config.Constants;
+import com.doctor.visit.domain.BusArticle;
 import com.doctor.visit.web.rest.errors.UnAuthorizedException;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public final class Utils {
 
     private Utils() {
+    }
+
+
+    /**
+     * 文章生成html
+     *
+     * @param busArticle
+     * @return 文件相对地址
+     */
+    public static String writeHtml(BusArticle busArticle, String rootPath) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String ymd = sdf.format(new Date());
+        if (rootPath.endsWith("/")) {
+            rootPath = rootPath.substring(0, rootPath.length() - 1);
+        }
+        String savePath = rootPath + File.separator + "html" + File.separator + ymd + File.separator;
+        String saveUrl = "html/" + ymd + "/";
+        String fileName = busArticle.getId() + ".html";
+        File saveFile = new File(savePath);
+        if (!saveFile.exists()) {
+            saveFile.mkdirs();
+        }
+        String html =
+            "<!doctype html>" +
+                "<html>" +
+                "<head>" +
+                "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />" +
+                "<meta content='telephone=no' name='format-detection'> " +
+                "<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>" +
+                "<title>" + busArticle.getTitle() + "</title>" +
+                "</head>" +
+                "<body> " +
+                "<div class='warp' style='text-align:center;bold:1px;font-size:20px;'>" +
+                busArticle.getForwardFrom() +
+                "</div> " +
+                "<div class='warp' id='nr'>" + busArticle.getContent() + "</div>" +
+                //替换内容ip
+                "<script> " +
+                "function getUrl() {" +
+                "    var href = location.href;" +
+                "    var http = href.indexOf('http://') > 0 ? 'http://' : 'https://';" +
+                "    var port = location.port;" +
+                "    if (port === '80') {" +
+                "        return http + location.hostname" +
+                "    } else {" +
+                "        return http + location.host;" +
+                "    }" +
+                "}" +
+                "function setImgSrc(){" +
+                "    for (var i = 0; i < document.getElementsByTagName('img').length; i++) {" +
+                "        var _this = document.getElementsByTagName('img')[0];" +
+                "        var src = _this.data('src');" +
+                "        _this.setAttribute('src',getUrl() + src.substring(src.lastIndexOf(':') + 5))" +
+                "    }" +
+                "}" +
+                "setImgSrc();" +
+                "</script>" +
+                "</body>" +
+                "</html>";
+        File file = new File(savePath + fileName);
+        BufferedWriter writer = null;
+        try {
+            if (!file.exists() || !file.isDirectory()) {
+                file.createNewFile();
+            }
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "utf-8"));
+            writer.write(html);
+            writer.flush();
+            writer.close();
+            writer = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.flush();
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return saveUrl + fileName;
     }
 
     /**
