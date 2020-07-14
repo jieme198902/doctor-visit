@@ -1,7 +1,9 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +19,12 @@ public class BusUser implements Serializable {
      * 名字
      */
     private String name;
+
+    /**
+     * 微信昵称
+     */
+    @Column(name = "wechat_nickname")
+    private String wechatNickname;
 
     /**
      * 用户唯一标识openid
@@ -67,6 +75,8 @@ public class BusUser implements Serializable {
      * 创建时间
      */
     @Column(name = "create_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date createTime;
 
     /**
@@ -85,6 +95,8 @@ public class BusUser implements Serializable {
      * 修改时间
      */
     @Column(name = "edit_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date editTime;
 
     /**
@@ -92,6 +104,10 @@ public class BusUser implements Serializable {
      */
     @Column(name = "is_del")
     private String isDel;
+    /**
+     * 用户状态：0可用，1黑名单
+     */
+    private String status;
 
     @Transient
     private String token;
@@ -136,6 +152,22 @@ public class BusUser implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 微信昵称
+     * @return
+     */
+    public String getWechatNickname() {
+        return wechatNickname;
+    }
+
+    /**
+     * 微信昵称
+     * @param wechatNickname
+     */
+    public void setWechatNickname(String wechatNickname) {
+        this.wechatNickname = wechatNickname;
     }
 
     /**
@@ -370,5 +402,21 @@ public class BusUser implements Serializable {
      */
     public void setIsDel(String isDel) {
         this.isDel = isDel;
+    }
+
+    /**
+     * 用户状态：0可用，1黑名单
+     * @return
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * 用户状态：0可用，1黑名单
+     * @param status
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
