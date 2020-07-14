@@ -133,11 +133,24 @@ public class ArticleService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
+    public ComResponse<List<BusArticle>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
-        Long userId = Utils.getUserIdWithException(request);
-        Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId);
+        Page<BusArticle> busList = null;
+        if (sys) {
+            Example example = new Example(BusArticle.class);
+            Example.Criteria criteria = example.createCriteria();
+            if(StringUtils.isNotBlank(bus.getTitle())){
+                criteria.andLike("title",bus.getTitle()+"%");
+            }
+            if(null!=bus.getClassId()){
+                criteria.andEqualTo("classId",bus.getClassId());
+            }
+            busList = (Page<BusArticle>)busArticleMapper.selectByExample(example);
+        } else {
+            Long userId = Utils.getUserIdWithException(request);
+            busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId);
+        }
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
@@ -180,6 +193,9 @@ public class ArticleService {
                 busArticleMapper.updateByPrimaryKeySelective(bus);
             } else {
                 bus.setId(IDKeyUtil.generateId());
+                bus.setCreateTime(new Date());
+                bus.setCreateBy(jhiUser.getId());
+                bus.setCreateName(jhiUser.getFirstName());
                 busArticleMapper.insertSelective(bus);
             }
         } else {

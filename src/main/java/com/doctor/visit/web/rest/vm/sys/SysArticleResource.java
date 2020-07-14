@@ -90,7 +90,7 @@ public class SysArticleResource {
     @PostMapping("listArticle")
     @ApiOperation(value = "文章列表")
     public Object getArticleList(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
-        return articleService.listArticle(bus, pageable,request);
+        return articleService.listArticle(bus, pageable,request,true);
     }
 
     /**

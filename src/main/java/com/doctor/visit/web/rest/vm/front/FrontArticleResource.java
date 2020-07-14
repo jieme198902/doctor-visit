@@ -43,10 +43,10 @@ public class FrontArticleResource {
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = BusArticle.class)
     })
-    @PostMapping("getArticleList")
+    @PostMapping("listArticle")
     @ApiOperation(value = "文章列表")
-    public Object getArticleList(BusArticle bus, Pageable pageable,HttpServletRequest request) throws Exception {
-        return articleService.listArticle(bus, pageable,request);
+    public Object listArticle(BusArticle bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        return articleService.listArticle(bus, pageable,request,false);
     }
 
     /**
@@ -59,9 +59,9 @@ public class FrontArticleResource {
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = BusArticle.class)
     })
-    @PostMapping("getFavArticleList")
+    @PostMapping("listFavArticle")
     @ApiOperation(value = "获取收藏的文章列表")
-    public Object getFavArticleList(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
+    public Object listFavArticle(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
         return articleService.listFavArticle(bus, pageable, request);
     }
 

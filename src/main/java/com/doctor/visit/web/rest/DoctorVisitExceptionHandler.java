@@ -18,13 +18,19 @@ public class DoctorVisitExceptionHandler {
     @ExceptionHandler(Exception.class)
     public void exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) throws IOException {
         ComResponse comResponse = ComResponse.fail();
+        String message = ex.getMessage();
         if (ex instanceof org.springframework.dao.DuplicateKeyException) {
-            if (ex.getMessage().contains("Duplicate entry")) {
-                String message = ex.getMessage();
+            if (message.contains("Duplicate entry")) {
                 message = message.substring(message.indexOf("Duplicate entry '")+"Duplicate entry '".length(), message.indexOf("' for key '"));
                 comResponse.setMessage("【"+message + "】已录入");
-                response.getOutputStream().write(new Gson().toJson(comResponse).getBytes());
             }
         }
+        if(ex instanceof org.springframework.dao.DataIntegrityViolationException){
+            if(message.contains("doesn't have a default value")){
+                message = message.substring(message.indexOf(": Field '")+": Field '".length(), message.indexOf("' doesn't have a default value"));
+                comResponse.setMessage("请填写【"+message + "】的值");
+            }
+        }
+        response.getOutputStream().write(new Gson().toJson(comResponse).getBytes());
     }
 }

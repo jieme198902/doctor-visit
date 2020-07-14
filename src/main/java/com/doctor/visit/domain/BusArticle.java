@@ -1,7 +1,9 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,6 +36,12 @@ public class BusArticle implements Serializable {
      * 文章内容url
      */
     private String url;
+
+    /**
+     * 文章内容
+     */
+    private String content;
+
     /**
      * 文章转发哪里
      */
@@ -55,6 +63,8 @@ public class BusArticle implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     @Column(name = "create_time")
     private Date createTime;
 
@@ -73,6 +83,8 @@ public class BusArticle implements Serializable {
     /**
      * 修改时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     @Column(name = "edit_time")
     private Date editTime;
 
@@ -182,6 +194,22 @@ public class BusArticle implements Serializable {
      */
     public void setUrl(String url) {
         this.url = url;
+    }
+    /**
+     * 设置文章内容
+     *
+     * @return content 文章内容
+     */
+    public String getContent() {
+        return content;
+    }
+    /**
+     * 设置文章内容
+     *
+     * @param content 文章内容
+     */
+    public void setContent(String content) {
+        this.content = content;
     }
 
     /**

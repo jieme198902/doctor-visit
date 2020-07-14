@@ -10,6 +10,7 @@
     <result column="class_id" property="classId" jdbcType="BIGINT" />
     <result column="class_name" property="className" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="forward_from" property="forwardFrom" jdbcType="VARCHAR" />
     <result column="create_by" property="createBy" jdbcType="BIGINT" />
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
@@ -66,12 +67,12 @@
                 (CASE
                     WHEN rua.user_id = #{userId}
                     AND rua.is_del = "0" THEN
-                        'true' ELSE 'false'
+                        '1' ELSE '0'
                     END
                     ) AS create_by
             </if>
             <if test="null==userId">
-            'false' AS create_by
+            '0' AS create_by
             </if>
 
                 FROM
