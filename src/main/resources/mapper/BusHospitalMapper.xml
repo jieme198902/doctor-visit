@@ -8,8 +8,10 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="img" property="img" jdbcType="VARCHAR" />
-    <result column="grade" property="grade" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="grade_id" property="gradeId" jdbcType="BIGINT" />
+    <result column="grade_name" property="gradeName" jdbcType="VARCHAR" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
     <result column="lat" property="lat" jdbcType="VARCHAR" />
     <result column="lng" property="lng" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />

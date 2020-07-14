@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import com.doctor.visit.web.rest.errors.UnAuthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

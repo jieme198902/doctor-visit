@@ -31,6 +31,10 @@ public class DoctorVisitExceptionHandler {
                 comResponse.setMessage("请填写【"+message + "】的值");
             }
         }
+        //jwt 过期
+        if(ex instanceof org.springframework.security.authentication.InsufficientAuthenticationException){
+            comResponse = ComResponse.failUnauthorized();
+        }
         response.getOutputStream().write(new Gson().toJson(comResponse).getBytes());
     }
 }

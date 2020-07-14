@@ -1,6 +1,8 @@
 package com.doctor.visit.security.jwt;
 
 import com.doctor.visit.config.Constants;
+import com.doctor.visit.web.rest.util.ComResponse;
+import com.google.gson.Gson;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -33,6 +35,9 @@ public class JWTFilter extends GenericFilterBean {
         if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        }else{
+            servletResponse.getOutputStream().write(new Gson().toJson(ComResponse.failUnauthorized()).getBytes());
+            return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

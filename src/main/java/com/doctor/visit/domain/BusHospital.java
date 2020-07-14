@@ -1,7 +1,9 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,12 +28,27 @@ public class BusHospital implements Serializable {
     /**
      * 医院等级
      */
-    private String grade;
+    @Column(name = "grade_id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long gradeId;
+    /**
+     * 医院等级
+     */
+    @Column(name = "grade_name")
+    private String gradeName;
+
+    /**
+     * 医院类型
+     */
+    @Column(name = "type_id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long typeId;
 
     /**
      * 医院类型：综合医院等
      */
-    private String type;
+    @Column(name = "type_name")
+    private String typeName;
 
     /**
      * 维度
@@ -79,6 +96,8 @@ public class BusHospital implements Serializable {
      * 创建时间
      */
     @Column(name = "create_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date createTime;
 
     /**
@@ -97,6 +116,8 @@ public class BusHospital implements Serializable {
      * 修改时间
      */
     @Column(name = "edit_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date editTime;
 
     /**
@@ -176,37 +197,63 @@ public class BusHospital implements Serializable {
     /**
      * 获取医院等级
      *
-     * @return grade - 医院等级
+     * @return gradeId - 医院等级
      */
-    public String getGrade() {
-        return grade;
+    public Long getGradeId() {
+        return gradeId;
     }
 
     /**
      * 设置医院等级
      *
-     * @param grade 医院等级
+     * @param gradeId 医院等级
      */
-    public void setGrade(String grade) {
-        this.grade = grade;
+    public void setGradeId(Long gradeId) {
+        this.gradeId = gradeId;
+    }
+
+    /**
+     * 获取医院等级
+     *
+     * @return gradeName - 医院等级
+     */
+    public String getGradeName() {
+        return gradeName;
+    }
+
+    /**
+     * 设置医院等级
+     *
+     * @param gradeName 医院等级
+     */
+    public void setGradeName(String gradeName) {
+        this.gradeName = gradeName;
+    }
+
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     /**
      * 获取医院类型：综合医院等
      *
-     * @return type - 医院类型：综合医院等
+     * @return typeName - 医院类型：综合医院等
      */
-    public String getType() {
-        return type;
+    public String getTypeName() {
+        return typeName;
     }
 
     /**
      * 设置医院类型：综合医院等
      *
-     * @param type 医院类型：综合医院等
+     * @param typeName 医院类型：综合医院等
      */
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     /**
