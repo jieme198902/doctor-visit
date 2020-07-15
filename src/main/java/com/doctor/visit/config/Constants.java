@@ -1,5 +1,11 @@
 package com.doctor.visit.config;
 
+import com.doctor.visit.domain.BusArea;
+import net.jodah.expiringmap.ExpiringMap;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * Application constants.
  */
@@ -9,6 +15,12 @@ public final class Constants {
 
     private Constants() {
     }
+
+    /**
+     * 行政区划
+     */
+    public static final ExpiringMap<String, List<Map<String,Object>>> areaMap = ExpiringMap.builder().variableExpiration().build();
+
 
     public static final String COMMA = ",";
     public static final String UNDERLINE = "_";

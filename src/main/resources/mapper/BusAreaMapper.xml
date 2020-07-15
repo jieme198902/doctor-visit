@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.doctor.visit.repository.BusAreaMapper" >
+  <resultMap id="BaseResultMap" type="com.doctor.visit.domain.BusArea" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="WGBM" property="wgbm" jdbcType="VARCHAR" />
+    <id column="SJWGBM" property="sjwgbm" jdbcType="VARCHAR" />
+    <result column="WGMC" property="wgmc" jdbcType="VARCHAR" />
+    <result column="WGLX" property="wglx" jdbcType="VARCHAR" />
+    <result column="WGDZ" property="wgdz" jdbcType="VARCHAR" />
+    <result column="GB" property="gb" jdbcType="VARCHAR" />
+    <result column="WGJB" property="wgjb" jdbcType="DECIMAL" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="LAT" property="lat" jdbcType="VARCHAR" />
+    <result column="LNG" property="lng" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="selectAreaForSelect" resultType="java.util.Map">
+    select
+        WGBM AS `value`,
+        WGMC AS label,
+        SJWGBM AS pValue
+    from
+        bus_area
+    where SJWGBM = #{wgbm}
+
+  </select>
+</mapper>

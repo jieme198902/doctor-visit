@@ -130,3 +130,12 @@ UPDATE bus_self_diagnose
 set fid = CONCAT(left(fid,1),RIGHT(fid,2)) where LENGTH(fid)=4;
 
 ```
+
+redis
+wangkuan0203
+
+mysql
+mysql@123.com
+
+ssh 
+root/wangkuan195961V
