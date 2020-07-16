@@ -94,6 +94,10 @@ public class DoctorService {
                 busDoctorMapper.updateByPrimaryKeySelective(bus);
             } else {
                 bus.setId(IDKeyUtil.generateId());
+                bus.setId(IDKeyUtil.generateId());
+                bus.setCreateTime(new Date());
+                bus.setCreateBy(jhiUser.getId());
+                bus.setCreateName(jhiUser.getFirstName());
                 busDoctorMapper.insertSelective(bus);
             }
         } else {

@@ -39,7 +39,7 @@ public class SysDoctorResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusHospital.class)
+        @ApiImplicitParam(dataTypeClass = BusDoctor.class)
     })
     @PostMapping("listDoctor")
     @ApiOperation(value = "查询医生列表")
@@ -54,7 +54,7 @@ public class SysDoctorResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusHospital.class)
+        @ApiImplicitParam(dataTypeClass = BusDoctor.class)
     })
     @PostMapping("insertOrUpdateDoctor")
     @ApiOperation(value = "新增或者修改医生")

@@ -9,6 +9,7 @@ import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -44,9 +45,13 @@ public class ClincClassService {
      */
     public ComResponse<List<BusClincClass>> listClincClass(BusClincClass bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
+
         Example example = new Example(BusClincClass.class);
         Example.Criteria criteria = example.createCriteria();
+        criteria.andLike("isDel", Constants.EXIST);
+        if (StringUtils.isNotBlank(bus.getClincClassName())) {
+            criteria.andLike("clincClassName", bus.getClincClassName() + "%");
+        }
 
         Page<BusClincClass> busList = (Page<BusClincClass>) busClincClassMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
@@ -54,10 +59,10 @@ public class ClincClassService {
 
     /**
      * 新增或者更新科室
-     * FIXME
+     *
      *
      * @param bus
-     * @param request       这里需要处理文件
+     * @param request
      * @return
      */
     public ComResponse<BusClincClass> insertOrUpdateClincClass(BusClincClass bus, HttpServletRequest request) {
@@ -74,6 +79,9 @@ public class ClincClassService {
                 busClincClassMapper.updateByPrimaryKeySelective(bus);
             } else {
                 bus.setId(IDKeyUtil.generateId());
+                bus.setCreateTime(new Date());
+                bus.setCreateBy(jhiUser.getId());
+                bus.setCreateName(jhiUser.getFirstName());
                 busClincClassMapper.insertSelective(bus);
             }
         } else {
