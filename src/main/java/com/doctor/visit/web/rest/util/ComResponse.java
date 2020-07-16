@@ -74,6 +74,15 @@ public final class ComResponse<T> implements Serializable {
     }
 
     /**
+     * 成功
+     *
+     * @return
+     */
+    public boolean isSuccess() {
+        return ( HttpStatus.OK.value() == getStatus());
+    }
+
+    /**
      * ok 200
      *
      * @param data
@@ -102,6 +111,7 @@ public final class ComResponse<T> implements Serializable {
     public static <T> ComResponse<T> fail() {
         return of(null, HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), 0L);
     }
+
     /**
      * fail 500
      *
@@ -141,7 +151,6 @@ public final class ComResponse<T> implements Serializable {
     public static <T> ComResponse<T> failBadRequest() {
         return of(null, HttpStatus.BAD_REQUEST.value(), "非法请求", 0L);
     }
-
 
 
     /**

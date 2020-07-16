@@ -139,3 +139,7 @@ mysql@123.com
 
 ssh 
 root/wangkuan195961V
+
+
+nginx 
+/usr/local/etc/nginx/servers/doctorvisit.conf

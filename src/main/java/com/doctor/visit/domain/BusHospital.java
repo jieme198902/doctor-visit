@@ -73,7 +73,14 @@ public class BusHospital implements Serializable {
     /**
      * 所属城市
      */
-    private String area;
+    @Column(name = "area_name")
+    private String areaName;
+
+    /**
+     * 所属城市编码
+     */
+    @Column(name = "area_code")
+    private String areaCode;
 
     /**
      * 医院咨询量
@@ -331,19 +338,36 @@ public class BusHospital implements Serializable {
     /**
      * 获取所属城市
      *
-     * @return area - 所属城市
+     * @return areaName - 所属城市
      */
-    public String getArea() {
-        return area;
+    public String getAreaName() {
+        return areaName;
     }
 
     /**
      * 设置所属城市
      *
-     * @param area 所属城市
+     * @param areaName 所属城市
      */
-    public void setArea(String area) {
-        this.area = area;
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    /**
+     * 获取所属城市 编码
+     *
+     * @return areaCode - 所属城市 编码
+     */
+    public String getAreaCode() {
+        return areaCode;
+    }
+    /**
+     * 设置所属城市编码
+     *
+     * @param areaCode 所属城市编码
+     */
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
     }
 
     /**

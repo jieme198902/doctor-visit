@@ -1,6 +1,5 @@
 package com.doctor.visit.config;
 
-import com.doctor.visit.domain.BusArea;
 import net.jodah.expiringmap.ExpiringMap;
 
 import java.util.List;
@@ -24,6 +23,13 @@ public final class Constants {
 
     public static final String COMMA = ",";
     public static final String UNDERLINE = "_";
+    public static final String MIDDLE_LINE = "-";
+    public static final String POINT=".";
+    public static final String SLASH="/";
+    public static final String SPACE = "";
+
+    public static final String FILE_TYPE_IMG = "0";
+
     public static final String TOKEN = "token";
 
     public static final String BEARER = "Bearer ";

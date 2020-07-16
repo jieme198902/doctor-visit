@@ -2,6 +2,7 @@ package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
+import com.doctor.visit.repository.BusAreaMapper;
 import com.doctor.visit.repository.BusHospitalMapper;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
@@ -9,7 +10,6 @@ import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Criteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -28,12 +28,16 @@ import java.util.Optional;
 @Service
 public class HospitalService {
     private final CommonService commonService;
+    private final UploadService uploadService;
     //
     private final BusHospitalMapper busHospitalMapper;
+    private final BusAreaMapper busAreaMapper;
 
-    public HospitalService(CommonService commonService, BusHospitalMapper busHospitalMapper) {
+    public HospitalService(CommonService commonService, UploadService uploadService, BusHospitalMapper busHospitalMapper, BusAreaMapper busAreaMapper) {
         this.commonService = commonService;
+        this.uploadService = uploadService;
         this.busHospitalMapper = busHospitalMapper;
+        this.busAreaMapper = busAreaMapper;
     }
 
     /**
@@ -59,10 +63,9 @@ public class HospitalService {
 
     /**
      * 新增或者更新医院
-     * FIXME
      *
      * @param bus
-     * @param request     这里需要处理文件
+     * @param request 这里需要处理文件
      * @return
      */
     public ComResponse<BusHospital> insertOrUpdateHospital(BusHospital bus, HttpServletRequest request) {
@@ -72,6 +75,16 @@ public class HospitalService {
             if (null == jhiUser) {
                 return ComResponse.failNotFound();
             }
+            if (StringUtils.isNotBlank(bus.getAreaCode())) {
+                BusArea areaRecord = new BusArea();
+                areaRecord.setWgbm(bus.getAreaCode());
+                areaRecord = busAreaMapper.selectOne(areaRecord);
+                if (null != areaRecord) {
+                    bus.setAreaCode(areaRecord.getWgbm());
+                    bus.setAreaName(areaRecord.getWgmc());
+                }
+            }
+
             bus.setEditTime(new Date());
             bus.setEditBy(jhiUser.getId());
             bus.setEditName(jhiUser.getFirstName());
@@ -84,6 +97,11 @@ public class HospitalService {
                 bus.setCreateName(jhiUser.getFirstName());
                 busHospitalMapper.insertSelective(bus);
             }
+            BusFile busFile = new BusFile();
+            busFile.setBus("bus_hospital");
+            busFile.setBusId(bus.getId());
+            busFile.setFileType(Constants.FILE_TYPE_IMG);
+            uploadService.uploadFiles(busFile, request);
         } else {
             return ComResponse.failUnauthorized();
         }

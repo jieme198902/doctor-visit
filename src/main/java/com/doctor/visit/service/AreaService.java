@@ -62,10 +62,10 @@ public class AreaService {
      * @return
      */
     public ComResponse<List<Map<String, Object>>> listAreaForSelect(BusArea bus) {
-//        List<Map<String, Object>> areas = Constants.areaMap.get(bus.getSjwgbm() + bus.getWgjb());
-//        if (null != areas && !areas.isEmpty()) {
-//            return ComResponse.ok(areas);
-//        }
+        List<Map<String, Object>> areas = Constants.areaMap.get(bus.getSjwgbm() + bus.getWgjb());
+        if (null != areas && !areas.isEmpty()) {
+            return ComResponse.ok(areas);
+        }
         Long wgjb = bus.getWgjb();
         List<Map<String, Object>> busAreas = busAreaMapper.selectAreaForSelect(bus.getSjwgbm());
         if (wgjb >= 1) {

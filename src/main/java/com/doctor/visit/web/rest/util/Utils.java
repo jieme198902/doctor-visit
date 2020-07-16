@@ -9,12 +9,37 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 public final class Utils {
 
     private Utils() {
     }
 
+    /**
+     * 生成 时间 格式化 不带间隔的id
+     *
+     * @return yyyyMMddHHmmssSSS
+     */
+    public static String generateOfDate() {
+        Date now = new Date();
+        SimpleDateFormat timeUidSdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        return timeUidSdf.format(now);
+    }
+
+    /**
+     * @return uuid
+     */
+    public static String generate() {
+        return UUID.randomUUID().toString().replaceAll(Constants.MIDDLE_LINE, Constants.SPACE);
+    }
+
+    /**
+     * @return 8 位 UUID
+     */
+    public static String generateOf8() {
+        return generate().substring(0, 8);
+    }
 
     /**
      * 文章生成html
