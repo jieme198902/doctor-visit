@@ -49,10 +49,10 @@ public class HospitalService {
      */
     public ComResponse<List<BusHospital>> listHospital(BusHospital bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
         Example example = new Example(BusHospital.class);
         Example.Criteria criteria = example.createCriteria();
 
+        criteria.andEqualTo("isDel",Constants.EXIST);
         if (StringUtils.isNotBlank(bus.getName())) {
             criteria.andLike("name", bus.getName() + "%");
         }
