@@ -20,6 +20,13 @@ public class BusDoctor implements Serializable {
      */
     private String name;
 
+
+
+    /**
+     * 医生职称 对应dict 的YSZC
+     */
+    @Column(name = "professional_id")
+    private Long professionalId;
     /**
      * 医生职称
      */
@@ -147,6 +154,22 @@ public class BusDoctor implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 医生职称 对应dict 的YSZC
+     * @return
+     */
+    public Long getProfessionalId() {
+        return professionalId;
+    }
+
+    /**
+     * 医生职称 对应dict 的YSZC
+     * @param professionalId
+     */
+    public void setProfessionalId(Long professionalId) {
+        this.professionalId = professionalId;
     }
 
     /**

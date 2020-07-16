@@ -2,6 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusDict;
+import com.doctor.visit.domain.BusHospital;
 import com.doctor.visit.service.DictService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 获取字典
@@ -60,4 +63,34 @@ public class SysDictResource {
         return dictService.listDict(bus, null);
     }
 
+
+    /**
+     * 新增或者修改字典
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusDict.class)
+    })
+    @PostMapping("insertOrUpdateDict")
+    @ApiOperation(value = "新增或者修改字典")
+    public Object insertOrUpdateHospital(BusDict bus, HttpServletRequest request) {
+        return dictService.insertOrUpdateDict(bus,request);
+    }
+
+    /**
+     * 根据id删除字典
+     *
+     * @param ids
+     * @return
+     */
+    @ApiImplicitParams({
+
+    })
+    @PostMapping("deleteDict")
+    @ApiOperation(value = "根据id删除字典")
+    public Object deleteDict(String ids) {
+        return dictService.deleteDict(ids);
+    }
 }
