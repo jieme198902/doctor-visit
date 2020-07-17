@@ -27,6 +27,9 @@ eureka:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 
 management:
+  health:
+    elasticsearch:
+      enabled: false
   metrics:
     export:
       prometheus:
@@ -41,11 +44,14 @@ spring:
       enabled: false
     livereload:
       enabled: false
+  jackson:
+    serialization:
+      indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/doctorVisit?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/doctor_visit?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
-    password: mysql@123
+    password: mysql@123.com
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -103,11 +109,11 @@ spring:
 #        ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
 # ===================================================================
 server:
-  port: 8081
-  compression:
-    enabled: true
-    mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
-    min-response-size: 1024
+  port: 8083
+#  compression:
+#    enabled: true
+#    mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json, application/x-www-form-urlencoded
+#    min-response-size: 1024
 
 # ===================================================================
 # JHipster specific properties
@@ -131,7 +137,7 @@ jhipster:
         # - In the JHipster Registry (which includes a Spring Cloud Config server)
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: ZGFmYzc5NWQ1NmMyYmFjYTA2NGQ1ZTc5ODM4OTcwMzZlYjM1ZTNlYWM2MjYwM2QwOGIyMzY0MGQ5YWQwYmU5ZjQwZGJjNGJlZDNlNTFlNjNhOWM1MzQ5NWQ5NjgwNmM2MWIzNmFiZDZhYzQ0NGY1ODVkYTNjMTk0NWFiOWNhZDE=
+        base64-secret: OGU5MGJkN2NkYzQ1OGMxYjdjOWJhNmM2ZGYwZDRiZjIyYzg3N2Q5OWM2MTI3ZmQ1YTA1OGRlNjQyMzZmNGQyN2M1NjgxOWVmMTUwYzEwOWQ4OWExMDdkNDdmOGI0MDM0ZDE0NzllYzJiMTgxNWEwZjgzZDkyYzI3MGZlZWRiMGQ=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
@@ -162,6 +168,7 @@ jhipster:
 
 # application:
 custom:
-  rootPath: '/data'
+  rootPath: '/data/'
   requestPath: 'http://localhost:8082/'
   excludeLogin: 'doctor/authenticate'
+

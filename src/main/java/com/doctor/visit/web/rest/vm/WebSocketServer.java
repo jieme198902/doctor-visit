@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 //ws.port=80
 
 @Component
-@ServerEndpoint(path = "/im/{sid}")
+@ServerEndpoint(path = "/im/{sid}",port = "${ws.port}")
 public class WebSocketServer {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
 
