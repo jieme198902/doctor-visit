@@ -4,6 +4,8 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.security.jwt.TokenProvider;
 import com.doctor.visit.web.rest.errors.UnAuthorizedException;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -15,6 +17,7 @@ import java.io.IOException;
  * 自定义jwt验证过滤器
  */
 public class UDUserJWTFilter implements Filter {
+    private static final Logger logger = LoggerFactory.getLogger(UDUserJWTFilter.class);
 
     private final String excludeLogin;
     private final TokenProvider tokenProvider;
@@ -37,6 +40,7 @@ public class UDUserJWTFilter implements Filter {
             for (String url : exLoginAry) {
                 if (httpServletRequest.getRequestURI().contains(url)) {
                     filterChain.doFilter(httpServletRequest, servletResponse);
+                    logger.info(httpServletRequest.getRequestURI()+"["+url+"] no need go to check !!!");
                     check = false;
                     break;
                 }
@@ -45,11 +49,11 @@ public class UDUserJWTFilter implements Filter {
         if (check) {
             String authorization = httpServletRequest.getHeader(Constants.AUTHORIZATION_HEADER);
             if (StringUtils.isBlank(authorization)) {
-                throw new UnAuthorizedException();
+                throw new UnAuthorizedException("UDUserJWTFilter filter ");
             } else {
                 String jwt = resolveToken(httpServletRequest);
                 if (StringUtils.isBlank(jwt) || !tokenProvider.validateToken(jwt)) {
-                    throw new UnAuthorizedException();
+                    throw new UnAuthorizedException("UDUserJWTFilter filter ");
                 } else {
                     Authentication authentication = tokenProvider.getAuthentication(jwt);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
