@@ -130,7 +130,7 @@ public final class Utils {
      * @return
      */
     public static String createToken(Long userId) throws Exception {
-        String tokenOrigin = userId + Constants.UNDERLINE + System.currentTimeMillis();
+        String tokenOrigin = System.currentTimeMillis() + Constants.UNDERLINE + userId + Constants.UNDERLINE + generate();
         return Des3Util.encode(tokenOrigin, Constants.des3Key);
     }
 
@@ -149,7 +149,7 @@ public final class Utils {
         if (StringUtils.isBlank(idTime)) {
             throw new UnAuthorizedException("token is error . ");
         }
-        String idStr = idTime.split(Constants.UNDERLINE)[0];
+        String idStr = idTime.split(Constants.UNDERLINE)[1];
         if (StringUtils.isBlank(idStr)) {
             throw new UnAuthorizedException("token is error . ");
         }
@@ -171,7 +171,7 @@ public final class Utils {
         if (StringUtils.isBlank(idTime)) {
             return null;
         }
-        String idStr = idTime.split(Constants.UNDERLINE)[0];
+        String idStr = idTime.split(Constants.UNDERLINE)[1];
         if (StringUtils.isBlank(idStr)) {
             return null;
         }

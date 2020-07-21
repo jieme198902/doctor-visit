@@ -143,3 +143,35 @@ root/wangkuan195961V
 
 nginx 
 /usr/local/etc/nginx/servers/doctorvisit.conf
+
+
+
+```text
+外网 - 网关
+http://121.196.184.57:8010
+内网 - 网关
+http://172.16.125.89:8010/
+
+注册中心
+http://www.doctorvisit.icu:8761
+
+
+https://www.doctorvisit.icu/api/authenticate
+
+
+
+https://wk.zhangfan.ink/sys-manage/
+
+https://wk.zhangfan.ink/api/authenticate
+
+https://wk.zhangfan.ink/doctorvisit/api/article/listArticleClass
+
+
+前端
+header ： token=
+
+
+测试
+AppID(小程序ID) wx28e94f16479e6fd6
+AppSecret(小程序密钥) c87443a30e54d65ee6af19bbe22d3476
+```

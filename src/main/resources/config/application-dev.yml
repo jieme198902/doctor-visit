@@ -155,4 +155,4 @@ jhipster:
 custom:
   rootPath: '/Users/kuanwang/Documents/workspaces/JavaWebProjects/doctor-visit/src/main/resources/static/'
   requestPath: 'http://localhost:8082/'
-  excludeLogin: 'doctor/authenticate,front/'
+  excludeLogin: 'authenticate,api'

@@ -170,5 +170,5 @@ jhipster:
 custom:
   rootPath: '/data/'
   requestPath: 'http://localhost:8082/'
-  excludeLogin: 'doctor/authenticate'
+  excludeLogin: 'authenticate,api'
 
