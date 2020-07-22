@@ -199,16 +199,16 @@ public class ArticleService {
             bus.setEditBy(jhiUser.getId());
             bus.setEditName(jhiUser.getFirstName());
             if (null != bus.getId()) {
-                //设置html的静态化，并且维护url
-                bus.setUrl(Utils.writeHtml(bus, rootPath));
+                //设置html的静态化，并且维护url Long busId, String bus, String title, String forwardFrom, String content
+                bus.setUrl(Utils.writeHtml(new Utils.BusHtml(bus.getId(),"bus_article",bus.getTitle(),bus.getForwardFrom(),bus.getContent()), rootPath));
                 busArticleMapper.updateByPrimaryKeySelective(bus);
             } else {
                 bus.setId(IDKeyUtil.generateId());
                 bus.setCreateTime(new Date());
                 bus.setCreateBy(jhiUser.getId());
                 bus.setCreateName(jhiUser.getFirstName());
-                //设置html的静态化，并且维护url
-                bus.setUrl(Utils.writeHtml(bus, rootPath));
+                //设置html的静态化，并且维护url Long busId, String bus, String title, String forwardFrom, String content
+                bus.setUrl(Utils.writeHtml(new Utils.BusHtml(bus.getId(),"bus_article",bus.getTitle(),bus.getForwardFrom(),bus.getContent()), rootPath));
                 busArticleMapper.insertSelective(bus);
             }
         } else {

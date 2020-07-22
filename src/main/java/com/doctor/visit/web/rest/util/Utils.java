@@ -2,6 +2,7 @@ package com.doctor.visit.web.rest.util;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArticle;
+import com.doctor.visit.domain.BusFile;
 import com.doctor.visit.web.rest.errors.UnAuthorizedException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,21 +42,48 @@ public final class Utils {
         return generate().substring(0, 8);
     }
 
+    public static class BusHtml {
+        public Long busId;
+        public String bus;
+        public String title;
+        public String forwardFrom;
+        public String content;
+
+        public BusHtml() {
+        }
+
+        /**
+         *
+         * @param busId
+         * @param bus
+         * @param title
+         * @param forwardFrom
+         * @param content
+         */
+        public BusHtml(Long busId, String bus, String title, String forwardFrom, String content) {
+            this.busId = busId;
+            this.bus = bus;
+            this.title = title;
+            this.forwardFrom = forwardFrom;
+            this.content = content;
+        }
+    }
+
     /**
      * 文章生成html
      *
-     * @param busArticle
+     * @param busHtml
      * @return 文件相对地址
      */
-    public static String writeHtml(BusArticle busArticle, String rootPath) {
+    public static String writeHtml(BusHtml busHtml, String rootPath) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String ymd = sdf.format(new Date());
         if (rootPath.endsWith("/")) {
             rootPath = rootPath.substring(0, rootPath.length() - 1);
         }
-        String savePath = rootPath + File.separator + "html" + File.separator + ymd + File.separator;
-        String saveUrl = "html/" + ymd + "/";
-        String fileName = busArticle.getId() + ".html";
+        String savePath = rootPath + File.separator + "html" + File.separator + busHtml.bus + File.separator + ymd + File.separator;
+        String saveUrl = "html/"+ File.separator + busHtml.bus + File.separator + ymd + "/";
+        String fileName = busHtml.busId + ".html";
         File saveFile = new File(savePath);
         if (!saveFile.exists()) {
             saveFile.mkdirs();
@@ -67,13 +95,13 @@ public final class Utils {
                 "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />" +
                 "<meta content='telephone=no' name='format-detection'> " +
                 "<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>" +
-                "<title>" + busArticle.getTitle() + "</title>" +
+                "<title>" + busHtml.title + "</title>" +
                 "</head>" +
                 "<body> " +
                 "<div class='warp' style='text-align:center;bold:1px;font-size:20px;'>" +
-                busArticle.getForwardFrom() +
+                busHtml.forwardFrom +
                 "</div> " +
-                "<div class='warp' id='nr'>" + busArticle.getContent() + "</div>" +
+                "<div class='warp' id='nr'>" + busHtml.content + "</div>" +
                 //替换内容ip
                 "<script> " +
                 "function getUrl() {" +
