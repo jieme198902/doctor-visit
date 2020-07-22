@@ -1,20 +1,16 @@
 package com.doctor.visit.config;
 
 import com.doctor.visit.security.jwt.TokenProvider;
-import com.doctor.visit.security.ud.UDUserJWTFilter;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.server.*;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -69,18 +65,18 @@ public class WebConfigurer implements ServletContextInitializer {
         return new CorsFilter(source);
     }
 
-    /**
-     * 自定义过滤器
-     *
-     * @return
-     */
-    @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
-        FilterRegistrationBean bean = new FilterRegistrationBean();
-        bean.setFilter(new UDUserJWTFilter(excludeLogin, tokenProvider));
-        bean.addUrlPatterns(Constants.API_BASE_FRONT+"/*");
-        bean.setOrder(2);
-        return bean;
-    }
+//    /**
+//     * 自定义过滤器
+//     *
+//     * @return
+//     */
+//    @Bean
+//    public FilterRegistrationBean filterRegistrationBean() {
+//        FilterRegistrationBean bean = new FilterRegistrationBean();
+//        bean.setFilter(new UDUserJWTFilter(excludeLogin, tokenProvider));
+//        bean.addUrlPatterns(Constants.API_BASE_FRONT+"/*");
+//        bean.setOrder(2);
+//        return bean;
+//    }
 
 }

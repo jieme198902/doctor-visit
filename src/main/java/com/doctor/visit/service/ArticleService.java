@@ -154,7 +154,7 @@ public class ArticleService {
             }
             busList = (Page<BusArticle>) busArticleMapper.selectByExample(example);
         } else {
-            Long userId = Utils.getUserIdWithException(request);
+            Long userId = Utils.getUserIdWithoutException(request);
             busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId);
         }
         return ComResponse.ok(busList.getResult(), busList.getTotal()).setStarDataListener(list -> {

@@ -17,6 +17,7 @@ public class DoctorVisitExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public void exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) throws IOException {
+        ex.printStackTrace();
         ComResponse comResponse = ComResponse.fail();
         String message = ex.getMessage();
         if (ex instanceof org.springframework.dao.DuplicateKeyException) {

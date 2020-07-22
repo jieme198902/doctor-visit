@@ -34,7 +34,7 @@ public final class Constants {
 
     public static final String BEARER = "Bearer ";
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String USER_AGENT = "User-Agent";
+    public static final String USER_AGENT = "user-agent";
 
     public static final String WX_SUCCESS_CODE = "0";
     public static final String WX_OPEN_ID = "openid";

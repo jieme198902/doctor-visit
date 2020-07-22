@@ -2,7 +2,6 @@ package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArea;
-import com.doctor.visit.domain.BusDict;
 import com.doctor.visit.repository.BusAreaMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.github.pagehelper.Page;
@@ -52,8 +51,6 @@ public class AreaService {
             return ComResponse.ok(busAreaMapper.select(record));
         }
     }
-
-    private int recursionCount = 0;
 
     /**
      * 查询无分页的地区列表

@@ -163,7 +163,7 @@ public final class Utils {
      * @return
      * @throws Exception
      */
-    public static Long getUserIdWithException(String token) throws Exception {
+    public static Long getUserIdWithoutException(String token) throws Exception {
         if (StringUtils.isBlank(token)) {
             return null;
         }
@@ -201,12 +201,12 @@ public final class Utils {
      * @return
      * @throws Exception
      */
-    public static Long getUserIdWithException(HttpServletRequest request) throws Exception {
+    public static Long getUserIdWithoutException(HttpServletRequest request) throws Exception {
         String token = request.getHeader(Constants.TOKEN);
         if (StringUtils.isBlank(token)) {
             return null;
         }
-        return getUserIdWithException(token);
+        return getUserIdWithoutException(token);
     }
 
     /**
