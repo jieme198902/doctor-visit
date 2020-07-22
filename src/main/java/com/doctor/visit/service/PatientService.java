@@ -42,17 +42,17 @@ public class PatientService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusPatient>> listPatient(BusPatient bus, Pageable pageable,HttpServletRequest request) throws Exception {
+    public ComResponse<List<BusPatient>> listPatient(BusPatient bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
         Example example = new Example(BusPatient.class);
         Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDel", Constants.EXIST);
         //患者名字
         if (StringUtils.isNotBlank(bus.getName())) {
             criteria.andLike("name", bus.getName() + "%");
         }
-        //创建者
-        if (null != bus.getCreateBy()) {
+        if (!sys) {
+            //创建者
             Long userId = Utils.getUserId(request);
             criteria.andEqualTo("createBy", userId);
         }

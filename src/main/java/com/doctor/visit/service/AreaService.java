@@ -44,6 +44,9 @@ public class AreaService {
         if (StringUtils.isNotBlank(bus.getWgbm())) {
             record.setWgbm(bus.getWgbm());
         }
+        if (StringUtils.isNotBlank(bus.getWgmc())) {
+            record.setWgmc(bus.getWgmc());
+        }
         if (null != pageable) {
             Page<BusArea> busList = (Page<BusArea>) busAreaMapper.select(record);
             return ComResponse.ok(busList.getResult(), busList.getTotal());
