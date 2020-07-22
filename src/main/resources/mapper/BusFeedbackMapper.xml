@@ -16,4 +16,18 @@
     <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="CHAR" />
   </resultMap>
+
+  <select id="countFeedback" resultType="java.lang.Integer">
+    SELECT
+        count( * )
+    FROM
+        bus_feedback
+    WHERE 1=1
+
+     <if test="null!=thisMonth">
+        AND DATE_FORMAT( NOW( ), '%Y%m%d' ) = DATE_FORMAT( create_time, '%Y%m%d' )
+    </if>
+
+  </select>
+
 </mapper>

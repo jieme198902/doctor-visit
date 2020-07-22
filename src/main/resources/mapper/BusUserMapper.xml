@@ -23,4 +23,18 @@
     <result column="is_del" property="isDel" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
   </resultMap>
+
+
+  <select id="countAllUser" resultType="java.lang.Integer">
+    SELECT
+        count( * )
+    FROM
+        bus_user
+    WHERE 1=1
+
+     <if test="null!=thisMonth">
+        AND DATE_FORMAT( NOW( ), '%Y%m%d' ) = DATE_FORMAT( create_time, '%Y%m%d' )
+    </if>
+
+  </select>
 </mapper>

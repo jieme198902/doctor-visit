@@ -82,6 +82,11 @@ public class SysUserResource {
         return userService.listBusUser(bus, pageable);
     }
 
+    /**
+     * 拉黑微信用户
+     * @param ids
+     * @return
+     */
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = String.class)
     })
@@ -91,6 +96,11 @@ public class SysUserResource {
         return userService.insertOrUpdateUserPullToBlacklist(ids);
     }
 
+    /**
+     * 从黑名单中去掉微信用户
+     * @param ids
+     * @return
+     */
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = String.class)
     })

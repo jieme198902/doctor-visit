@@ -11,4 +11,14 @@
     <result column="event_type" jdbcType="VARCHAR" property="eventType" />
   </resultMap>
 
+  <select id="selectLastLoginInfo" resultMap="BaseResultMap">
+
+    select
+        *
+    from jhi_persistent_audit_event
+    where principal = #{principal} and event_type = 'AUTHENTICATION_SUCCESS'
+    order by event_date desc limit 1
+
+    </select>
+
 </mapper>

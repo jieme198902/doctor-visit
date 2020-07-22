@@ -46,4 +46,33 @@ public class SysMineResource {
     public Object listEvaluate(BusEvaluate bus, Pageable pageable) {
         return evaluateService.listEvaluate(bus, pageable);
     }
+
+    /**
+     * 后台 - 首页：微信总用户数，微信本月新增用户，
+     *
+     * @return
+     */
+    @ApiImplicitParams({
+//        @ApiImplicitParam(dataTypeClass = BusEvaluate.class)
+    })
+    @PostMapping("findStatisticsUser")
+    @ApiOperation(value = "后台 - 首页：微信总用户数，微信本月新增用户")
+    public Object findStatisticsUser() {
+        return mineService.findStatisticsUser();
+    }
+
+    /**
+     * 后台 - 首页：获取最近登录状态
+     *
+     * @return
+     */
+    @ApiImplicitParams({
+//        @ApiImplicitParam(dataTypeClass = BusEvaluate.class)
+    })
+    @PostMapping("findLastLoginInfo")
+    @ApiOperation(value = "后台 - 首页 - 获取最近登录状态")
+    public Object findLastLoginInfo() {
+        return mineService.findLastLoginInfo();
+    }
+
 }

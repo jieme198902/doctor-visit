@@ -1,5 +1,10 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -8,11 +13,14 @@ import javax.persistence.*;
 public class JhiPersistentAuditEvent implements Serializable {
     @Id
     @Column(name = "event_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long eventId;
 
     private String principal;
 
     @Column(name = "event_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date eventDate;
 
     @Column(name = "event_type")

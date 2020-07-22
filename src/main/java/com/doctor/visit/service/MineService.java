@@ -1,20 +1,22 @@
 package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusEvaluate;
-import com.doctor.visit.domain.BusUser;
+import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.BusEvaluateMapper;
+import com.doctor.visit.repository.BusFeedbackMapper;
+import com.doctor.visit.repository.BusUserMapper;
+import com.doctor.visit.repository.JhiPersistentAuditEventMapper;
+import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import org.springframework.data.domain.Pageable;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * 我的业务层
@@ -25,12 +27,17 @@ public class MineService {
     private final CommonService commonService;
     //
     private final BusEvaluateMapper busEvaluateMapper;
+    private final BusUserMapper busUserMapper;
+    private final BusFeedbackMapper busFeedbackMapper;
+    private final JhiPersistentAuditEventMapper jhiPersistentAuditEventMapper;
 
-    public MineService(CommonService commonService, BusEvaluateMapper busEvaluateMapper) {
+    public MineService(CommonService commonService, BusEvaluateMapper busEvaluateMapper, BusUserMapper busUserMapper, BusFeedbackMapper busFeedbackMapper, JhiPersistentAuditEventMapper jhiPersistentAuditEventMapper) {
         this.commonService = commonService;
         this.busEvaluateMapper = busEvaluateMapper;
+        this.busUserMapper = busUserMapper;
+        this.busFeedbackMapper = busFeedbackMapper;
+        this.jhiPersistentAuditEventMapper = jhiPersistentAuditEventMapper;
     }
-
 
 
     /**
@@ -38,7 +45,7 @@ public class MineService {
      * FIXME
      *
      * @param bus
-     * @param request     这里需要处理文件
+     * @param request 这里需要处理文件
      * @return
      */
     public ComResponse<BusEvaluate> insertOrUpdateEvaluate(BusEvaluate bus, HttpServletRequest request) throws Exception {
@@ -84,6 +91,43 @@ public class MineService {
             }
         }
         return ComResponse.ok(delIds);
+    }
+
+
+    /**
+     * 首页：微信总用户数，微信本月新增用户，
+     *
+     * @return
+     */
+    public ComResponse<Map<String,Integer>> findStatisticsUser() {
+        Integer allCount = busUserMapper.countAllUser(null);
+        Integer thisMonthCount = busUserMapper.countAllUser("thisMonth");
+        Integer thisMonthFeedbackCount = busFeedbackMapper.countFeedback("thisMonth");
+
+        Map<String,Integer> countMap = Maps.newHashMap();
+        countMap.put("all",allCount);
+        countMap.put("thisMonth",thisMonthCount);
+        countMap.put("thisMonthFeedback",thisMonthFeedbackCount);
+        return ComResponse.ok(countMap);
+    }
+
+
+    /**
+     * 后台 - 首页：获取最近登录状态
+     *
+     * @return
+     */
+    public ComResponse<JhiPersistentAuditEvent> findLastLoginInfo() {
+        Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
+        if (usernameOptional.isPresent()) {
+            JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
+            if (null == jhiUser) {
+                return ComResponse.failNotFound();
+            }
+        }
+        JhiPersistentAuditEvent jhiPersistentAuditEvent = jhiPersistentAuditEventMapper.selectLastLoginInfo(usernameOptional.get());
+
+        return ComResponse.ok(jhiPersistentAuditEvent);
     }
 
 }
