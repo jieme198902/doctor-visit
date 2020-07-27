@@ -39,7 +39,9 @@ public class FrontDoctorResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusDoctor.class)
+        @ApiImplicitParam(dataTypeClass = BusDoctor.class),
+        @ApiImplicitParam(name = "name",value = "医生名称"),
+        @ApiImplicitParam(name = "clincId",value = "科室id"),
     })
     @PostMapping("getDoctorList")
     @ApiOperation(value = "获取医生列表")
@@ -55,7 +57,8 @@ public class FrontDoctorResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusDoctor.class)
+        @ApiImplicitParam(dataTypeClass = BusDoctor.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
     })
     @PostMapping("getFavDoctorList")
     @ApiOperation(value = "获取关注的医生列表")
@@ -70,7 +73,9 @@ public class FrontDoctorResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusRelationUserDoctor.class)
+        @ApiImplicitParam(dataTypeClass = BusRelationUserDoctor.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "doctorId",value = "医生id"),
     })
     @PostMapping("favDoctor")
     @ApiOperation(value = "关注医生")
@@ -86,7 +91,9 @@ public class FrontDoctorResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusRelationUserDoctor.class)
+        @ApiImplicitParam(dataTypeClass = BusRelationUserDoctor.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "doctorId",value = "医生id"),
     })
     @PostMapping("cancelFavDoctor")
     @ApiOperation(value = "取消关注医生")

@@ -52,12 +52,18 @@ public class HospitalService {
         Example example = new Example(BusHospital.class);
         Example.Criteria criteria = example.createCriteria();
 
-        criteria.andEqualTo("isDel",Constants.EXIST);
+        criteria.andEqualTo("isDel", Constants.EXIST);
         if (StringUtils.isNotBlank(bus.getName())) {
             criteria.andLike("name", bus.getName() + "%");
         }
+        Page<BusHospital> busList = null;
+        if (StringUtils.isNoneBlank(bus.getLat(), bus.getLng())) {
+            busList = (Page<BusHospital>) busHospitalMapper.selectHospitalByDistance(bus);
+        } else {
+            busList = (Page<BusHospital>) busHospitalMapper.selectByExample(example);
+        }
 
-        Page<BusHospital> busList = (Page<BusHospital>) busHospitalMapper.selectByExample(example);
+
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 

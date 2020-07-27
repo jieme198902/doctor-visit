@@ -4,6 +4,7 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusDict;
 import com.doctor.visit.domain.BusLog;
 import com.doctor.visit.domain.BusUser;
+import com.doctor.visit.domain.dto.BusUserDto;
 import com.doctor.visit.repository.BusDictMapper;
 import com.doctor.visit.repository.BusLogMapper;
 import com.doctor.visit.repository.BusUserMapper;
@@ -59,7 +60,7 @@ public class UserService {
      * @param jsCode
      * @return
      */
-    public ComResponse<BusUser> authenticate(String jsCode, HttpServletRequest httpServletRequest) throws Exception {
+    public ComResponse<BusUserDto> authenticate(String jsCode, HttpServletRequest httpServletRequest) throws Exception {
         if (StringUtils.isBlank(jsCode)) {
             return ComResponse.failBadRequest();
         }
@@ -153,13 +154,15 @@ public class UserService {
                     //更新
                     busUserMapper.updateByPrimaryKeySelective(busUser);
                 }
-                busUser.setToken(Utils.createToken(busUser.getId()));
+                BusUserDto busUserDto = gson.fromJson(gson.toJson(busUser),BusUserDto.class);
+
+                busUserDto.setToken(Utils.createToken(busUser.getId()));
                 //记录日志
                 loginLog.setCreateBy(busUser.getId());
                 loginLog.setCreateName(busUser.getName());
                 busLogMapper.insertSelective(loginLog);
 
-                return ComResponse.ok(busUser);
+                return ComResponse.ok(busUserDto);
             } else {
                 //记录日志
                 loginLog.setResponse(gson.toJson(resultMap));

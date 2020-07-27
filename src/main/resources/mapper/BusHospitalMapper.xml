@@ -30,4 +30,25 @@
     <result column="features" property="features" jdbcType="LONGVARCHAR" />
     <result column="diagnostic_methods" property="diagnosticMethods" jdbcType="LONGVARCHAR" />
   </resultMap>
+
+
+  <select id="selectHospitalByDistance" resultMap="BaseResultMap">
+    SELECT
+        *,
+        (
+            st_distance (
+                point ( lng, lat ),
+                point ( #{lng}, #{lat} )
+            ) * 111195 / 1000
+        ) AS isDel
+    FROM
+    bus_hospital WHERE is_del = '0'
+    <if test="name!=null">
+      AND name like CONCAT(#{name},'%')
+    </if>
+
+    ORDER BY
+	isDel ASC
+  </select>
+
 </mapper>

@@ -8,6 +8,7 @@ import com.doctor.visit.domain.BusUserShoppingCart;
 import com.doctor.visit.repository.BusUserShoppingCartMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
+import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +39,13 @@ public class UserShoppingCartService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusUserShoppingCart>> listUserShoppingCart(BusUserShoppingCart bus, Pageable pageable) {
+    public ComResponse<List<BusUserShoppingCart>> listUserShoppingCart(BusUserShoppingCart bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
+        if (null == busUser) {
+            return ComResponse.failUnauthorized();
+        }
+        busUser.setCreateBy(busUser.getId());
+
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
         Example example = new Example(BusUserShoppingCart.class);
@@ -60,11 +67,8 @@ public class UserShoppingCartService {
      * @param request
      * @return
      */
-    public ComResponse<BusUserShoppingCart> insertOrUpdateUserShoppingCart(BusUserShoppingCart bus, HttpServletRequest request) {
-        if (null == bus.getCreateBy()) {
-            return ComResponse.failBadRequest();
-        }
-        BusUser busUser = commonService.getBusUser(bus.getCreateBy());
+    public ComResponse<BusUserShoppingCart> insertOrUpdateUserShoppingCart(BusUserShoppingCart bus, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
             return ComResponse.failUnauthorized();
         }

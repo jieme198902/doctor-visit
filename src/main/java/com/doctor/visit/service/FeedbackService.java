@@ -5,6 +5,7 @@ import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.BusFeedbackMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
+import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.data.domain.Pageable;
@@ -49,11 +50,8 @@ public class FeedbackService {
      * @param request 这里需要处理文件
      * @return
      */
-    public ComResponse<BusFeedback> insertOrUpdateFeedback(BusFeedback bus, HttpServletRequest request) {
-        if (null == bus.getCreateBy()) {
-            return ComResponse.failBadRequest();
-        }
-        BusUser busUser = commonService.getBusUser(bus.getCreateBy());
+    public ComResponse<BusFeedback> insertOrUpdateFeedback(BusFeedback bus, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
             return ComResponse.failUnauthorized();
         }

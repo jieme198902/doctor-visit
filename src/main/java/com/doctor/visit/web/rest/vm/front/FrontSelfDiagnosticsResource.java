@@ -38,7 +38,9 @@ public class FrontSelfDiagnosticsResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusSelfDiagnose.class)
+        @ApiImplicitParam(dataTypeClass = BusSelfDiagnose.class),
+        @ApiImplicitParam(name = "id",value = "id,获取该id下的所有子项，顶级项传0"),
+
     })
     @PostMapping("listSelfDiagnose")
     @ApiOperation(value = "获取自诊问题列表")

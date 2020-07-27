@@ -41,7 +41,9 @@ public class FrontArticleResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusArticle.class)
+        @ApiImplicitParam(dataTypeClass = BusArticle.class),
+        @ApiImplicitParam(name = "classId",value = "文章类别id"),
+        @ApiImplicitParam(name = "title",value = "标题"),
     })
     @PostMapping("listArticle")
     @ApiOperation(value = "文章列表")
@@ -57,7 +59,8 @@ public class FrontArticleResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusArticle.class)
+        @ApiImplicitParam(dataTypeClass = BusArticle.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
     })
     @PostMapping("listFavArticle")
     @ApiOperation(value = "获取收藏的文章列表")
@@ -72,7 +75,9 @@ public class FrontArticleResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusRelationUserArticle.class)
+        @ApiImplicitParam(dataTypeClass = BusRelationUserArticle.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "articleId",value = "文章id"),
     })
     @PostMapping("favArticle")
     @ApiOperation(value = "收藏文章")
@@ -88,7 +93,9 @@ public class FrontArticleResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusRelationUserArticle.class)
+        @ApiImplicitParam(dataTypeClass = BusRelationUserArticle.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "articleId",value = "文章id"),
     })
     @PostMapping("cancelFavArticle")
     @ApiOperation(value = "取消收藏文章")
@@ -104,7 +111,9 @@ public class FrontArticleResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusRelationUserArticleShare.class)
+        @ApiImplicitParam(dataTypeClass = BusRelationUserArticleShare.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "articleId",value = "文章id"),
     })
     @PostMapping("shareArticle")
     @ApiOperation(value = "分享文章")
@@ -120,7 +129,9 @@ public class FrontArticleResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusArticle.class)
+        @ApiImplicitParam(dataTypeClass = BusArticle.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "articleId",value = "文章id"),
     })
     @PostMapping("listArticleShare")
     @ApiOperation(value = "获取我分享的文章列表")

@@ -37,7 +37,10 @@ public class FrontHospitalResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusHospital.class)
+        @ApiImplicitParam(dataTypeClass = BusHospital.class),
+        @ApiImplicitParam(name = "name",value = "医院名称"),
+        @ApiImplicitParam(name = "lat",value = "纬度，如果传了则返回isDel为距离，不传不返回"),
+        @ApiImplicitParam(name = "lng",value = "经度，如果传了则返回isDel为距离，不传不返回")
     })
     @PostMapping("listHospital")
     @ApiOperation(value = "查询医院列表")

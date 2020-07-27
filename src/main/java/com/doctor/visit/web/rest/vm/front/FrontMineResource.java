@@ -47,7 +47,13 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusEvaluate.class)
+        @ApiImplicitParam(dataTypeClass = BusEvaluate.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "orderId",value = "订单id"),
+        @ApiImplicitParam(name = "module",value = "模块：0问诊，1商品"),
+        @ApiImplicitParam(name = "moduleId",value = "问诊订单id，商品订单id"),
+        @ApiImplicitParam(name = "evaluate",value = "评价内容"),
+        @ApiImplicitParam(name = "score",value = "评分0-5"),
     })
     @PostMapping("insertOrUpdateEvaluate")
     @ApiOperation(value = "评价接口，评价医生、商品 --> module  模块：0医生，1商品")
@@ -62,7 +68,9 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusEvaluate.class)
+        @ApiImplicitParam(dataTypeClass = BusEvaluate.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "ids",value = "评价id，多个用,隔开"),
     })
     @PostMapping("deleteEvaluate")
     @ApiOperation(value = "根据id删除评价")
@@ -79,7 +87,9 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusPatient.class)
+        @ApiImplicitParam(dataTypeClass = BusPatient.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "name",value = "患者名称"),
     })
     @PostMapping("listPatient")
     @ApiOperation(value = "前台 - 获取患者列表")
@@ -95,7 +105,17 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusPatient.class)
+        @ApiImplicitParam(dataTypeClass = BusPatient.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "id",value = "插入不传，更新传"),
+        @ApiImplicitParam(name = "name",value = "患者名字"),
+        @ApiImplicitParam(name = "idcard",value = "患者身份证号"),
+        @ApiImplicitParam(name = "sex",value = "性别：1男，2女"),
+        @ApiImplicitParam(name = "birthday",value = "出生日期"),
+        @ApiImplicitParam(name = "addressCode",value = "所在地编码"),
+        @ApiImplicitParam(name = "addressName",value = "所在地名称"),
+        @ApiImplicitParam(name = "addressDetail",value = "详细地址"),
+        @ApiImplicitParam(name = "defaultPatient",value = "默认就诊人；1是，0否"),
     })
     @PostMapping("insertOrUpdatePatient")
     @ApiOperation(value = "前台 - 新增或者更新患者")
@@ -111,7 +131,9 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusEvaluate.class)
+        @ApiImplicitParam(dataTypeClass = BusEvaluate.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "ids",value = "患者id，多个用,隔开"),
     })
     @PostMapping("deletePatient")
     @ApiOperation(value = "前台 - 根据id删除患者")
@@ -128,12 +150,13 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
     })
     @PostMapping("listUserShippingAddress")
     @ApiOperation(value = "前台 - 获取收货地址列表")
-    public Object listUserShippingAddress(BusUserShippingAddress bus, Pageable pageable) {
-        return userShippingAddressService.listUserShippingAddress(bus, pageable);
+    public Object listUserShippingAddress(BusUserShippingAddress bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        return userShippingAddressService.listUserShippingAddress(bus, pageable,request);
     }
 
 
@@ -144,11 +167,19 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "id",value = "不传是新增，传了是更新"),
+        @ApiImplicitParam(name = "name",value = "姓名"),
+        @ApiImplicitParam(name = "mobile",value = "手机号码"),
+        @ApiImplicitParam(name = "addressCode",value = "所在地编码"),
+        @ApiImplicitParam(name = "addressName",value = "所在地名称"),
+        @ApiImplicitParam(name = "addressDetail",value = "详细地址"),
+        @ApiImplicitParam(name = "defaultAddress",value = "是否默认地址：1是，0否"),
     })
     @PostMapping("insertOrUpdateUserShippingAddress")
     @ApiOperation(value = "前台 - 新增或者更新收货地址")
-    public Object insertOrUpdateUserShippingAddress(BusUserShippingAddress bus, HttpServletRequest request) {
+    public Object insertOrUpdateUserShippingAddress(BusUserShippingAddress bus, HttpServletRequest request) throws Exception {
         return userShippingAddressService.insertOrUpdateUserShippingAddress(bus, request);
     }
 
@@ -160,7 +191,9 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "ids",value = "地址id，多个用,隔开"),
     })
     @PostMapping("deleteUserShippingAddress")
     @ApiOperation(value = "前台 - 根据id删除收货地址")
@@ -177,12 +210,13 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusUserShoppingCart.class)
+        @ApiImplicitParam(dataTypeClass = BusUserShoppingCart.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
     })
     @PostMapping("listUserShippingCart")
     @ApiOperation(value = "前台 - 获取购物车的商品列表")
-    public Object listUserShippingCart(BusUserShoppingCart bus, Pageable pageable) {
-        return userShoppingCartService.listUserShoppingCart(bus, pageable);
+    public Object listUserShippingCart(BusUserShoppingCart bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        return userShoppingCartService.listUserShoppingCart(bus, pageable,request);
     }
 
 
@@ -193,11 +227,19 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "id",value = "不传id新增，传id为更新"),
+
+        @ApiImplicitParam(name = "goodsId",value = "商品id"),
+        @ApiImplicitParam(name = "goodsName",value = "商品标题"),
+        @ApiImplicitParam(name = "goodsNum",value = "购买商品数量"),
+        @ApiImplicitParam(name = "goodsSpecification",value = "商品规格id"),
+
     })
     @PostMapping("insertOrUpdateUserShoppingCart")
     @ApiOperation(value = "前台 - 新增或者更新购物车里的商品")
-    public Object insertOrUpdateUserShippingAddress(BusUserShoppingCart bus, HttpServletRequest request) {
+    public Object insertOrUpdateUserShippingAddress(BusUserShoppingCart bus, HttpServletRequest request) throws Exception {
         return userShoppingCartService.insertOrUpdateUserShoppingCart(bus, request);
     }
 
@@ -209,7 +251,9 @@ public class FrontMineResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class)
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "ids",value = "购物车id，多个用,隔开"),
     })
     @PostMapping("deleteUserShoppingCart")
     @ApiOperation(value = "前台 - 根据id删除购物车里的商品")

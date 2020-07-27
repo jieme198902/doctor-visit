@@ -46,8 +46,14 @@ public class SelfDiagnosticsService {
     public ComResponse<List<BusSelfDiagnose>> listSelfDiagnose(BusSelfDiagnose bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
-
-        Page<BusSelfDiagnose> busList = (Page<BusSelfDiagnose>) busSelfDiagnoseMapper.select(bus);
+        //
+        BusSelfDiagnose record = new BusSelfDiagnose();
+        if(null==bus.getId()){
+            record.setFid(0L);
+        }else{
+            record.setFid(bus.getId());
+        }
+        Page<BusSelfDiagnose> busList = (Page<BusSelfDiagnose>) busSelfDiagnoseMapper.select(record);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 

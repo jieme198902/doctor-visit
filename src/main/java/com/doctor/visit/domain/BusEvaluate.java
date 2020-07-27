@@ -40,6 +40,12 @@ public class BusEvaluate implements Serializable {
     private Long moduleId;
 
     /**
+     * 订单id
+     */
+    @Column(name = "order_id")
+    private Long orderId;
+
+    /**
      * 创建者id
      */
     @Column(name = "create_by")
@@ -82,6 +88,14 @@ public class BusEvaluate implements Serializable {
     private String isDel;
 
     private static final long serialVersionUID = 1L;
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 
     /**
      * @return id

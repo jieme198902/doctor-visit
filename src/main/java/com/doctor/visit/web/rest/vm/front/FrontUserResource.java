@@ -39,7 +39,8 @@ public class FrontUserResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusUser.class)
+        @ApiImplicitParam(dataTypeClass = BusUser.class),
+        @ApiImplicitParam(name = "jsCode",value = "jsCode"),
     })
     @PostMapping("authenticate")
     @ApiOperation(value = "登录接口")
@@ -56,11 +57,15 @@ public class FrontUserResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusFeedback.class)
+        @ApiImplicitParam(dataTypeClass = BusFeedback.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+        @ApiImplicitParam(name = "id",value = "不传是新增，传是更新"),
+        @ApiImplicitParam(name = "mobile",value = "手机号"),
+        @ApiImplicitParam(name = "content",value = "反馈信息"),
     })
     @PostMapping("insertOrUpdateFeedback")
     @ApiOperation(value = "前端 - 新增或者更新意见反馈")
-    public Object insertOrUpdateFeedback(BusFeedback bus, HttpServletRequest request) {
+    public Object insertOrUpdateFeedback(BusFeedback bus, HttpServletRequest request) throws Exception {
         return feedbackService.insertOrUpdateFeedback(bus, request);
     }
 

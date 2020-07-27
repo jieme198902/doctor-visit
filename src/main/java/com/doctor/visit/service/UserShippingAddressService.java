@@ -7,6 +7,7 @@ import com.doctor.visit.domain.BusUserShippingAddress;
 import com.doctor.visit.repository.BusUserShippingAddressMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
+import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -38,16 +39,20 @@ public class UserShippingAddressService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusUserShippingAddress>> listUserShippingAddress(BusUserShippingAddress bus, Pageable pageable) {
+    public ComResponse<List<BusUserShippingAddress>> listUserShippingAddress(BusUserShippingAddress bus, Pageable pageable, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
+        if (null == busUser) {
+            return ComResponse.failUnauthorized();
+        }
+        bus.setCreateBy(busUser.getId());
+
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
         Example example = new Example(BusPatient.class);
         Example.Criteria criteria = example.createCriteria();
 
         //创建者
-        if (null != bus.getCreateBy()) {
-            criteria.andEqualTo("createBy", bus.getCreateBy());
-        }
+        criteria.andEqualTo("createBy", bus.getCreateBy());
 
         Page<BusUserShippingAddress> busList = (Page<BusUserShippingAddress>) busUserShippingAddressMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
@@ -60,11 +65,8 @@ public class UserShippingAddressService {
      * @param request
      * @return
      */
-    public ComResponse<BusUserShippingAddress> insertOrUpdateUserShippingAddress(BusUserShippingAddress bus, HttpServletRequest request) {
-        if (null == bus.getCreateBy()) {
-            return ComResponse.failBadRequest();
-        }
-        BusUser busUser = commonService.getBusUser(bus.getCreateBy());
+    public ComResponse<BusUserShippingAddress> insertOrUpdateUserShippingAddress(BusUserShippingAddress bus, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
             return ComResponse.failUnauthorized();
         }

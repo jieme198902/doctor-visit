@@ -184,6 +184,9 @@ public class DoctorService {
      */
     public ComResponse insertOrUpdateRelationUserDoctor(BusRelationUserDoctor bus, HttpServletRequest request) throws Exception {
         //获取用户的id
+        if (null == bus.getDoctorId()) {
+            return ComResponse.failBadRequest();
+        }
         Long userId = Utils.getUserId(request);
         if (null == bus.getId()) {
             bus.setId(IDKeyUtil.generateId());

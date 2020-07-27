@@ -109,18 +109,7 @@ public class BusUser implements Serializable {
      */
     private String status;
 
-    @Transient
-    private String token;
-
     private static final long serialVersionUID = 1L;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     /**
      * @return id
