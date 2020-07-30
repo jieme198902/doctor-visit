@@ -99,6 +99,9 @@ public final class Utils {
                 "</head>" +
                 "<body> " +
                 "<div class='warp' style='text-align:center;bold:1px;font-size:20px;'>" +
+                busHtml.title +
+                "</div> " +
+                "<div class='warp' style='text-align:right;bold:1px;font-size:14px;'>" +
                 busHtml.forwardFrom +
                 "</div> " +
                 "<div class='warp' id='nr'>" + busHtml.content + "</div>" +

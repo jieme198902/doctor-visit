@@ -95,6 +95,16 @@ public final class ComResponse<T> implements Serializable {
     /**
      * ok 200
      *
+     * @param message
+     * @return
+     */
+    public static <T> ComResponse<T> okMsg(String message) {
+        return of(null, HttpStatus.OK.value(), message, 0L);
+    }
+
+    /**
+     * ok 200
+     *
      * @param
      * @return
      */

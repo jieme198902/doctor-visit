@@ -31,7 +31,7 @@
         WHERE
             1 = 1
             AND ua.is_del = '0'
-            AND ua.user_id = #{userId};
+            AND ua.user_id = #{userId}
 
   </select>
 
@@ -46,7 +46,7 @@
         WHERE
             1 = 1
             AND ua.is_del = '0'
-            AND ua.user_id = #{userId};
+            AND ua.user_id = #{userId}
 
   </select>
 
@@ -69,10 +69,10 @@
                     AND rua.is_del = "0" THEN
                         '1' ELSE '0'
                     END
-                    ) AS create_by
+                    ) AS is_del
             </if>
             <if test="null==userId">
-            '0' AS create_by
+            '0' AS is_del
             </if>
 
                 FROM

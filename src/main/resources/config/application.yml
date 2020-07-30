@@ -160,7 +160,12 @@ spring:
       console-available: true
   liquibase:
     enabled: false
-
+  servlet:
+    multipart:
+      location: /data/temp
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
 server:
   servlet:
     session:

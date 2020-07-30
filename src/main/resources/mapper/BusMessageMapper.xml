@@ -27,7 +27,7 @@
         WHERE
             1 = 1
             AND ua.is_del = '0'
-            AND ua.user_id = #{userId};
+            AND ua.user_id = #{userId}
   </select>
 
 </mapper>

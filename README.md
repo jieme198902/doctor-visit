@@ -175,3 +175,11 @@ header ： token=
 AppID(小程序ID) wx28e94f16479e6fd6
 AppSecret(小程序密钥) c87443a30e54d65ee6af19bbe22d3476
 ```
+
+```text
+pom.xml openapi-generator 
+<skipValidateSpec>true</skipValidateSpec>
+
+mvn -Pprod clean package -Dmaven.test.skip=true
+
+```

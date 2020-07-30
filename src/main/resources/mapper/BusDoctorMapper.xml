@@ -35,7 +35,7 @@
         WHERE
             1 = 1
             AND ud.is_del = '0'
-            AND ud.user_id = #{userId};
+            AND ud.user_id = #{userId}
 
   </select>
 

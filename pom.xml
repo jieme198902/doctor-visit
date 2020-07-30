@@ -952,7 +952,7 @@
                                 <modelPackage>com.doctor.visit.web.api.model</modelPackage>
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                                 <importMappings>Problem=org.zalando.problem.Problem</importMappings>
-                                <skipValidateSpec>false</skipValidateSpec>
+                                <skipValidateSpec>true</skipValidateSpec>
                                 <configOptions>
                                     <delegatePattern>true</delegatePattern>
                                     <title>doctor-visit</title>

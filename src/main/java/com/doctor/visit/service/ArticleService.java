@@ -200,7 +200,7 @@ public class ArticleService {
             bus.setEditName(jhiUser.getFirstName());
             if (null != bus.getId()) {
                 //设置html的静态化，并且维护url Long busId, String bus, String title, String forwardFrom, String content
-                bus.setUrl(Utils.writeHtml(new Utils.BusHtml(bus.getId(),"bus_article",bus.getTitle(),bus.getForwardFrom(),bus.getContent()), rootPath));
+                bus.setUrl(Utils.writeHtml(new Utils.BusHtml(bus.getId(), "bus_article", bus.getTitle(), bus.getForwardFrom(), bus.getContent()), rootPath));
                 busArticleMapper.updateByPrimaryKeySelective(bus);
             } else {
                 bus.setId(IDKeyUtil.generateId());
@@ -208,7 +208,7 @@ public class ArticleService {
                 bus.setCreateBy(jhiUser.getId());
                 bus.setCreateName(jhiUser.getFirstName());
                 //设置html的静态化，并且维护url Long busId, String bus, String title, String forwardFrom, String content
-                bus.setUrl(Utils.writeHtml(new Utils.BusHtml(bus.getId(),"bus_article",bus.getTitle(),bus.getForwardFrom(),bus.getContent()), rootPath));
+                bus.setUrl(Utils.writeHtml(new Utils.BusHtml(bus.getId(), "bus_article", bus.getTitle(), bus.getForwardFrom(), bus.getContent()), rootPath));
                 busArticleMapper.insertSelective(bus);
             }
         } else {
@@ -256,15 +256,22 @@ public class ArticleService {
         }
         //获取用户的id
         Long userId = Utils.getUserId(request);
-        if (null == bus.getId()) {
+        BusRelationUserArticle exist = new BusRelationUserArticle();
+        exist.setUserId(userId);
+        exist.setArticleId(bus.getArticleId());
+
+        BusRelationUserArticle existCount = busRelationUserArticleMapper.selectOne(exist);
+        //该用户没有收藏过该文章，或者取消收藏过该文章
+        if (null == existCount) {
+            //新增一条收藏，不管是del还是exist
             bus.setId(IDKeyUtil.generateId());
             bus.setUserId(userId);
             busRelationUserArticleMapper.insertSelective(bus);
-        } else {
-            bus.setUserId(userId);
-            busRelationUserArticleMapper.updateByPrimaryKeySelective(bus);
+        }else{
+            existCount.setIsDel(bus.getIsDel());
+            busRelationUserArticleMapper.updateByPrimaryKeySelective(existCount);
         }
-        return ComResponse.ok();
+        return ComResponse.okMsg("1".equals(bus.getIsDel())?"已取消收藏":"已收藏");
     }
 
     /**
@@ -278,16 +285,24 @@ public class ArticleService {
         if (Utils.isBlank(bus.getArticleId())) {
             return ComResponse.fail("文章id为空");
         }
+
         Long userId = Utils.getUserId(request);
-        if (null == bus.getId()) {
+        BusRelationUserArticleShare exist = new BusRelationUserArticleShare();
+        exist.setUserId(userId);
+        exist.setArticleId(bus.getArticleId());
+
+        BusRelationUserArticleShare existCount = busRelationUserArticleShareMapper.selectOne(exist);
+        //该用户没有收藏过该文章，或者取消收藏过该文章
+        if (null == existCount) {
+            //新增一条收藏，不管是del还是exist
             bus.setId(IDKeyUtil.generateId());
             bus.setUserId(userId);
             busRelationUserArticleShareMapper.insertSelective(bus);
-        } else {
-            bus.setUserId(userId);
-            busRelationUserArticleShareMapper.updateByPrimaryKeySelective(bus);
+        }else{
+            existCount.setIsDel(bus.getIsDel());
+            busRelationUserArticleShareMapper.updateByPrimaryKeySelective(existCount);
         }
-        return ComResponse.ok();
+        return ComResponse.okMsg("1".equals(bus.getIsDel())?"已删除分享的文章":"已分享");
     }
 
 

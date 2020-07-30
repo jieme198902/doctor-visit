@@ -36,7 +36,18 @@ public class BusFile implements Serializable {
     @Column(name = "file_type")
     private String fileType;
 
+    @Transient
+    private boolean delBefore = true;
+
     private static final long serialVersionUID = 1L;
+
+    public boolean isDelBefore() {
+        return delBefore;
+    }
+
+    public void setDelBefore(boolean delBefore) {
+        this.delBefore = delBefore;
+    }
 
     /**
      * @return id

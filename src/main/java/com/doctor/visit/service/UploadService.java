@@ -61,6 +61,13 @@ public class UploadService {
             if (!dirRootPath.exists()) {
                 dirRootPath.mkdirs();
             }
+            if(busFile.isDelBefore()){
+                BusFile delRecord = new BusFile();
+                delRecord.setBusId(busFile.getBusId());
+                delRecord.setBus(busFile.getBus());
+                delRecord.setFileType(busFile.getFileType());
+                busFileMapper.delete(delRecord);
+            }
             for (MultipartFile multipartFile : fileList) {
                 // 获取文件的原名称
                 String fileName = multipartFile.getOriginalFilename().replace(".temp", "");

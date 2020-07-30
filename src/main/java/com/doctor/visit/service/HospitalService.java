@@ -3,6 +3,7 @@ package com.doctor.visit.service;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.BusAreaMapper;
+import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusHospitalMapper;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
@@ -10,6 +11,7 @@ import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -32,12 +34,16 @@ public class HospitalService {
     //
     private final BusHospitalMapper busHospitalMapper;
     private final BusAreaMapper busAreaMapper;
+    private final BusFileMapper busFileMapper;
+    @Value("${custom.requestPath}")
+    private String requestPath;
 
-    public HospitalService(CommonService commonService, UploadService uploadService, BusHospitalMapper busHospitalMapper, BusAreaMapper busAreaMapper) {
+    public HospitalService(CommonService commonService, UploadService uploadService, BusHospitalMapper busHospitalMapper, BusAreaMapper busAreaMapper, BusFileMapper busFileMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busHospitalMapper = busHospitalMapper;
         this.busAreaMapper = busAreaMapper;
+        this.busFileMapper = busFileMapper;
     }
 
     /**
@@ -63,6 +69,16 @@ public class HospitalService {
             busList = (Page<BusHospital>) busHospitalMapper.selectByExample(example);
         }
 
+        busList.getResult().forEach(busHospital -> {
+            BusFile busFile = new BusFile();
+            busFile.setBus("bus_hospital");
+            busFile.setFileType(Constants.FILE_TYPE_IMG);
+            busFile.setBusId(busHospital.getId());
+            List<BusFile> files = busFileMapper.select(busFile);
+            if (null != files && !files.isEmpty()) {
+                busHospital.setImg(requestPath + files.get(0).getFilePath());
+            }
+        });
 
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
