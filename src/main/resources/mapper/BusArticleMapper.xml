@@ -50,6 +50,7 @@
 
   </select>
 
+<!--rua.is_del 是否删除，1是，0否-->
   <select id="selectArticleListWithFav" resultMap="BaseResultMap">
         SELECT DISTINCT
             a.id,

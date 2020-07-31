@@ -2,16 +2,19 @@ package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
+import com.doctor.visit.domain.dto.BusArticleDto;
 import com.doctor.visit.repository.BusArticleClassMapper;
 import com.doctor.visit.repository.BusArticleMapper;
 import com.doctor.visit.repository.BusRelationUserArticleMapper;
 import com.doctor.visit.repository.BusRelationUserArticleShareMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -139,10 +142,11 @@ public class ArticleService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
+    public ComResponse<List<BusArticleDto>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusArticle> busList = null;
         if (sys) {
+            //后台
             Example example = new Example(BusArticle.class);
             Example.Criteria criteria = example.createCriteria();
             criteria.andEqualTo("isDel", Constants.EXIST);
@@ -154,13 +158,13 @@ public class ArticleService {
             }
             busList = (Page<BusArticle>) busArticleMapper.selectByExample(example);
         } else {
+            //前台
             Long userId = Utils.getUserIdWithoutException(request);
             busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId);
         }
-        return ComResponse.ok(busList.getResult(), busList.getTotal()).setStarDataListener(list -> {
-            list.forEach(bean -> bean.setUrl(requestPath + bean.getUrl()));
-            return list;
-        });
+        List<BusArticleDto> busDtoList = Lists.newArrayList();
+        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath)));
+        return ComResponse.ok(busDtoList, busList.getTotal());
     }
 
     /**
@@ -170,7 +174,7 @@ public class ArticleService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listFavArticle(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
+    public ComResponse<List<BusArticleDto>> listFavArticle(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
         //获取用户的id
         bus.setCreateBy(Utils.getUserId(request));
         if (null == bus.getCreateBy()) {
@@ -178,7 +182,10 @@ public class ArticleService {
         }
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectFavArticle(bus.getCreateBy());
-        return ComResponse.ok(busList.getResult(), busList.getTotal());
+        List<BusArticleDto> busDtoList = Lists.newArrayList();
+        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath)));
+
+        return ComResponse.ok(busDtoList, busList.getTotal());
     }
 
     /**
@@ -267,11 +274,11 @@ public class ArticleService {
             bus.setId(IDKeyUtil.generateId());
             bus.setUserId(userId);
             busRelationUserArticleMapper.insertSelective(bus);
-        }else{
+        } else {
             existCount.setIsDel(bus.getIsDel());
             busRelationUserArticleMapper.updateByPrimaryKeySelective(existCount);
         }
-        return ComResponse.okMsg("1".equals(bus.getIsDel())?"已取消收藏":"已收藏");
+        return ComResponse.okMsg("1".equals(bus.getIsDel()) ? "已取消收藏" : "已收藏");
     }
 
     /**
@@ -298,11 +305,11 @@ public class ArticleService {
             bus.setId(IDKeyUtil.generateId());
             bus.setUserId(userId);
             busRelationUserArticleShareMapper.insertSelective(bus);
-        }else{
+        } else {
             existCount.setIsDel(bus.getIsDel());
             busRelationUserArticleShareMapper.updateByPrimaryKeySelective(existCount);
         }
-        return ComResponse.okMsg("1".equals(bus.getIsDel())?"已删除分享的文章":"已分享");
+        return ComResponse.okMsg("1".equals(bus.getIsDel()) ? "已删除分享的文章" : "已分享");
     }
 
 
@@ -313,7 +320,7 @@ public class ArticleService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusArticle>> listArticleShare(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
+    public ComResponse<List<BusArticleDto>> listArticleShare(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
         //获取用户的id
         Long userId = Utils.getUserId(request);
         bus.setCreateBy(userId);
@@ -322,7 +329,9 @@ public class ArticleService {
         }
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectShareArticle(bus.getCreateBy());
-        return ComResponse.ok(busList.getResult(), busList.getTotal());
+        List<BusArticleDto> busDtoList = Lists.newArrayList();
+        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath)));
+        return ComResponse.ok(busDtoList, busList.getTotal());
     }
 
 }

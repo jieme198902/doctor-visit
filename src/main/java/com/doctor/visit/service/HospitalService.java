@@ -2,14 +2,17 @@ package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
+import com.doctor.visit.domain.dto.BusHospitalDto;
 import com.doctor.visit.repository.BusAreaMapper;
 import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusHospitalMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +56,7 @@ public class HospitalService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusHospital>> listHospital(BusHospital bus, Pageable pageable) {
+    public ComResponse<List<BusHospitalDto>> listHospital(BusHospital bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusHospital.class);
         Example.Criteria criteria = example.createCriteria();
@@ -69,18 +72,10 @@ public class HospitalService {
             busList = (Page<BusHospital>) busHospitalMapper.selectByExample(example);
         }
 
-        busList.getResult().forEach(busHospital -> {
-            BusFile busFile = new BusFile();
-            busFile.setBus("bus_hospital");
-            busFile.setFileType(Constants.FILE_TYPE_IMG);
-            busFile.setBusId(busHospital.getId());
-            List<BusFile> files = busFileMapper.select(busFile);
-            if (null != files && !files.isEmpty()) {
-                busHospital.setImg(requestPath + files.get(0).getFilePath());
-            }
-        });
+        List<BusHospitalDto> busHospitalDtoList = Lists.newArrayList();
+        busList.getResult().forEach(busHospital -> busHospitalDtoList.add(BeanConversionUtil.beanToDto(busHospital, requestPath, busFileMapper)));
 
-        return ComResponse.ok(busList.getResult(), busList.getTotal());
+        return ComResponse.ok(busHospitalDtoList, busList.getTotal());
     }
 
     /**

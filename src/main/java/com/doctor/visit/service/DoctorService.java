@@ -2,17 +2,19 @@ package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
-import com.doctor.visit.repository.BusClincClassMapper;
-import com.doctor.visit.repository.BusDoctorMapper;
-import com.doctor.visit.repository.BusHospitalMapper;
-import com.doctor.visit.repository.BusRelationUserDoctorMapper;
+import com.doctor.visit.domain.dto.BusDoctorDto;
+import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -31,14 +33,19 @@ public class DoctorService {
     private final CommonService commonService;
     private final UploadService uploadService;
     //
+    private final BusFileMapper busFileMapper;
     private final BusDoctorMapper busDoctorMapper;
     private final BusHospitalMapper busHospitalMapper;
     private final BusClincClassMapper busClincClassMapper;
     private final BusRelationUserDoctorMapper busRelationUserDoctorMapper;
+    //
+    @Value("${custom.requestPath}")
+    private String requestPath;
 
-    public DoctorService(CommonService commonService, UploadService uploadService, BusDoctorMapper busDoctorMapper, BusHospitalMapper busHospitalMapper, BusClincClassMapper busClincClassMapper, BusRelationUserDoctorMapper busRelationUserDoctorMapper) {
+    public DoctorService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusHospitalMapper busHospitalMapper, BusClincClassMapper busClincClassMapper, BusRelationUserDoctorMapper busRelationUserDoctorMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
+        this.busFileMapper = busFileMapper;
         this.busDoctorMapper = busDoctorMapper;
         this.busHospitalMapper = busHospitalMapper;
         this.busClincClassMapper = busClincClassMapper;
@@ -52,7 +59,7 @@ public class DoctorService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusDoctor>> listDoctor(BusDoctor bus, Pageable pageable) {
+    public ComResponse<List<BusDoctorDto>> listDoctor(BusDoctor bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusDoctor.class);
         Example.Criteria criteria = example.createCriteria();
@@ -66,8 +73,14 @@ public class DoctorService {
         criteria.andEqualTo("isDel", Constants.EXIST);
 
         Page<BusDoctor> busList = (Page<BusDoctor>) busDoctorMapper.selectByExample(example);
-        return ComResponse.ok(busList.getResult(), busList.getTotal());
+
+        List<BusDoctorDto> busDoctorDtoList = Lists.newArrayList();
+
+        busList.getResult().forEach(busDoctor -> busDoctorDtoList.add(BeanConversionUtil.beanToDto(busDoctor,requestPath,busFileMapper)));
+
+        return ComResponse.ok(busDoctorDtoList, busList.getTotal());
     }
+
 
     /**
      * 前台 - 获取关注的医生列表
@@ -76,7 +89,7 @@ public class DoctorService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusDoctor>> listFavDoctor(BusDoctor bus, Pageable pageable, HttpServletRequest request) throws Exception {
+    public ComResponse<List<BusDoctorDto>> listFavDoctor(BusDoctor bus, Pageable pageable, HttpServletRequest request) throws Exception {
         //获取用户的id
         Long userId = Utils.getUserId(request);
         bus.setCreateBy(userId);
@@ -85,7 +98,9 @@ public class DoctorService {
         }
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusDoctor> busList = (Page<BusDoctor>) busDoctorMapper.selectFavDoctor(bus.getCreateBy());
-        return ComResponse.ok(busList.getResult(), busList.getTotal());
+        List<BusDoctorDto> busDoctorDtoList = Lists.newArrayList();
+        busList.getResult().forEach(busDoctor -> BeanConversionUtil.beanToDto(busDoctor,requestPath,busFileMapper));
+        return ComResponse.ok(busDoctorDtoList, busList.getTotal());
     }
 
 

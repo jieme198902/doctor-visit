@@ -21,11 +21,6 @@ public class BusHospital implements Serializable {
     private String name;
 
     /**
-     * 医院图片
-     */
-    private String img;
-
-    /**
      * 医院等级
      */
     @Column(name = "grade_id")
@@ -183,23 +178,6 @@ public class BusHospital implements Serializable {
         this.name = name;
     }
 
-    /**
-     * 获取医院图片
-     *
-     * @return img - 医院图片
-     */
-    public String getImg() {
-        return img;
-    }
-
-    /**
-     * 设置医院图片
-     *
-     * @param img 医院图片
-     */
-    public void setImg(String img) {
-        this.img = img;
-    }
 
     /**
      * 获取医院等级

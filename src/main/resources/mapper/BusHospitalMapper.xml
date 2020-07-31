@@ -7,7 +7,6 @@
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="img" property="img" jdbcType="VARCHAR" />
     <result column="grade_id" property="gradeId" jdbcType="BIGINT" />
     <result column="grade_name" property="gradeName" jdbcType="VARCHAR" />
     <result column="type_id" property="typeId" jdbcType="BIGINT" />
