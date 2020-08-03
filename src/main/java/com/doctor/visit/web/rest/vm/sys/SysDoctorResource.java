@@ -43,8 +43,8 @@ public class SysDoctorResource {
     })
     @PostMapping("listDoctor")
     @ApiOperation(value = "查询医生列表")
-    public Object listDoctor(BusDoctor bus, Pageable pageable) {
-        return doctorService.listDoctor(bus, pageable);
+    public Object listDoctor(BusDoctor bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        return doctorService.listDoctor(bus, pageable,request,true);
     }
 
     /**

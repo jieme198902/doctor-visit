@@ -39,4 +39,45 @@
 
   </select>
 
+
+  <select id="selectDoctorWithFav" resultMap="BaseResultMap">
+        SELECT DISTINCT
+            <if test="null!=userId">
+                (CASE
+                    WHEN rua.user_id = #{userId}
+                    AND rua.is_del = "0" THEN
+                        '1' ELSE '0'
+                    END
+                    ) AS is_del,
+            </if>
+            a.id,
+            a.`name`,
+            a.professional_id,
+            a.professional_title,
+            a.hospital_name,
+            a.hospital_id,
+            a.good_at,
+            a.inquiries,
+            a.consulting_fees,
+            a.clinc_name,
+            a.clinc_id,
+            a.create_by,
+            a.create_name,
+            a.create_time,
+            a.edit_by,
+            a.edit_name,
+            a.edit_time
+
+        FROM
+        bus_doctor a LEFT JOIN bus_relation_user_doctor rua ON a.id = rua.doctor_id
+        WHERE a.is_del = '0'
+        <if test="name!=null">
+            AND a.name LIKE CONCAT(#{name},'%')
+        </if>
+        <if test="clincId!=null">
+            AND a.clinc_id = #{clincId}
+        </if>
+
+  </select>
+
 </mapper>

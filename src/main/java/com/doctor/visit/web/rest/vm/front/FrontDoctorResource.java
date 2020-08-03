@@ -45,8 +45,8 @@ public class FrontDoctorResource {
     })
     @PostMapping("getDoctorList")
     @ApiOperation(value = "获取医生列表")
-    public Object getDoctorList(BusDoctor bus, Pageable pageable) {
-        return doctorService.listDoctor(bus, pageable);
+    public Object getDoctorList(BusDoctor bus, Pageable pageable,HttpServletRequest request) throws Exception {
+        return doctorService.listDoctor(bus, pageable,request,false);
     }
 
     /**

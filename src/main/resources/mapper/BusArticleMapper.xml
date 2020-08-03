@@ -72,9 +72,6 @@
                     END
                     ) AS is_del
             </if>
-            <if test="null==userId">
-            '0' AS is_del
-            </if>
 
                 FROM
                 bus_article AS a

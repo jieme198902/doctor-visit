@@ -1,7 +1,9 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,6 +22,12 @@ public class BusGoodsInquiry implements Serializable {
     private Long doctorId;
 
     /**
+     * 医生名字
+     */
+    @Column(name = "doctor_name")
+    private String doctorName;
+
+    /**
      * 问诊方式：0电话，1图文，2视频咨询
      */
     @Column(name = "ask_type")
@@ -29,6 +37,12 @@ public class BusGoodsInquiry implements Serializable {
      * 价格
      */
     private Integer price;
+
+    /**
+     * 现价
+     */
+    @Column(name = "current_price")
+    private Integer currentPrice;
 
     /**
      * 上限次数
@@ -58,6 +72,8 @@ public class BusGoodsInquiry implements Serializable {
      * 创建时间
      */
     @Column(name = "create_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date createTime;
 
     /**
@@ -76,6 +92,8 @@ public class BusGoodsInquiry implements Serializable {
      * 修改时间
      */
     @Column(name = "edit_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date editTime;
 
     /**
@@ -85,6 +103,22 @@ public class BusGoodsInquiry implements Serializable {
     private String isDel;
 
     private static final long serialVersionUID = 1L;
+
+    public Integer getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(Integer currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    }
 
     /**
      * @return id
