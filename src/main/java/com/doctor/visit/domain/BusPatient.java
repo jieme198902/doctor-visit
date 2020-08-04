@@ -33,6 +33,8 @@ public class BusPatient implements Serializable {
     /**
      * 出生日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd")//存日期时使用
     private Date birthday;
 
     /**

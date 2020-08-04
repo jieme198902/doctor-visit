@@ -32,7 +32,7 @@ public class SysLogService {
      */
     public ComResponse<List<BusLog>> listLog(BusLog bus, Pageable pageable) {
         if (null != pageable) {
-            PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+            PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize(),"create_time desc");
         }
         BusLog record = new BusLog();
         if (StringUtils.isNotBlank(bus.getSys())) {

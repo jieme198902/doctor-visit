@@ -68,7 +68,9 @@ public class PatientService {
      * @param request
      * @return
      */
-    public ComResponse<BusPatient> insertOrUpdatePatient(BusPatient bus, HttpServletRequest request) {
+    public ComResponse<BusPatient> insertOrUpdatePatient(BusPatient bus, HttpServletRequest request) throws Exception {
+        Long userId = Utils.getUserId(request);
+        bus.setCreateBy(userId);
         if (null == bus.getCreateBy()) {
             return ComResponse.failBadRequest();
         }

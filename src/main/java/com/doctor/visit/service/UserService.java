@@ -64,7 +64,7 @@ public class UserService {
         if (StringUtils.isBlank(jsCode)) {
             return ComResponse.failBadRequest();
         }
-        logger.info("jsCode-->{}",jsCode);
+        logger.info("jsCode-->{}", jsCode);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .readTimeout(120, TimeUnit.SECONDS)
             .writeTimeout(120, TimeUnit.SECONDS)
@@ -93,9 +93,9 @@ public class UserService {
             .url(authCode2Session)
             .get().build();
         try {
-            Map<String,String> requestMap = Maps.newHashMap();
-            requestMap.put("jsCode",jsCode);
-            requestMap.put(Constants.USER_AGENT,httpServletRequest.getHeader(Constants.USER_AGENT));
+            Map<String, Object> requestMap = Maps.newHashMap();
+            requestMap.put("jsCode", jsCode);
+            requestMap.put(Constants.USER_AGENT, httpServletRequest.getHeader(Constants.USER_AGENT));
             //
             BusLog loginLog = new BusLog();
             loginLog.setId(IDKeyUtil.generateId());
@@ -108,18 +108,18 @@ public class UserService {
             String result = response.body().string();
             if (StringUtils.isBlank(result)) {
                 //记录日志
-                requestMap.put("result","请求微信服务器超时");
+                requestMap.put("result", "请求微信服务器超时");
                 loginLog.setResponse(gson.toJson(requestMap));
                 busLogMapper.insertSelective(loginLog);
                 return ComResponse.fail("请求失败，请稍后重试");
             }
             loginLog.setResponse(result);
-            logger.info("wx.response-->{}",result);
+            logger.info("wx.response-->{}", result);
             Map<String, String> resultMap = gson.fromJson(result, new TypeToken<Map<String, String>>() {
             }.getType());
             if (null == resultMap) {
                 //记录日志
-                requestMap.put("result","微信返回的数据解析失败");
+                requestMap.put("result", "微信返回的数据解析失败");
                 loginLog.setResponse(gson.toJson(requestMap));
                 busLogMapper.insertSelective(loginLog);
                 return ComResponse.fail("解析失败，请稍后重试");
@@ -154,12 +154,18 @@ public class UserService {
                     //更新
                     busUserMapper.updateByPrimaryKeySelective(busUser);
                 }
-                BusUserDto busUserDto = gson.fromJson(gson.toJson(busUser),BusUserDto.class);
+                BusUserDto busUserDto = gson.fromJson(gson.toJson(busUser), BusUserDto.class);
 
                 busUserDto.setToken(Utils.createToken(busUser.getId()));
                 //记录日志
                 loginLog.setCreateBy(busUser.getId());
-                loginLog.setCreateName(busUser.getName());
+                if (StringUtils.isBlank(busUser.getName())) {
+                    loginLog.setCreateName(openid);
+                } else {
+                    loginLog.setCreateName(busUser.getName());
+                }
+                requestMap.put("user",busUserDto);
+                loginLog.setResponse(gson.toJson(requestMap));
                 busLogMapper.insertSelective(loginLog);
 
                 return ComResponse.ok(busUserDto);
@@ -167,8 +173,8 @@ public class UserService {
                 //记录日志
                 loginLog.setResponse(gson.toJson(resultMap));
                 busLogMapper.insertSelective(loginLog);
-                String errcode = resultMap.get(Constants.WX_ERR_CODE);
-                switch (errcode) {
+                String errCode = resultMap.get(Constants.WX_ERR_CODE);
+                switch (errCode) {
                     case "-1":
                         return ComResponse.fail("系统繁忙，请稍候再试");
                     case "45011":
@@ -179,8 +185,8 @@ public class UserService {
                         return ComResponse.fail(result);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error("login.error-->{}",e.getMessage());
             return ComResponse.fail(e.getMessage());
         }
     }

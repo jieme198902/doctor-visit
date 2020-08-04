@@ -119,7 +119,7 @@ public class FrontMineResource {
     })
     @PostMapping("insertOrUpdatePatient")
     @ApiOperation(value = "前台 - 新增或者更新患者")
-    public Object insertOrUpdatePatient(BusPatient bus, HttpServletRequest request) {
+    public Object insertOrUpdatePatient(BusPatient bus, HttpServletRequest request) throws Exception {
         return patientService.insertOrUpdatePatient(bus, request);
     }
 
