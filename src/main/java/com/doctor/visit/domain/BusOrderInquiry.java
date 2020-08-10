@@ -63,6 +63,7 @@ public class BusOrderInquiry implements Serializable {
     /**
      * 病情描述
      */
+    @Column(name = "`condition`")
     private String condition;
 
     /**

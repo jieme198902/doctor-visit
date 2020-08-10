@@ -196,14 +196,17 @@ https://github.com/YeautyYE/netty-websocket-spring-boot-starter
 2.聊天列表 本地存储下还是 后台有接口呢 
 答：还没写
 3.单纯聊天websocket实现吗
-答：
+答：参考后台的websocket实现
+
 4.不同科室怎么定义（数据库表里面没写具体定义id）
 5.智能问询，
 POST /front/self/diagnostics/listSelfDiagnose 获取自诊问题列表
 POST/front/self/diagnostics/listGSelfDiagnosis 获取自诊结果列表
 这两个接口怎么使用呢，用户先输入自己病情描述，这个时候调用哪个接口
-6.生成订单报错 500，咨询订单列表报错 500
+6.生成订单报错 500，咨询订单列表报错 500 
+答：已解决
 7.患者 没有年龄、手机号字段
+答：出生日期为年龄 「'busPatient' on field 'birthday': rejected value [2020年08月04日] 」----> 这个字段用2020-08-04的格式，手机号为mobile
 8.生成咨询订单的时候，前端有上传图片的操作
 9.文章数据里面少个封面图片字段， 现在的url 字段是 详情的html吗，前端直接加载html吗
 10.“我的”界面，需要一个返回 当前收藏数、分享数、关注数的接口

@@ -19,7 +19,10 @@ public class BusPatient implements Serializable {
      * 患者名字
      */
     private String name;
-
+    /**
+     * 手机号
+     */
+    private String mobile;
     /**
      * 患者身份证号
      */
@@ -108,6 +111,14 @@ public class BusPatient implements Serializable {
     private String isDel;
 
     private static final long serialVersionUID = 1L;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     /**
      * @return id
