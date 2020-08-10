@@ -156,10 +156,6 @@ http://172.16.125.89:8010/
 http://www.doctorvisit.icu:8761
 
 
-https://www.doctorvisit.icu/api/authenticate
-
-
-
 https://wk.zhangfan.ink/sys-manage/
 
 https://wk.zhangfan.ink/api/authenticate
@@ -177,9 +173,42 @@ AppSecret(小程序密钥) c87443a30e54d65ee6af19bbe22d3476
 ```
 
 ```text
-pom.xml openapi-generator 
+pom.xml 跳过验证 openapi-generator 
 <skipValidateSpec>true</skipValidateSpec>
 
 mvn -Pprod clean package -Dmaven.test.skip=true
+
+```
+
+```text
+websocket
+
+https://my.oschina.net/u/3580577/blog/2088114
+https://gitee.com/Yeauty/netty-websocket-spring-boot-starter
+https://github.com/YeautyYE/netty-websocket-spring-boot-starter
+```
+
+
+```text
+2020-08-10
+1.首页搜索“找医生、找医院”，一个接口根据输入的内容，查询医生跟医院，查询出来的医生或者医院要有标识，方便前端展示医生或者医院，前端是联想方式
+答：doctor/listDoctorOrHospital  参数name 查询，出来两个列表数据。
+2.聊天列表 本地存储下还是 后台有接口呢 
+答：还没写
+3.单纯聊天websocket实现吗
+答：
+4.不同科室怎么定义（数据库表里面没写具体定义id）
+5.智能问询，
+POST /front/self/diagnostics/listSelfDiagnose 获取自诊问题列表
+POST/front/self/diagnostics/listGSelfDiagnosis 获取自诊结果列表
+这两个接口怎么使用呢，用户先输入自己病情描述，这个时候调用哪个接口
+6.生成订单报错 500，咨询订单列表报错 500
+7.患者 没有年龄、手机号字段
+8.生成咨询订单的时候，前端有上传图片的操作
+9.文章数据里面少个封面图片字段， 现在的url 字段是 详情的html吗，前端直接加载html吗
+10.“我的”界面，需要一个返回 当前收藏数、分享数、关注数的接口
+11.分享 成功，但是已分享列表里面没有
+12.已关注的医生列表没有数据
+
 
 ```

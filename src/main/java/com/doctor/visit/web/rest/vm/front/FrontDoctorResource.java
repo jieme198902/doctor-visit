@@ -2,6 +2,7 @@ package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusDoctor;
+import com.doctor.visit.domain.BusHospital;
 import com.doctor.visit.domain.BusRelationUserDoctor;
 import com.doctor.visit.service.DoctorService;
 import io.swagger.annotations.Api;
@@ -29,6 +30,23 @@ public class FrontDoctorResource {
 
     public FrontDoctorResource(DoctorService doctorService) {
         this.doctorService = doctorService;
+    }
+
+    /**
+     * 获取医生和医院列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusHospital.class),
+        @ApiImplicitParam(name = "name",value = "搜索的内容"),
+    })
+    @PostMapping("listDoctorOrHospital")
+    @ApiOperation(value = "获取医生和医院列表")
+    public Object listDoctorOrHospital(BusHospital bus, Pageable pageable, HttpServletRequest request) throws Exception {
+        return doctorService.listDoctorOrHospital(bus, pageable,request);
     }
 
     /**
