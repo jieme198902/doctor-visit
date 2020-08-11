@@ -80,6 +80,7 @@ public class DoctorService {
             criteria.andLike("name", bus.getName() + "%");
         }
         Page<BusHospital> busList = null;
+        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         if (StringUtils.isNoneBlank(bus.getLat(), bus.getLng())) {
             busList = (Page<BusHospital>) busHospitalMapper.selectHospitalByDistance(bus);
         } else {
