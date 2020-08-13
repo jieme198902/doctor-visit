@@ -167,7 +167,7 @@ public class UserService {
                 requestMap.put("user",busUserDto);
                 loginLog.setResponse(gson.toJson(requestMap));
                 busLogMapper.insertSelective(loginLog);
-
+                logger.info("login-->{}", gson.toJson(busUserDto));
                 return ComResponse.ok(busUserDto);
             } else {
                 //记录日志

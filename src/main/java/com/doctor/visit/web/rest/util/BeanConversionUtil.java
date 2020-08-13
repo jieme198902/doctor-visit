@@ -5,6 +5,7 @@ import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusArticleDto;
 import com.doctor.visit.domain.dto.BusDoctorDto;
 import com.doctor.visit.domain.dto.BusHospitalDto;
+import com.doctor.visit.domain.dto.BusOrderInquiryDto;
 import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusGoodsInquiryMapper;
 import org.springframework.beans.BeanUtils;
@@ -75,11 +76,52 @@ public class BeanConversionUtil {
      * @param bus
      * @return
      */
-    public static BusArticleDto beanToDto(BusArticle bus, String requestPath) {
+    public static BusArticleDto beanToDto(BusArticle bus, String requestPath, BusFileMapper busFileMapper) {
         BusArticleDto busDto = new BusArticleDto();
         BeanUtils.copyProperties(bus, busDto);
         busDto.setCollect(bus.getIsDel());
         busDto.setUrl(requestPath + bus.getUrl());
+        //获取封面图
+        BusFile busFile = new BusFile();
+        busFile.setBus("bus_article");
+        busFile.setFileType(Constants.FILE_TYPE_IMG);
+        busFile.setBusId(bus.getId());
+        List<BusFile> files = busFileMapper.select(busFile);
+        if (null != files && !files.isEmpty()) {
+            busDto.setCoverImg(requestPath + files.get(0).getFilePath());
+        }
+        return busDto;
+    }
+
+
+    /**
+     * 文章转换
+     * 从 bean 转为 Dto
+     *
+     * @param bus
+     * @return
+     */
+    public static BusOrderInquiryDto beanToDto(BusOrderInquiry bus, String requestPath, BusFileMapper busFileMapper) {
+        BusOrderInquiryDto busDto = new BusOrderInquiryDto();
+        BeanUtils.copyProperties(bus, busDto);
+        //获取封面图
+        BusFile busFile = new BusFile();
+        busFile.setBus("bus_order_inquiry");
+        busFile.setFileType(Constants.FILE_TYPE_IMG);
+        busFile.setBusId(bus.getId());
+        List<BusFile> files = busFileMapper.select(busFile);
+        if (null != files && !files.isEmpty()) {
+            StringBuffer stringBuffer = new StringBuffer();
+            for (BusFile file : files) {
+                stringBuffer.append(requestPath + file.getFilePath());
+                stringBuffer.append(Constants.COMMA);
+            }
+            String imgs = stringBuffer.toString();
+            if (imgs.endsWith(Constants.COMMA)) {
+                imgs = imgs.substring(0, imgs.length() - 1);
+            }
+            busDto.setImgs(imgs);
+        }
         return busDto;
     }
 

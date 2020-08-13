@@ -11,6 +11,18 @@ public class BusArticleDto extends BusArticle {
      * 收藏
      */
     private String collect;
+    /**
+     * 封面图
+     */
+    private String coverImg;
+
+    public String getCoverImg() {
+        return coverImg;
+    }
+
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
+    }
 
     public String getCollect() {
         return collect;

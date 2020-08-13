@@ -104,8 +104,8 @@ public class SysArticleResource {
     })
     @PostMapping("insertOrUpdateArticle")
     @ApiOperation(value = "新增或者修改文章")
-    public Object insertOrUpdateArticle(BusArticle bus) {
-        return articleService.insertOrUpdateArticle(bus);
+    public Object insertOrUpdateArticle(BusArticle bus,HttpServletRequest request) {
+        return articleService.insertOrUpdateArticle(bus,request);
     }
 
     /**

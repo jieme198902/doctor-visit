@@ -3,10 +3,7 @@ package com.doctor.visit.service;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusArticleDto;
-import com.doctor.visit.repository.BusArticleClassMapper;
-import com.doctor.visit.repository.BusArticleMapper;
-import com.doctor.visit.repository.BusRelationUserArticleMapper;
-import com.doctor.visit.repository.BusRelationUserArticleShareMapper;
+import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
@@ -41,16 +38,21 @@ public class ArticleService {
     private String requestPath;
     //
     private final CommonService commonService;
+    private final UploadService uploadService;
+
     //
+    private final BusFileMapper busFileMapper;
     private final BusArticleMapper busArticleMapper;
     private final BusArticleClassMapper busArticleClassMapper;
     private final BusRelationUserArticleMapper busRelationUserArticleMapper;
     private final BusRelationUserArticleShareMapper busRelationUserArticleShareMapper;
 
-    public ArticleService(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService, BusRelationUserArticleMapper busRelationUserArticleMapper, BusRelationUserArticleShareMapper busRelationUserArticleShareMapper) {
+    public ArticleService(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusRelationUserArticleMapper busRelationUserArticleMapper, BusRelationUserArticleShareMapper busRelationUserArticleShareMapper) {
         this.busArticleClassMapper = busArticleClassMapper;
         this.busArticleMapper = busArticleMapper;
         this.commonService = commonService;
+        this.uploadService = uploadService;
+        this.busFileMapper = busFileMapper;
         this.busRelationUserArticleMapper = busRelationUserArticleMapper;
         this.busRelationUserArticleShareMapper = busRelationUserArticleShareMapper;
     }
@@ -163,7 +165,7 @@ public class ArticleService {
             busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId);
         }
         List<BusArticleDto> busDtoList = Lists.newArrayList();
-        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath)));
+        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath,busFileMapper)));
         return ComResponse.ok(busDtoList, busList.getTotal());
     }
 
@@ -183,7 +185,7 @@ public class ArticleService {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectFavArticle(bus.getCreateBy());
         List<BusArticleDto> busDtoList = Lists.newArrayList();
-        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath)));
+        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath,busFileMapper)));
 
         return ComResponse.ok(busDtoList, busList.getTotal());
     }
@@ -193,9 +195,10 @@ public class ArticleService {
      * 静态化文章生成url
      *
      * @param bus
+     * @param request 处理封面
      * @return
      */
-    public ComResponse<BusArticle> insertOrUpdateArticle(BusArticle bus) {
+    public ComResponse<BusArticle> insertOrUpdateArticle(BusArticle bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
             JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
@@ -218,6 +221,13 @@ public class ArticleService {
                 bus.setUrl(Utils.writeHtml(new Utils.BusHtml(bus.getId(), "bus_article", bus.getTitle(), bus.getForwardFrom(), bus.getContent()), rootPath));
                 busArticleMapper.insertSelective(bus);
             }
+            //上传封面图
+            BusFile busFile = new BusFile();
+            busFile.setBus("bus_article");
+            busFile.setBusId(bus.getId());
+            busFile.setFileType(Constants.FILE_TYPE_IMG);
+            uploadService.uploadFiles(busFile, request);
+
         } else {
             return ComResponse.failUnauthorized();
         }
@@ -330,7 +340,7 @@ public class ArticleService {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectShareArticle(bus.getCreateBy());
         List<BusArticleDto> busDtoList = Lists.newArrayList();
-        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath)));
+        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath,busFileMapper)));
         return ComResponse.ok(busDtoList, busList.getTotal());
     }
 

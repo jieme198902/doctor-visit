@@ -193,25 +193,45 @@ https://github.com/YeautyYE/netty-websocket-spring-boot-starter
 2020-08-10
 1.首页搜索“找医生、找医院”，一个接口根据输入的内容，查询医生跟医院，查询出来的医生或者医院要有标识，方便前端展示医生或者医院，前端是联想方式
 答：doctor/listDoctorOrHospital  参数name 查询，出来两个列表数据。
+
 2.聊天列表 本地存储下还是 后台有接口呢 
 答：还没写
+
 3.单纯聊天websocket实现吗
 答：参考后台的websocket实现
 
 4.不同科室怎么定义（数据库表里面没写具体定义id）
+啥意思？？？？？
+
 5.智能问询，
 POST /front/self/diagnostics/listSelfDiagnose 获取自诊问题列表
 POST/front/self/diagnostics/listGSelfDiagnosis 获取自诊结果列表
 这两个接口怎么使用呢，用户先输入自己病情描述，这个时候调用哪个接口
+答：
+1、进页面请求 https://wk.zhangfan.ink/doctorvisit/front/self/diagnostics/listSelfDiagnose?id=0 获取顶级问题列表
+2、再根据每次的点击的问题id获取下级问题选项。  
+3、当点击的选项数据里有 "diagnosis": **** 字段的时候说明有诊断结果了，根据这个id获取诊断结果。
+4、比如：https://wk.zhangfan.ink/doctorvisit/front/self/diagnostics/listGSelfDiagnosis?id=1001
+
 6.生成订单报错 500，咨询订单列表报错 500 
 答：已解决
+
 7.患者 没有年龄、手机号字段
 答：出生日期为年龄 「'busPatient' on field 'birthday': rejected value [2020年08月04日] 」----> 这个字段用2020-08-04的格式，手机号为mobile
-8.生成咨询订单的时候，前端有上传图片的操作
-9.文章数据里面少个封面图片字段， 现在的url 字段是 详情的html吗，前端直接加载html吗
-10.“我的”界面，需要一个返回 当前收藏数、分享数、关注数的接口
-11.分享 成功，但是已分享列表里面没有
-12.已关注的医生列表没有数据
 
+8.生成咨询订单的时候，前端有上传图片的操作
+答：接口已添加接受图片，列表添加imgs字段，多张用,隔开
+
+9.文章数据里面少个封面图片字段， 现在的url 字段是 详情的html吗，前端直接加载html吗
+答：添加 coverImg 封面图片
+
+10.“我的”界面，需要一个返回 当前收藏数、分享数、关注数的接口
+答：未写
+
+11.分享 成功，但是已分享列表里面没有
+答：调用分享接口了吗？
+
+12.已关注的医生列表没有数据
+答：已解决
 
 ```

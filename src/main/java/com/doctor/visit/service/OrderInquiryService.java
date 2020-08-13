@@ -1,15 +1,20 @@
 package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
+import com.doctor.visit.domain.BusFile;
 import com.doctor.visit.domain.BusOrderInquiry;
 import com.doctor.visit.domain.BusUser;
+import com.doctor.visit.domain.dto.BusOrderInquiryDto;
+import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusOrderInquiryMapper;
+import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.compress.utils.Lists;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +28,22 @@ import java.util.List;
 @Service
 public class OrderInquiryService {
 
+    @Value("${custom.rootPath}")
+    private String rootPath;
+    @Value("${custom.requestPath}")
+    private String requestPath;
+
     private final CommonService commonService;
+    private final UploadService uploadService;
+
+    //
+    private final BusFileMapper busFileMapper;
     private final BusOrderInquiryMapper busOrderInquiryMapper;
 
-    public OrderInquiryService(CommonService commonService, BusOrderInquiryMapper busOrderInquiryMapper) {
+    public OrderInquiryService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusOrderInquiryMapper busOrderInquiryMapper) {
         this.commonService = commonService;
+        this.uploadService = uploadService;
+        this.busFileMapper = busFileMapper;
         this.busOrderInquiryMapper = busOrderInquiryMapper;
     }
 
@@ -38,11 +54,13 @@ public class OrderInquiryService {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusOrderInquiry>> listOrderInquiry(BusOrderInquiry bus, Pageable pageable) {
+    public ComResponse<List<BusOrderInquiryDto>> listOrderInquiry(BusOrderInquiry bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
         Page<BusOrderInquiry> busList = (Page<BusOrderInquiry>) busOrderInquiryMapper.select(bus);
-        return ComResponse.ok(busList.getResult(), busList.getTotal());
+        List<BusOrderInquiryDto> busDtoList = Lists.newArrayList();
+        busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry,requestPath,busFileMapper)));
+        return ComResponse.ok(busDtoList, busList.getTotal());
     }
 
 
@@ -74,6 +92,12 @@ public class OrderInquiryService {
             bus.setCreateName(busUser.getName());
             busOrderInquiryMapper.insertSelective(bus);
         }
+        //上传咨询订单
+        BusFile busFile = new BusFile();
+        busFile.setBus("bus_order_inquiry");
+        busFile.setBusId(bus.getId());
+        busFile.setFileType(Constants.FILE_TYPE_IMG);
+        uploadService.uploadFiles(busFile, request);
         return ComResponse.ok(bus);
     }
 

@@ -57,6 +57,7 @@ public class DoctorService {
 
     /**
      * 根据名称
+     *
      * @param bus
      * @param pageable
      * @param request
@@ -89,7 +90,7 @@ public class DoctorService {
         List<BusHospitalDto> busHospitalDtoList = Lists.newArrayList();
         busList.getResult().forEach(busHospital -> busHospitalDtoList.add(BeanConversionUtil.beanToDto(busHospital, requestPath, busFileMapper)));
         doctorHospitalDto.setBusHospitalDtos(busHospitalDtoList);
-        return ComResponse.ok(doctorHospitalDto,busDoctorList.getTotal()+busList.getTotal());
+        return ComResponse.ok(doctorHospitalDto, busDoctorList.getTotal() + busList.getTotal());
     }
 
     /**
@@ -233,7 +234,7 @@ public class DoctorService {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusDoctor> busList = (Page<BusDoctor>) busDoctorMapper.selectFavDoctor(bus.getCreateBy());
         List<BusDoctorDto> busDoctorDtoList = Lists.newArrayList();
-        busList.getResult().forEach(busDoctor -> BeanConversionUtil.beanToDto(busDoctor, requestPath, busFileMapper, busGoodsInquiryMapper, true));
+        busList.getResult().forEach(busDoctor -> busDoctorDtoList.add(BeanConversionUtil.beanToDto(busDoctor, requestPath, busFileMapper, busGoodsInquiryMapper, true)));
         return ComResponse.ok(busDoctorDtoList, busList.getTotal());
     }
 
@@ -246,16 +247,23 @@ public class DoctorService {
     public ComResponse insertOrUpdateRelationUserDoctor(BusRelationUserDoctor bus, HttpServletRequest request) throws Exception {
         //获取用户的id
         if (null == bus.getDoctorId()) {
-            return ComResponse.failBadRequest();
+            return ComResponse.fail("医生id为空");
         }
         Long userId = Utils.getUserId(request);
-        if (null == bus.getId()) {
+
+        BusRelationUserDoctor exist = new BusRelationUserDoctor();
+        exist.setUserId(userId);
+        exist.setDoctorId(bus.getDoctorId());
+        BusRelationUserDoctor existCount = busRelationUserDoctorMapper.selectOne(exist);
+        //该用户没有收藏过该医生，或者取消收藏过该医生
+        if (null == existCount) {
+            //新增一条收藏，不管是del还是exist
             bus.setId(IDKeyUtil.generateId());
             bus.setUserId(userId);
             busRelationUserDoctorMapper.insertSelective(bus);
         } else {
-            bus.setUserId(userId);
-            busRelationUserDoctorMapper.updateByPrimaryKeySelective(bus);
+            existCount.setIsDel(bus.getIsDel());
+            busRelationUserDoctorMapper.updateByPrimaryKeySelective(existCount);
         }
         return ComResponse.ok();
     }
