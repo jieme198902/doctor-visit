@@ -6,6 +6,8 @@ import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 
@@ -27,6 +30,7 @@ import java.util.List;
 @Service
 @EnableAsync
 public class UploadService {
+    private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
 
     @Value("${custom.rootPath}")
     private String rootPath;
@@ -74,10 +78,12 @@ public class UploadService {
                 //文件后缀
                 String suffix = fileName.substring(fileName.lastIndexOf(Constants.POINT));
                 String newFileName = Utils.generateOfDate() + Constants.UNDERLINE + Utils.generateOf8() + suffix;
-
                 File destFile = new File(dirRootPath, newFileName);
                 try {
-                    multipartFile.transferTo(destFile);
+//                    multipartFile.transferTo(destFile);
+//                    FileUtils.copyInputStreamToFile(multipartFile.getInputStream(),destFile);
+                    Files.copy(multipartFile.getInputStream(),destFile.toPath());
+
                     try {
                         Runtime.getRuntime().exec("chmod -R 755 " + destFile.getAbsolutePath());
                     } catch (IOException e) {
