@@ -1,10 +1,7 @@
 package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusEvaluate;
-import com.doctor.visit.domain.BusPatient;
-import com.doctor.visit.domain.BusUserShippingAddress;
-import com.doctor.visit.domain.BusUserShoppingCart;
+import com.doctor.visit.domain.*;
 import com.doctor.visit.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -37,6 +34,24 @@ public class FrontMineResource {
         this.userShoppingCartService = userShoppingCartService;
     }
 
+
+    /**
+     * 10.“我的”界面，需要一个返回 当前收藏数、分享数、关注数的接口
+     * <p>
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusEvaluate.class),
+        @ApiImplicitParam(name = "token",value = "header中的token"),
+
+    })
+    @PostMapping("findMineCount")
+    @ApiOperation(value = "“我的”界面，需要一个返回 当前收藏数、分享数、关注数的接口")
+    public Object findMineCount(BusUser bus, HttpServletRequest request) throws Exception {
+        return mineService.findMineCount(bus, request);
+    }
 
     /**
      * 评价接口，评价医生、商品

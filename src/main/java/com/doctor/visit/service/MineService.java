@@ -25,24 +25,42 @@ import java.util.Optional;
 public class MineService {
 
     private final CommonService commonService;
+    private final UploadService uploadService;
+
     //
     private final BusEvaluateMapper busEvaluateMapper;
     private final BusUserMapper busUserMapper;
     private final BusFeedbackMapper busFeedbackMapper;
     private final JhiPersistentAuditEventMapper jhiPersistentAuditEventMapper;
 
-    public MineService(CommonService commonService, BusEvaluateMapper busEvaluateMapper, BusUserMapper busUserMapper, BusFeedbackMapper busFeedbackMapper, JhiPersistentAuditEventMapper jhiPersistentAuditEventMapper) {
+    public MineService(CommonService commonService, UploadService uploadService, BusEvaluateMapper busEvaluateMapper, BusUserMapper busUserMapper, BusFeedbackMapper busFeedbackMapper, JhiPersistentAuditEventMapper jhiPersistentAuditEventMapper) {
         this.commonService = commonService;
+        this.uploadService = uploadService;
         this.busEvaluateMapper = busEvaluateMapper;
         this.busUserMapper = busUserMapper;
         this.busFeedbackMapper = busFeedbackMapper;
         this.jhiPersistentAuditEventMapper = jhiPersistentAuditEventMapper;
     }
 
+    /**
+     * 我的”界面，需要一个返回 当前收藏数、分享数、关注数的接口
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public ComResponse findMineCount(BusUser bus, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
+        if (null == busUser) {
+            return ComResponse.failUnauthorized();
+        }
+
+        return ComResponse.ok(busUserMapper.findMineCount(busUser.getId()));
+
+    }
 
     /**
      * 前台 - 新增或者更新评价
-     * FIXME
      *
      * @param bus
      * @param request 这里需要处理文件
@@ -67,6 +85,11 @@ public class MineService {
             bus.setCreateName(busUser.getName());
             busEvaluateMapper.insertSelective(bus);
         }
+        BusFile busFile = new BusFile();
+        busFile.setBus("bus_evaluate");
+        busFile.setBusId(bus.getId());
+        busFile.setFileType(Constants.FILE_TYPE_IMG);
+        uploadService.uploadFiles(busFile, request);
 
         return ComResponse.ok(bus);
     }

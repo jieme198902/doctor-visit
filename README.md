@@ -226,7 +226,7 @@ POST/front/self/diagnostics/listGSelfDiagnosis 获取自诊结果列表
 答：添加 coverImg 封面图片
 
 10.“我的”界面，需要一个返回 当前收藏数、分享数、关注数的接口
-答：未写
+答：https://wk.zhangfan.ink/doctorvisit/front/mine/findMineCount
 
 11.分享 成功，但是已分享列表里面没有
 答：调用分享接口了吗？

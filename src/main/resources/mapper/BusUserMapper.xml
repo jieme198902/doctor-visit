@@ -37,4 +37,40 @@
     </if>
 
   </select>
+
+
+    <select id="findMineCount" resultType="java.util.Map">
+        SELECT
+            *
+        FROM
+            (
+                (
+                SELECT
+                    count( * ) AS collectCount
+                FROM
+                    bus_relation_user_article
+                WHERE
+                    user_id = #{userId}
+                    AND is_del = '0'
+                ) a,
+                (
+                SELECT
+                    count( * ) AS shareCount
+                FROM
+                    bus_relation_user_article_share
+                WHERE
+                    user_id = #{userId}
+                    AND is_del = '0'
+                ) b ,
+                (
+                SELECT
+                    count( * ) AS doctorCount
+                FROM
+                    bus_relation_user_doctor
+                WHERE
+                    user_id = #{userId}
+                    AND is_del = '0'
+                ) c
+            )
+    </select>
 </mapper>
