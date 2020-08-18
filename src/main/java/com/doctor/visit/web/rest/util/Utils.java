@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 public final class Utils {
@@ -223,6 +224,24 @@ public final class Utils {
             throw new UnAuthorizedException("token is null . ");
         }
         return getUserId(token);
+    }
+
+    public static String getRandomCode(boolean num,int size) {
+
+        String ZiMu = num?"1234567890":"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGJKLZXCVBNM1234567890";
+        String result = "";
+        Random random = new Random();
+        for (int i = 0; i < size; i++) {
+            int index = random.nextInt(ZiMu.length());
+            char c = ZiMu.charAt(index);
+            result += c;
+        }
+        return result;
+    }
+
+
+    public static String orderNo(){
+        return generateOfDate()+getRandomCode(true,4);
     }
 
     /**

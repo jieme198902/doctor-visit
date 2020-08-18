@@ -8,6 +8,7 @@ import com.doctor.visit.domain.dto.BusHospitalDto;
 import com.doctor.visit.domain.dto.BusOrderInquiryDto;
 import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusGoodsInquiryMapper;
+import com.doctor.visit.repository.BusPatientMapper;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
@@ -101,7 +102,7 @@ public class BeanConversionUtil {
      * @param bus
      * @return
      */
-    public static BusOrderInquiryDto beanToDto(BusOrderInquiry bus, String requestPath, BusFileMapper busFileMapper) {
+    public static BusOrderInquiryDto beanToDto(BusOrderInquiry bus, String requestPath, BusFileMapper busFileMapper, BusPatientMapper busPatientMapper) {
         BusOrderInquiryDto busDto = new BusOrderInquiryDto();
         BeanUtils.copyProperties(bus, busDto);
         //获取封面图
@@ -122,6 +123,8 @@ public class BeanConversionUtil {
             }
             busDto.setImgs(imgs);
         }
+        busDto.setBusPatient(busPatientMapper.selectByPrimaryKey(bus.getPatientId()));
+
         return busDto;
     }
 

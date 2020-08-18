@@ -7,6 +7,7 @@ import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.dto.BusOrderInquiryDto;
 import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusOrderInquiryMapper;
+import com.doctor.visit.repository.BusPatientMapper;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -38,12 +39,14 @@ public class OrderInquiryService {
 
     //
     private final BusFileMapper busFileMapper;
+    private final BusPatientMapper busPatientMapper;
     private final BusOrderInquiryMapper busOrderInquiryMapper;
 
-    public OrderInquiryService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusOrderInquiryMapper busOrderInquiryMapper) {
+    public OrderInquiryService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busFileMapper = busFileMapper;
+        this.busPatientMapper = busPatientMapper;
         this.busOrderInquiryMapper = busOrderInquiryMapper;
     }
 
@@ -59,7 +62,7 @@ public class OrderInquiryService {
         bus.setIsDel(Constants.EXIST);
         Page<BusOrderInquiry> busList = (Page<BusOrderInquiry>) busOrderInquiryMapper.select(bus);
         List<BusOrderInquiryDto> busDtoList = Lists.newArrayList();
-        busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry,requestPath,busFileMapper)));
+        busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry,requestPath,busFileMapper,busPatientMapper)));
         return ComResponse.ok(busDtoList, busList.getTotal());
     }
 
@@ -90,6 +93,7 @@ public class OrderInquiryService {
             bus.setCreateTime(new Date());
             bus.setCreateBy(busUser.getId());
             bus.setCreateName(busUser.getName());
+            bus.setOrderNo(Utils.orderNo());
             bus.setOrderState("0");
             busOrderInquiryMapper.insertSelective(bus);
         }
