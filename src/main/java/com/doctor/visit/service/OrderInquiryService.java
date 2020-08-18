@@ -90,6 +90,7 @@ public class OrderInquiryService {
             bus.setCreateTime(new Date());
             bus.setCreateBy(busUser.getId());
             bus.setCreateName(busUser.getName());
+            bus.setOrderState("0");
             busOrderInquiryMapper.insertSelective(bus);
         }
         //上传咨询订单
