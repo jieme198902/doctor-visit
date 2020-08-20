@@ -75,7 +75,7 @@ public class SysDictResource {
     })
     @PostMapping("insertOrUpdateDict")
     @ApiOperation(value = "新增或者修改字典")
-    public Object insertOrUpdateHospital(BusDict bus, HttpServletRequest request) {
+    public Object insertOrUpdateDict(BusDict bus, HttpServletRequest request) {
         return dictService.insertOrUpdateDict(bus,request);
     }
 
