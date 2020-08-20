@@ -11,4 +11,27 @@
     <result column="bus_id" property="busId" jdbcType="BIGINT" />
     <result column="file_type" property="fileType" jdbcType="CHAR" />
   </resultMap>
+
+  <select id="selectBusExist" resultType="java.lang.Integer">
+    SELECT
+        count(*)
+    from
+        information_schema.TABLES
+    where
+        table_schema=#{databaseName} and table_name=#{tableName}
+  </select>
+
+
+  <select id="selectBusByIdExist" resultType="java.lang.Integer">
+    SELECT
+        count(*)
+    from
+        ${tableName}
+    where
+        <if test="null!=busLongId">
+            ${idField}=#{busLongId}
+        </if>
+  </select>
+
+
 </mapper>

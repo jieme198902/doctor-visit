@@ -5,6 +5,7 @@ import com.doctor.visit.domain.BusFile;
 import com.doctor.visit.domain.BusOrderInquiry;
 import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.dto.BusOrderInquiryDto;
+import com.doctor.visit.repository.BusDoctorMapper;
 import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusOrderInquiryMapper;
 import com.doctor.visit.repository.BusPatientMapper;
@@ -39,13 +40,15 @@ public class OrderInquiryService {
 
     //
     private final BusFileMapper busFileMapper;
+    private final BusDoctorMapper busDoctorMapper;
     private final BusPatientMapper busPatientMapper;
     private final BusOrderInquiryMapper busOrderInquiryMapper;
 
-    public OrderInquiryService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper) {
+    public OrderInquiryService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busFileMapper = busFileMapper;
+        this.busDoctorMapper = busDoctorMapper;
         this.busPatientMapper = busPatientMapper;
         this.busOrderInquiryMapper = busOrderInquiryMapper;
     }
@@ -62,7 +65,7 @@ public class OrderInquiryService {
         bus.setIsDel(Constants.EXIST);
         Page<BusOrderInquiry> busList = (Page<BusOrderInquiry>) busOrderInquiryMapper.select(bus);
         List<BusOrderInquiryDto> busDtoList = Lists.newArrayList();
-        busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry,requestPath,busFileMapper,busPatientMapper)));
+        busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry, requestPath, busFileMapper, busPatientMapper, busDoctorMapper)));
         return ComResponse.ok(busDtoList, busList.getTotal());
     }
 

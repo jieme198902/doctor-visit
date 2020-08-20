@@ -29,6 +29,9 @@ public class UploadService {
     @Value("${custom.rootPath}")
     private String rootPath;
 
+    @Value("${spring.datasource.url}")
+    private String datasourceUrl;
+
     private final BusFileMapper busFileMapper;
 
     public UploadService(BusFileMapper busFileMapper) {
@@ -42,12 +45,24 @@ public class UploadService {
      * @param request
      * @return
      */
-    public void uploadFiles(BusFile busFile, HttpServletRequest request) {
+    public String uploadFiles(BusFile busFile, HttpServletRequest request) {
+        //先检查下是否有该业务数据
+        String startUrl = datasourceUrl.split("\\?")[0];
+        String databaseName = startUrl.substring(startUrl.lastIndexOf("/") + 1);
+        int count = busFileMapper.selectBusExist(databaseName, busFile.getBus());
+        if (count == 0) {
+            return "业务不存在";
+        }
+        int dataCount = busFileMapper.selectBusByIdExist(busFile.getBus(), "id", busFile.getBusId());
+        if (dataCount == 0) {
+            return "业务数据不存在";
+        }
         String folder = busFile.getBus();
         File dirRootPath = new File((rootPath.endsWith(Constants.SLASH) ? rootPath : (rootPath + Constants.SLASH)) + folder);
         if (!dirRootPath.exists()) {
             dirRootPath.mkdirs();
         }
+        //是否删除之前的图片
         if (busFile.isDelBefore()) {
             BusFile delRecord = new BusFile();
             delRecord.setBusId(busFile.getBusId());
@@ -55,7 +70,7 @@ public class UploadService {
             delRecord.setFileType(busFile.getFileType());
             busFileMapper.delete(delRecord);
         }
-
+        //判断是否上传文件了
         if (request instanceof StandardMultipartHttpServletRequest) {
             MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
             MultiValueMap<String, MultipartFile> multiValueMap = multipartHttpServletRequest.getMultiFileMap();
@@ -86,5 +101,13 @@ public class UploadService {
                 }
             });
         }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/doctor_visit?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true";
+        String startUrl = url.split("\\?")[0];
+        String databaseName = startUrl.substring(startUrl.lastIndexOf("/") + 1);
+        System.out.println(databaseName);
     }
 }

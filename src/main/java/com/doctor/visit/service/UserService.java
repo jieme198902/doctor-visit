@@ -1,9 +1,7 @@
 package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusDict;
-import com.doctor.visit.domain.BusLog;
-import com.doctor.visit.domain.BusUser;
+import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusUserDto;
 import com.doctor.visit.repository.BusDictMapper;
 import com.doctor.visit.repository.BusLogMapper;
@@ -27,7 +25,6 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,13 +39,16 @@ public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final CommonService commonService;
+    private final UploadService uploadService;
+    //
     private final BusUserMapper busUserMapper;
     private final BusDictMapper busDictMapper;
     private final BusLogMapper busLogMapper;
     private Gson gson = new Gson();
 
-    public UserService(CommonService commonService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper) {
+    public UserService(CommonService commonService, UploadService uploadService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper) {
         this.commonService = commonService;
+        this.uploadService = uploadService;
         this.busUserMapper = busUserMapper;
         this.busDictMapper = busDictMapper;
         this.busLogMapper = busLogMapper;
@@ -164,7 +164,7 @@ public class UserService {
                 } else {
                     loginLog.setCreateName(busUser.getName());
                 }
-                requestMap.put("user",busUserDto);
+                requestMap.put("user", busUserDto);
                 loginLog.setResponse(gson.toJson(requestMap));
                 busLogMapper.insertSelective(loginLog);
                 logger.info("login-->{}", gson.toJson(busUserDto));
@@ -186,7 +186,7 @@ public class UserService {
                 }
             }
         } catch (Exception e) {
-            logger.error("login.error-->{}",e.getMessage());
+            logger.error("login.error-->{}", e.getMessage());
             return ComResponse.fail(e.getMessage());
         }
     }
@@ -256,6 +256,27 @@ public class UserService {
             }
         }
         return ComResponse.ok(delIds);
+    }
+
+    /**
+     * 前端 - 上传文件的接口
+     *
+     * @param bus
+     * @param request
+     * @return
+     */
+    public ComResponse<BusFile> uploadFile(BusFile bus, HttpServletRequest request) throws Exception {
+        if (StringUtils.isAnyBlank(bus.getBus(), bus.getFileType())) {
+            return ComResponse.failBadRequest();
+        }
+        if (null == bus.isDelBefore()) {
+            bus.setDelBefore(false);
+        }
+        String uploadResult = uploadService.uploadFiles(bus, request);
+        if (StringUtils.isNotBlank(uploadResult)) {
+            return ComResponse.fail(uploadResult);
+        }
+        return ComResponse.ok(bus);
     }
 
 }

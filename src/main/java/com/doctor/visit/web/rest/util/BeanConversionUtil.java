@@ -6,6 +6,7 @@ import com.doctor.visit.domain.dto.BusArticleDto;
 import com.doctor.visit.domain.dto.BusDoctorDto;
 import com.doctor.visit.domain.dto.BusHospitalDto;
 import com.doctor.visit.domain.dto.BusOrderInquiryDto;
+import com.doctor.visit.repository.BusDoctorMapper;
 import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusGoodsInquiryMapper;
 import com.doctor.visit.repository.BusPatientMapper;
@@ -96,13 +97,13 @@ public class BeanConversionUtil {
 
 
     /**
-     * 文章转换
+     * 问诊订单转换
      * 从 bean 转为 Dto
      *
      * @param bus
      * @return
      */
-    public static BusOrderInquiryDto beanToDto(BusOrderInquiry bus, String requestPath, BusFileMapper busFileMapper, BusPatientMapper busPatientMapper) {
+    public static BusOrderInquiryDto beanToDto(BusOrderInquiry bus, String requestPath, BusFileMapper busFileMapper, BusPatientMapper busPatientMapper, BusDoctorMapper busDoctorMapper) {
         BusOrderInquiryDto busDto = new BusOrderInquiryDto();
         BeanUtils.copyProperties(bus, busDto);
         //获取封面图
@@ -112,7 +113,7 @@ public class BeanConversionUtil {
         busFile.setBusId(bus.getId());
         List<BusFile> files = busFileMapper.select(busFile);
         if (null != files && !files.isEmpty()) {
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuffer = new StringBuilder();
             for (BusFile file : files) {
                 stringBuffer.append(requestPath + file.getFilePath());
                 stringBuffer.append(Constants.COMMA);
@@ -123,8 +124,12 @@ public class BeanConversionUtil {
             }
             busDto.setImgs(imgs);
         }
-        busDto.setBusPatient(busPatientMapper.selectByPrimaryKey(bus.getPatientId()));
-
+        //查询患者的信息
+        BusPatient busPatient = busPatientMapper.selectByPrimaryKey(bus.getPatientId());
+        busDto.setBusPatient(busPatient);
+        //查询医生的信息
+        BusDoctor doctor = busDoctorMapper.selectByPrimaryKey(bus.getDoctorId());
+        busDto.setBusDoctor(doctor);
         return busDto;
     }
 
