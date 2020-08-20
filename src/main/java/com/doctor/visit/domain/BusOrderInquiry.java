@@ -16,7 +16,7 @@ public class BusOrderInquiry implements Serializable {
     private Long id;
 
     /**
-     * 问诊方式：0电话，1图文，2视频咨询
+     * 订单号
      */
     @Column(name = "order_no")
     private String orderNo;
