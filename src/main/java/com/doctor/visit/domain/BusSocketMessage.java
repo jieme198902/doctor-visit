@@ -1,5 +1,10 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -7,18 +12,21 @@ import javax.persistence.*;
 @Table(name = "bus_socket_message")
 public class BusSocketMessage implements Serializable {
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
      * 消息来自哪个用户
      */
     @Column(name = "from_user_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long fromUserId;
 
     /**
      * 消息发送到哪个用户
      */
     @Column(name = "to_user_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long toUserId;
 
     /**
@@ -42,6 +50,8 @@ public class BusSocketMessage implements Serializable {
      * 发送时间
      */
     @Column(name = "send_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date sendTime;
 
     /**

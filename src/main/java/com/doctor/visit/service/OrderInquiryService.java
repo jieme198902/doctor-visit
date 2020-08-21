@@ -64,9 +64,9 @@ public class OrderInquiryService {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusOrderInquiry.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("isDel",Constants.EXIST);
-        if(StringUtils.isNotBlank(bus.getOrderNo())){
-            criteria.andEqualTo("orderNo",bus.getOrderNo());
+        criteria.andEqualTo("isDel", Constants.EXIST);
+        if (StringUtils.isNotBlank(bus.getOrderNo())) {
+            criteria.andEqualTo("orderNo", bus.getOrderNo());
         }
         Page<BusOrderInquiry> busList = (Page<BusOrderInquiry>) busOrderInquiryMapper.selectByExample(example);
         List<BusOrderInquiryDto> busDtoList = Lists.newArrayList();
@@ -96,11 +96,11 @@ public class OrderInquiryService {
         if (null == orderInquiry) {
             return ComResponse.fail("该订单查询不到了");
         }
-        if(bus.getOrderState().equals(orderInquiry.getOrderState())){
+        if (bus.getOrderState().equals(orderInquiry.getOrderState())) {
             return ComResponse.fail("订单状态已更改，请勿重复提交");
         }
         //订单状态不可以回退
-        if(Integer.parseInt(bus.getOrderState())<Integer.parseInt(orderInquiry.getOrderState())){
+        if (Integer.parseInt(bus.getOrderState()) < Integer.parseInt(orderInquiry.getOrderState())) {
             return ComResponse.fail("订单状态不可以回退到之前的状态");
         }
 
@@ -127,13 +127,13 @@ public class OrderInquiryService {
      * @param request 这里需要处理文件
      * @return
      */
-    public ComResponse<BusOrderInquiry> insertOrUpdateOrderInquiry(BusOrderInquiry bus, HttpServletRequest request) throws Exception {
+    public ComResponse<BusOrderInquiryDto> insertOrUpdateOrderInquiry(BusOrderInquiry bus, HttpServletRequest request) throws Exception {
         bus.setCreateBy(Utils.getUserId(request));
         if (null == bus.getCreateBy()) {
             return ComResponse.failBadRequest();
         }
         BusUser busUser = commonService.getBusUser(bus.getCreateBy());
-        if (null == busUser) {
+        if (null == busUser || null == bus.getDoctorId() || null == bus.getPatientId()) {
             return ComResponse.failUnauthorized();
         }
         bus.setEditTime(new Date());
@@ -156,7 +156,9 @@ public class OrderInquiryService {
         busFile.setBusId(bus.getId());
         busFile.setFileType(Constants.FILE_TYPE_IMG);
         uploadService.uploadFiles(busFile, request);
-        return ComResponse.ok(bus);
+        //
+        BusOrderInquiryDto busOrderInquiryDto = BeanConversionUtil.beanToDto(bus, requestPath, busFileMapper, busPatientMapper, busDoctorMapper);
+        return ComResponse.ok(busOrderInquiryDto);
     }
 
 

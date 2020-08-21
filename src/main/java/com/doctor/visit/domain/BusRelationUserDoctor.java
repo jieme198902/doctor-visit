@@ -16,12 +16,14 @@ public class BusRelationUserDoctor implements Serializable {
      * 用户id
      */
     @Column(name = "user_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
 
     /**
      * 医生id
      */
     @Column(name = "doctor_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long doctorId;
 
     /**

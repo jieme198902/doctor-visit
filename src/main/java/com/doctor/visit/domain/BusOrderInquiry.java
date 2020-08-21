@@ -25,12 +25,14 @@ public class BusOrderInquiry implements Serializable {
      * 医生id
      */
     @Column(name = "doctor_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long doctorId;
 
     /**
      * 患者id
      */
     @Column(name = "patient_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long patientId;
 
     /**

@@ -1,5 +1,10 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -7,6 +12,7 @@ import javax.persistence.*;
 @Table(name = "bus_order_change_record")
 public class BusOrderChangeRecord implements Serializable {
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
@@ -18,6 +24,7 @@ public class BusOrderChangeRecord implements Serializable {
      * 业务id
      */
     @Column(name = "bus_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long busId;
 
     /**
@@ -30,6 +37,8 @@ public class BusOrderChangeRecord implements Serializable {
      * 添加时间
      */
     @Column(name = "create_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date createTime;
 
     private static final long serialVersionUID = 1L;

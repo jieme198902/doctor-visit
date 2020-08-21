@@ -1,7 +1,9 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +19,7 @@ public class BusGoodsSpecification implements Serializable {
      * 商品的id
      */
     @Column(name = "goods_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long goodsId;
 
     /**
@@ -51,6 +54,8 @@ public class BusGoodsSpecification implements Serializable {
      * 创建时间
      */
     @Column(name = "create_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date createTime;
 
     /**
@@ -69,6 +74,8 @@ public class BusGoodsSpecification implements Serializable {
      * 修改时间
      */
     @Column(name = "edit_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date editTime;
 
     /**

@@ -12,8 +12,10 @@ import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -45,15 +47,16 @@ public class SelfDiagnosticsService {
      */
     public ComResponse<List<BusSelfDiagnose>> listSelfDiagnose(BusSelfDiagnose bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
-        //
-        BusSelfDiagnose record = new BusSelfDiagnose();
-        if(null==bus.getId()){
-            record.setFid(0L);
-        }else{
-            record.setFid(bus.getId());
+        Example example = new Example(BusSelfDiagnose.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDel", Constants.EXIST);
+        if (null != bus.getId()) {
+            criteria.andEqualTo("fid", bus.getId());
         }
-        Page<BusSelfDiagnose> busList = (Page<BusSelfDiagnose>) busSelfDiagnoseMapper.select(record);
+        if (StringUtils.isNotBlank(bus.getContent())) {
+            criteria.andLike("content", bus.getContent() + "%");
+        }
+        Page<BusSelfDiagnose> busList = (Page<BusSelfDiagnose>) busSelfDiagnoseMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
@@ -121,9 +124,14 @@ public class SelfDiagnosticsService {
      */
     public ComResponse<List<BusSelfDiagnosis>> listSelfDiagnosis(BusSelfDiagnosis bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
+        Example example = new Example(BusSelfDiagnosis.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDel", Constants.EXIST);
 
-        Page<BusSelfDiagnosis> busList = (Page<BusSelfDiagnosis>) busSelfDiagnosisMapper.select(bus);
+        if (StringUtils.isNotBlank(bus.getReason())) {
+            criteria.andLike("reason", bus.getReason() + "%");
+        }
+        Page<BusSelfDiagnosis> busList = (Page<BusSelfDiagnosis>) busSelfDiagnosisMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
 
@@ -180,7 +188,6 @@ public class SelfDiagnosticsService {
         }
         return ComResponse.ok(delIds);
     }
-
 
 
 }

@@ -19,12 +19,14 @@ public class BusUserFavClinc implements Serializable {
      * 用户id
      */
     @Column(name = "user_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
 
     /**
      * 门诊科室id
      */
     @Column(name = "clinc_class_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long clincClassId;
 
     /**

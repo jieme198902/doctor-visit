@@ -16,12 +16,14 @@ public class BusRelationUserArticleShare implements Serializable {
      * 用户id
      */
     @Column(name = "user_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
 
     /**
      * 文章id
      */
     @Column(name = "article_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long articleId;
 
     /**

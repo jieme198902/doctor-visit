@@ -13,9 +13,11 @@ public class BusRelationUserArticle implements Serializable {
     private Long id;
 
     @Column(name = "user_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
 
     @Column(name = "article_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long articleId;
 
     /**
