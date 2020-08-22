@@ -10,13 +10,13 @@ import com.doctor.visit.domain.BusPatient;
 public class BusOrderInquiryDto extends BusOrderInquiry {
     private String imgs;
     private BusPatient busPatient;
-    private BusDoctor busDoctor;
+    private BusDoctorDto busDoctor;
 
-    public BusDoctor getBusDoctor() {
+    public BusDoctorDto getBusDoctor() {
         return busDoctor;
     }
 
-    public void setBusDoctor(BusDoctor busDoctor) {
+    public void setBusDoctor(BusDoctorDto busDoctor) {
         this.busDoctor = busDoctor;
     }
 

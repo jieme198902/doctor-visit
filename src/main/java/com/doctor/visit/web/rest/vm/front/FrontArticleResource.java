@@ -2,6 +2,7 @@ package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArticle;
+import com.doctor.visit.domain.BusArticleClass;
 import com.doctor.visit.domain.BusRelationUserArticle;
 import com.doctor.visit.domain.BusRelationUserArticleShare;
 import com.doctor.visit.service.ArticleService;
@@ -32,6 +33,21 @@ public class FrontArticleResource {
         this.articleService = articleService;
     }
 
+
+    /**
+     * 查询文章分类列表
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusArticleClass.class)
+    })
+    @PostMapping("listArticleClass")
+    @ApiOperation(value = "查询文章分类列表")
+    public Object listArticleClass(BusArticleClass bus, Pageable pageable) {
+        return articleService.listArticleClass(bus, pageable);
+    }
 
     /**
      * 获取文章列表

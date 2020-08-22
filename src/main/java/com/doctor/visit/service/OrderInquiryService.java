@@ -41,15 +41,17 @@ public class OrderInquiryService {
     private final BusDoctorMapper busDoctorMapper;
     private final BusPatientMapper busPatientMapper;
     private final BusOrderInquiryMapper busOrderInquiryMapper;
+    private final BusGoodsInquiryMapper busGoodsInquiryMapper;
     private final BusOrderChangeRecordMapper busOrderChangeRecordMapper;
 
-    public OrderInquiryService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper, BusOrderChangeRecordMapper busOrderChangeRecordMapper) {
+    public OrderInquiryService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusOrderChangeRecordMapper busOrderChangeRecordMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busFileMapper = busFileMapper;
         this.busDoctorMapper = busDoctorMapper;
         this.busPatientMapper = busPatientMapper;
         this.busOrderInquiryMapper = busOrderInquiryMapper;
+        this.busGoodsInquiryMapper = busGoodsInquiryMapper;
         this.busOrderChangeRecordMapper = busOrderChangeRecordMapper;
     }
 
@@ -70,7 +72,7 @@ public class OrderInquiryService {
         }
         Page<BusOrderInquiry> busList = (Page<BusOrderInquiry>) busOrderInquiryMapper.selectByExample(example);
         List<BusOrderInquiryDto> busDtoList = Lists.newArrayList();
-        busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry, requestPath, busFileMapper, busPatientMapper, busDoctorMapper)));
+        busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry, requestPath, busFileMapper, busPatientMapper, busGoodsInquiryMapper,busDoctorMapper)));
         return ComResponse.ok(busDtoList, busList.getTotal());
     }
 
@@ -157,7 +159,7 @@ public class OrderInquiryService {
         busFile.setFileType(Constants.FILE_TYPE_IMG);
         uploadService.uploadFiles(busFile, request);
         //
-        BusOrderInquiryDto busOrderInquiryDto = BeanConversionUtil.beanToDto(bus, requestPath, busFileMapper, busPatientMapper, busDoctorMapper);
+        BusOrderInquiryDto busOrderInquiryDto = BeanConversionUtil.beanToDto(bus, requestPath, busFileMapper, busPatientMapper,busGoodsInquiryMapper, busDoctorMapper);
         return ComResponse.ok(busOrderInquiryDto);
     }
 

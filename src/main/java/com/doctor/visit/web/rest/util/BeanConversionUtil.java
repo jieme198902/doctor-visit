@@ -11,12 +11,15 @@ import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusGoodsInquiryMapper;
 import com.doctor.visit.repository.BusPatientMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * bean对象转换，克隆等
  */
+@Component
 public class BeanConversionUtil {
 
     /**
@@ -103,7 +106,7 @@ public class BeanConversionUtil {
      * @param bus
      * @return
      */
-    public static BusOrderInquiryDto beanToDto(BusOrderInquiry bus, String requestPath, BusFileMapper busFileMapper, BusPatientMapper busPatientMapper, BusDoctorMapper busDoctorMapper) {
+    public static BusOrderInquiryDto beanToDto(BusOrderInquiry bus, String requestPath, BusFileMapper busFileMapper, BusPatientMapper busPatientMapper, BusGoodsInquiryMapper busGoodsInquiryMapper,BusDoctorMapper busDoctorMapper) {
         BusOrderInquiryDto busDto = new BusOrderInquiryDto();
         BeanUtils.copyProperties(bus, busDto);
         //获取封面图
@@ -129,7 +132,7 @@ public class BeanConversionUtil {
         busDto.setBusPatient(busPatient);
         //查询医生的信息
         BusDoctor doctor = busDoctorMapper.selectByPrimaryKey(bus.getDoctorId());
-        busDto.setBusDoctor(doctor);
+        busDto.setBusDoctor(beanToDto(doctor, requestPath, busFileMapper, busGoodsInquiryMapper,false));
         return busDto;
     }
 
