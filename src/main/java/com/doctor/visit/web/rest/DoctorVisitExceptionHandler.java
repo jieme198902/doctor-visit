@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 统一处理异常
+ */
 @ControllerAdvice
 public class DoctorVisitExceptionHandler {
 
@@ -36,7 +39,7 @@ public class DoctorVisitExceptionHandler {
         }
         //参数有问题
         if (ex instanceof org.springframework.validation.BindException) {
-            comResponse.setMessage(message);
+            comResponse.setMessage("参数有异常：【"+message+"】");
         }
 
 
