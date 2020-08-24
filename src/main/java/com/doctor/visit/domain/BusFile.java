@@ -37,15 +37,15 @@ public class BusFile implements Serializable {
     private String fileType;
 
     @Transient
-    private Boolean delBefore = true;
+    private String delBefore = "1";
 
     private static final long serialVersionUID = 1L;
 
-    public Boolean isDelBefore() {
+    public String getDelBefore() {
         return delBefore;
     }
 
-    public void setDelBefore(Boolean delBefore) {
+    public void setDelBefore(String delBefore) {
         this.delBefore = delBefore;
     }
 

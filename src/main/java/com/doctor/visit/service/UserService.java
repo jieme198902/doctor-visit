@@ -269,8 +269,8 @@ public class UserService {
         if (StringUtils.isAnyBlank(bus.getBus(), bus.getFileType())) {
             return ComResponse.failBadRequest();
         }
-        if (null == bus.isDelBefore()) {
-            bus.setDelBefore(false);
+        if (StringUtils.isBlank(bus.getDelBefore())) {
+            bus.setDelBefore("0");
         }
         String uploadResult = uploadService.uploadFiles(bus, request);
         if (StringUtils.isNotBlank(uploadResult)) {

@@ -63,7 +63,7 @@ public class UploadService {
             dirRootPath.mkdirs();
         }
         //是否删除之前的图片
-        if (busFile.isDelBefore()) {
+        if ("1".equals(busFile.getDelBefore())) {
             BusFile delRecord = new BusFile();
             delRecord.setBusId(busFile.getBusId());
             delRecord.setBus(busFile.getBus());

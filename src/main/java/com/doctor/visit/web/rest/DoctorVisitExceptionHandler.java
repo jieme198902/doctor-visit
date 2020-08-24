@@ -20,20 +20,28 @@ public class DoctorVisitExceptionHandler {
         ex.printStackTrace();
         ComResponse comResponse = ComResponse.fail();
         String message = ex.getMessage();
+        //主键冲突
         if (ex instanceof org.springframework.dao.DuplicateKeyException) {
             if (message.contains("Duplicate entry")) {
-                message = message.substring(message.indexOf("Duplicate entry '")+"Duplicate entry '".length(), message.indexOf("' for key '"));
-                comResponse.setMessage("【"+message + "】已录入");
+                message = message.substring(message.indexOf("Duplicate entry '") + "Duplicate entry '".length(), message.indexOf("' for key '"));
+                comResponse.setMessage("【" + message + "】已录入");
             }
         }
-        if(ex instanceof org.springframework.dao.DataIntegrityViolationException){
-            if(message.contains("doesn't have a default value")){
-                message = message.substring(message.indexOf(": Field '")+": Field '".length(), message.indexOf("' doesn't have a default value"));
-                comResponse.setMessage("请填写【"+message + "】的值");
+        //必填项
+        if (ex instanceof org.springframework.dao.DataIntegrityViolationException) {
+            if (message.contains("doesn't have a default value")) {
+                message = message.substring(message.indexOf(": Field '") + ": Field '".length(), message.indexOf("' doesn't have a default value"));
+                comResponse.setMessage("请填写【" + message + "】的值");
             }
         }
+        //参数有问题
+        if (ex instanceof org.springframework.validation.BindException) {
+            comResponse.setMessage(message);
+        }
+
+
         //jwt 过期
-        if(ex instanceof org.springframework.security.authentication.InsufficientAuthenticationException){
+        if (ex instanceof org.springframework.security.authentication.InsufficientAuthenticationException) {
             comResponse = ComResponse.failUnauthorized();
         }
         response.getOutputStream().write(new Gson().toJson(comResponse).getBytes());

@@ -162,7 +162,7 @@ public class ArticleService {
         } else {
             //前台
             Long userId = Utils.getUserIdWithoutException(request);
-            busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId);
+            busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId,bus.getClassId(),bus.getTitle());
         }
         List<BusArticleDto> busDtoList = Lists.newArrayList();
         busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath,busFileMapper)));

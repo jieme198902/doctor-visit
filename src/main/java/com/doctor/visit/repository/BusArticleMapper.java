@@ -29,8 +29,10 @@ public interface BusArticleMapper extends CommMapper<BusArticle> {
     /**
      * 获取文章列表，包含收藏状态
      *
-     * @param userId
+     * @param classId 文章分类
+     * @param userId  用户id
+     * @param title   标题
      * @return
      */
-    List<BusArticle> selectArticleListWithFav(@Param("userId") Long userId);
+    List<BusArticle> selectArticleListWithFav(@Param("userId") Long userId, @Param("classId") Long classId, @Param("title") String title);
 }

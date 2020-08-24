@@ -73,9 +73,16 @@
                     ) AS is_del
             </if>
 
-                FROM
-                bus_article AS a
-            LEFT JOIN bus_relation_user_article AS rua ON a.id = rua.article_id WHERE a.is_del = '0'
+        FROM
+            bus_article AS a LEFT JOIN bus_relation_user_article AS rua ON a.id = rua.article_id
+        WHERE a.is_del = '0'
+      <if test="null!=classId">
+          AND a.class_id = #{classId}
+      </if>
+      <if test="null!=title">
+          AND a.title = #{title}
+      </if>
+
   </select>
 
 </mapper>
