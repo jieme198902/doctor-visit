@@ -2,8 +2,10 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.SysMenu;
+import com.doctor.visit.domain.SysPermission;
 import com.doctor.visit.domain.SysRole;
 import com.doctor.visit.service.SysAuthService;
+import com.doctor.visit.web.rest.util.ComResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -71,7 +73,7 @@ public class SysAuthResource {
     @PostMapping("insertOrUpdateRole")
     @ApiOperation(value = "新增或者修改角色")
     public Object insertOrUpdateRole(SysRole bus, HttpServletRequest request) {
-        return sysAuthService.insertOrUpdateRole(bus,request);
+        return sysAuthService.insertOrUpdateRole(bus, request);
     }
 
     /**
@@ -90,6 +92,8 @@ public class SysAuthResource {
     }
 
 
+    //////////////////////////////
+
     /**
      * 查询菜单列表
      *
@@ -104,6 +108,37 @@ public class SysAuthResource {
     public Object listMenu(SysMenu bus, Pageable pageable) {
         return sysAuthService.listMenu(bus, pageable);
     }
+
+    /**
+     * 获取菜单树
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysMenu.class)
+    })
+    @PostMapping("listMenuTree")
+    @ApiOperation(value = "获取菜单树")
+    public Object listMenuTree(SysMenu bus) {
+        return sysAuthService.listMenuTree(bus);
+    }
+
+    /**
+     * 获取菜单树根据角色id
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysMenu.class)
+    })
+    @PostMapping("listMenuByRoleId")
+    @ApiOperation(value = "获取菜单树根据角色id")
+    public Object listMenuByRoleId(SysPermission bus) {
+        return sysAuthService.listMenuByRoleId(bus);
+    }
+
 
     /**
      * 查询无分页的菜单列表
@@ -133,7 +168,7 @@ public class SysAuthResource {
     @PostMapping("insertOrUpdateMenu")
     @ApiOperation(value = "新增或者修改菜单")
     public Object insertOrUpdateMenu(SysMenu bus, HttpServletRequest request) {
-        return sysAuthService.insertOrUpdateMenu(bus,request);
+        return sysAuthService.insertOrUpdateMenu(bus, request);
     }
 
     /**
@@ -151,4 +186,14 @@ public class SysAuthResource {
         return sysAuthService.deleteMenu(ids);
     }
 
+
+    /////////////////////
+    @ApiImplicitParams({
+
+    })
+    @ApiOperation(value = "修改权限")
+    @PostMapping("insertOrUpdatePermission")
+    public Object insertOrUpdatePermission(SysPermission bus, String menus, HttpServletRequest request) {
+        return sysAuthService.insertOrUpdatePermission(bus, menus, request);
+    }
 }

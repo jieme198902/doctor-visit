@@ -11,6 +11,7 @@
     <result column="icon" property="icon" jdbcType="VARCHAR" />
     <result column="path" property="path" jdbcType="VARCHAR" />
     <result column="pid" property="pid" jdbcType="BIGINT" />
+    <result column="pid_name" property="pidName" jdbcType="VARCHAR" />
     <result column="sort_by" property="sortBy" jdbcType="INTEGER" />
     <result column="create_by" property="createBy" jdbcType="BIGINT" />
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
@@ -20,4 +21,16 @@
     <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="CHAR" />
   </resultMap>
+
+
+    <select id="selectMenuByRoleId" parameterType="com.doctor.visit.domain.SysPermission" resultMap="BaseResultMap">
+        SELECT
+            m.*
+        FROM
+            sys_permission p
+            LEFT JOIN sys_menu m ON p.menu_id = m.id
+        WHERE
+            role_id = #{roleId}
+    </select>
+
 </mapper>

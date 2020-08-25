@@ -4,10 +4,12 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArticle;
 import com.doctor.visit.domain.BusFile;
 import com.doctor.visit.web.rest.errors.UnAuthorizedException;
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 public final class Utils {
 
+    private static Gson gson = new Gson();
     private Utils() {
     }
 
@@ -68,6 +71,10 @@ public final class Utils {
             this.forwardFrom = forwardFrom;
             this.content = content;
         }
+    }
+
+    public static <T,S> T gson(S s, Type t){
+        return gson.fromJson(gson.toJson(s),t);
     }
 
     /**

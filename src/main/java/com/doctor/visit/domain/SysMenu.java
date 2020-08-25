@@ -40,6 +40,11 @@ public class SysMenu implements Serializable {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long pid;
+    /**
+     * 菜单父级名称
+     */
+    @Column(name = "pid_name")
+    private String pidName;
 
     /**
      * 排序
@@ -63,7 +68,7 @@ public class SysMenu implements Serializable {
      * 创建时间
      */
     @Column(name = "create_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")  //取日期时使用
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date createTime;
 
@@ -83,7 +88,7 @@ public class SysMenu implements Serializable {
      * 修改时间
      */
     @Column(name = "edit_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")  //取日期时使用
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date editTime;
 
@@ -93,7 +98,28 @@ public class SysMenu implements Serializable {
     @Column(name = "is_del")
     private String isDel;
 
+
     private static final long serialVersionUID = 1L;
+
+
+    /**
+     * 菜单父级名称
+     *
+     * @return
+     */
+    public String getPidName() {
+        return pidName;
+    }
+
+    /**
+     * 菜单父级名称
+     *
+     * @param pidName
+     */
+    public void setPidName(String pidName) {
+        this.pidName = pidName;
+    }
+
 
     /**
      * @return id
