@@ -56,7 +56,7 @@ public class DoctorService {
     }
 
     /**
-     * 根据名称
+     * 根据名称 查询医生和医院列表
      *
      * @param bus
      * @param pageable
@@ -67,7 +67,7 @@ public class DoctorService {
     public ComResponse<BusDoctorHospitalDto> listDoctorOrHospital(BusHospital bus, Pageable pageable, HttpServletRequest request) throws Exception {
         BusDoctorHospitalDto doctorHospitalDto = new BusDoctorHospitalDto();
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        Page<BusDoctor> busDoctorList = (Page<BusDoctor>) busDoctorMapper.selectDoctorWithFav(Utils.getUserIdWithoutException(request), bus.getName(), null);
+        Page<BusDoctor> busDoctorList = (Page<BusDoctor>) busDoctorMapper.selectDoctorWithFav(Utils.getUserIdWithoutException(request), bus.getName(), null,null,null);
         List<BusDoctorDto> busDoctorDtoList = Lists.newArrayList();
 
         busDoctorList.getResult().forEach(busDoctor -> busDoctorDtoList.add(BeanConversionUtil.beanToDto(busDoctor, requestPath, busFileMapper, busGoodsInquiryMapper, false)));
@@ -107,6 +107,10 @@ public class DoctorService {
         if (StringUtils.isNotBlank(bus.getName())) {
             criteria.andLike("name", bus.getName() + "%");
         }
+        if (StringUtils.isNotBlank(bus.getDoctorType())) {
+            criteria.andEqualTo("doctorType", bus.getDoctorType());
+        }
+
         if (null != bus.getClincId()) {
             criteria.andEqualTo("clincId", bus.getClincId());
         }
@@ -118,7 +122,7 @@ public class DoctorService {
             busList = (Page<BusDoctor>) busDoctorMapper.selectByExample(example);
         } else {
             //前台
-            busList = (Page<BusDoctor>) busDoctorMapper.selectDoctorWithFav(Utils.getUserIdWithoutException(request), bus.getName(), bus.getClincId());
+            busList = (Page<BusDoctor>) busDoctorMapper.selectDoctorWithFav(Utils.getUserIdWithoutException(request), bus.getName(), bus.getClincId(),bus.getDoctorType(),bus.getFamousDoctor());
         }
 
         List<BusDoctorDto> busDoctorDtoList = Lists.newArrayList();

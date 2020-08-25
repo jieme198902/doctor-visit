@@ -1,83 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.doctor.visit.repository.BusDoctorMapper" >
-  <resultMap id="BaseResultMap" type="com.doctor.visit.domain.BusDoctor" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="professional_id" property="professionalId" jdbcType="BIGINT" />
-    <result column="professional_title" property="professionalTitle" jdbcType="VARCHAR" />
-    <result column="hospital_name" property="hospitalName" jdbcType="VARCHAR" />
-    <result column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
-    <result column="good_at" property="goodAt" jdbcType="VARCHAR" />
-    <result column="inquiries" property="inquiries" jdbcType="INTEGER" />
-    <result column="consulting_fees" property="consultingFees" jdbcType="INTEGER" />
-    <result column="clinc_name" property="clincName" jdbcType="VARCHAR" />
-    <result column="clinc_id" property="clincId" jdbcType="BIGINT" />
-    <result column="create_by" property="createBy" jdbcType="BIGINT" />
-    <result column="create_name" property="createName" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="edit_by" property="editBy" jdbcType="BIGINT" />
-    <result column="edit_name" property="editName" jdbcType="VARCHAR" />
-    <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="CHAR" />
-  </resultMap>
+<mapper namespace="com.doctor.visit.repository.BusDoctorMapper">
+    <resultMap id="BaseResultMap" type="com.doctor.visit.domain.BusDoctor">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="professional_id" property="professionalId" jdbcType="BIGINT"/>
+        <result column="professional_title" property="professionalTitle" jdbcType="VARCHAR"/>
+        <result column="hospital_name" property="hospitalName" jdbcType="VARCHAR"/>
+        <result column="hospital_id" property="hospitalId" jdbcType="BIGINT"/>
+        <result column="doctor_type" property="doctorType" jdbcType="VARCHAR"/>
+        <result column="famous_doctor" property="famousDoctor" jdbcType="VARCHAR"/>
+        <result column="good_at" property="goodAt" jdbcType="VARCHAR"/>
+        <result column="inquiries" property="inquiries" jdbcType="INTEGER"/>
+        <result column="consulting_fees" property="consultingFees" jdbcType="INTEGER"/>
+        <result column="clinc_name" property="clincName" jdbcType="VARCHAR"/>
+        <result column="clinc_id" property="clincId" jdbcType="BIGINT"/>
+        <result column="create_by" property="createBy" jdbcType="BIGINT"/>
+        <result column="create_name" property="createName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="edit_by" property="editBy" jdbcType="BIGINT"/>
+        <result column="edit_name" property="editName" jdbcType="VARCHAR"/>
+        <result column="edit_time" property="editTime" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="CHAR"/>
+    </resultMap>
 
-  <select id="selectFavDoctor" resultMap="BaseResultMap">
-
-      SELECT
-            d.*
-        FROM
-            bus_relation_user_doctor ud
-            LEFT JOIN bus_doctor d ON ud.doctor_id = d.id
-        WHERE
-            1 = 1
-            AND ud.is_del = '0'
-            AND ud.user_id = #{userId}
-
-  </select>
+    <select id="selectFavDoctor" resultMap="BaseResultMap">
+          SELECT
+                d.*
+            FROM
+                bus_relation_user_doctor ud
+                LEFT JOIN bus_doctor d ON ud.doctor_id = d.id
+            WHERE
+                1 = 1
+                AND ud.is_del = '0'
+                AND ud.user_id = #{userId}
+    </select>
 
 
-  <select id="selectDoctorWithFav" resultMap="BaseResultMap">
+    <select id="selectDoctorWithFav" resultMap="BaseResultMap">
         SELECT DISTINCT
-            <if test="null!=userId">
-                (CASE
-                    WHEN rua.user_id = #{userId}
-                    AND rua.is_del = "0" THEN
-                        '1' ELSE '0'
-                    END
-                    ) AS is_del,
-            </if>
-            a.id,
-            a.`name`,
-            a.professional_id,
-            a.professional_title,
-            a.hospital_name,
-            a.hospital_id,
-            a.good_at,
-            a.inquiries,
-            a.consulting_fees,
-            a.clinc_name,
-            a.clinc_id,
-            a.create_by,
-            a.create_name,
-            a.create_time,
-            a.edit_by,
-            a.edit_name,
-            a.edit_time
+        <if test="null!=userId">
+            (CASE
+            WHEN rua.user_id = #{userId}
+            AND rua.is_del = "0" THEN
+            '1' ELSE '0'
+            END
+            ) AS is_del,
+        </if>
+        a.id,
+        a.`name`,
+        a.professional_id,
+        a.professional_title,
+        a.hospital_name,
+        a.hospital_id,
+        a.good_at,
+        a.inquiries,
+        a.consulting_fees,
+        a.clinc_name,
+        a.clinc_id,
+        a.create_by,
+        a.create_name,
+        a.create_time,
+        a.edit_by,
+        a.edit_name,
+        a.edit_time
 
         FROM
         bus_doctor a LEFT JOIN bus_relation_user_doctor rua ON a.id = rua.doctor_id
         WHERE a.is_del = '0'
-        <if test="name!=null">
+        <if test="name!=null and name!=''">
             AND a.name LIKE CONCAT(#{name},'%')
         </if>
-        <if test="clincId!=null">
+        <if test="clincId!=null and clincId!=''">
             AND a.clinc_id = #{clincId}
         </if>
-
-  </select>
-
+        <if test="doctorType!=null and doctorType!=''">
+            AND (a.doctor_type = #{doctorType} or a.doctor_type='3')
+        </if>
+        <if test="famousDoctor!=null and famousDoctor!=''">
+            AND a.famous_doctor = #{famousDoctor}
+        </if>
+    </select>
 </mapper>

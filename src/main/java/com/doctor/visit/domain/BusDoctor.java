@@ -47,6 +47,17 @@ public class BusDoctor implements Serializable {
     private Long hospitalId;
 
     /**
+     * '医生类别：0中医、1西医、2中西医',
+     */
+    @Column(name = "doctor_type")
+    private String doctorType;
+    /**
+     * 是否名医：1是，0否
+     */
+    @Column(name = "famous_doctor")
+    private String famousDoctor;
+
+    /**
      * 擅长描述
      */
     @Column(name = "good_at")
@@ -224,6 +235,38 @@ public class BusDoctor implements Serializable {
      */
     public void setHospitalId(Long hospitalId) {
         this.hospitalId = hospitalId;
+    }
+
+    /**
+     * 医生类别：0中医、1西医、2中西医
+     * @return
+     */
+    public String getDoctorType() {
+        return doctorType;
+    }
+
+    /**
+     * 医生类别：0中医、1西医、2中西医
+     * @param doctorType
+     */
+    public void setDoctorType(String doctorType) {
+        this.doctorType = doctorType;
+    }
+
+    /**
+     * 是否名医：1是，0否
+     * @return
+     */
+    public String getFamousDoctor() {
+        return famousDoctor;
+    }
+
+    /**
+     * 是否名医：1是，0否
+     * @param famousDoctor
+     */
+    public void setFamousDoctor(String famousDoctor) {
+        this.famousDoctor = famousDoctor;
     }
 
     /**
