@@ -1,23 +1,24 @@
 package com.doctor.visit.web.rest.util;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusArticle;
-import com.doctor.visit.domain.BusFile;
+import com.doctor.visit.domain.SysMenu;
+import com.doctor.visit.domain.dto.SysMenuDto;
 import com.doctor.visit.web.rest.errors.UnAuthorizedException;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public final class Utils {
 
     private static Gson gson = new Gson();
+
     private Utils() {
     }
 
@@ -57,7 +58,6 @@ public final class Utils {
         }
 
         /**
-         *
          * @param busId
          * @param bus
          * @param title
@@ -73,8 +73,123 @@ public final class Utils {
         }
     }
 
-    public static <T,S> T gson(S s, Type t){
-        return gson.fromJson(gson.toJson(s),t);
+    public static <T, S> T gson(S s, Type t) {
+        return gson.fromJson(gson.toJson(s), t);
+    }
+
+
+    /**
+     * 横向递归遍历数据并填充
+     * <p>
+     * 把列表转换为树结构
+     *
+     * @param originalList 原始list数据
+     * @return 组装后的集合
+     * <p>
+     * 博山区的父级id
+     * a2057d70-95e5-11ea-a573-0050568e7d19
+     */
+    public List<SysMenuDto> getTree(List<SysMenuDto> originalList) {
+        // 获取根节点，即找出父节点为空的对象
+        List<SysMenuDto> topList = Lists.newArrayList();
+        for (int i = 0; i < originalList.size(); i++) {
+            SysMenuDto t = originalList.get(i);
+            Long parentId = t.getPid();
+            //parentId是null的是顶级菜单
+            if (null == parentId) {
+                topList.add(t);
+            }
+        }
+        // 将根节点从原始list移除，减少下次处理数据
+        originalList.removeAll(topList);
+
+        // 递归封装树
+        fillTree(topList, originalList);
+
+        return topList;
+    }
+
+    /**
+     * 封装树
+     *
+     * @param parentList   要封装为树的父对象集合
+     * @param originalList 原始list数据
+     */
+    private void fillTree(List<SysMenuDto> parentList, List<SysMenuDto> originalList) {
+        for (int i = 0; i < parentList.size(); i++) {
+            List<SysMenuDto> children = fillChildren(parentList.get(i), originalList);
+
+            if (children.isEmpty()) {
+                continue;
+            }
+
+            originalList.removeAll(children);
+            fillTree(children, originalList);
+        }
+    }
+
+
+    /**
+     * 将菜单集合转换成树状结构的数据
+     *
+     * @param trees
+     * @return
+     */
+    public static List<SysMenuDto> menuListToTree(List<SysMenu> trees) {
+        List<SysMenuDto> copyMenus = Utils.gson(trees, new TypeToken<List<SysMenuDto>>() {
+        }.getType());
+        List<SysMenuDto> rootTrees = Lists.newArrayList();
+        for (SysMenuDto tree : copyMenus) {
+            if (null == tree.getPid() || 0 == tree.getPid()) {
+                rootTrees.add(tree);
+            }
+            for (SysMenuDto t : copyMenus) {
+                if (null != t.getPid() && t.getPid().equals(tree.getId())) {
+                    if (tree.getChildren() == null) {
+                        List<SysMenuDto> children = Lists.newArrayList();
+                        children.add(t);
+                        tree.setChildren(children);
+                    } else {
+                        tree.getChildren().add(t);
+                    }
+                    tree.getChildren().sort((o1, o2) -> {
+                        if (null != o1.getSortBy() && null != o2.getSortBy()) {
+                            return o1.getSortBy() - o2.getSortBy();
+                        }
+                        return 0;
+                    });
+                }
+            }
+        }
+        rootTrees.sort((o1, o2) -> {
+            if (null != o1.getSortBy() && null != o2.getSortBy()) {
+                return o1.getSortBy() - o2.getSortBy();
+            }
+            return 0;
+        });
+        return rootTrees;
+    }
+
+    /**
+     * 封装子对象
+     *
+     * @param parent       父对象
+     * @param originalList 待处理对象集合
+     */
+    private List<SysMenuDto> fillChildren(SysMenuDto parent, List<SysMenuDto> originalList) {
+        List<SysMenuDto> childList = new ArrayList<>();
+        Long parentId = parent.getId();
+        for (int i = 0; i < originalList.size(); i++) {
+            SysMenuDto t = originalList.get(i);
+            Long childParentId = t.getPid();
+            if (parentId == childParentId) {
+                childList.add(t);
+            }
+        }
+        if (!childList.isEmpty()) {
+            parent.setChildren(childList);
+        }
+        return childList;
     }
 
     /**
@@ -90,7 +205,7 @@ public final class Utils {
             rootPath = rootPath.substring(0, rootPath.length() - 1);
         }
         String savePath = rootPath + File.separator + "html" + File.separator + busHtml.bus + File.separator + ymd + File.separator;
-        String saveUrl = "html/"+ File.separator + busHtml.bus + File.separator + ymd + "/";
+        String saveUrl = "html/" + File.separator + busHtml.bus + File.separator + ymd + "/";
         String fileName = busHtml.busId + ".html";
         File saveFile = new File(savePath);
         if (!saveFile.exists()) {
@@ -233,9 +348,9 @@ public final class Utils {
         return getUserId(token);
     }
 
-    public static String getRandomCode(boolean num,int size) {
+    public static String getRandomCode(boolean num, int size) {
 
-        String ZiMu = num?"1234567890":"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGJKLZXCVBNM1234567890";
+        String ZiMu = num ? "1234567890" : "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGJKLZXCVBNM1234567890";
         String result = "";
         Random random = new Random();
         for (int i = 0; i < size; i++) {
@@ -247,8 +362,8 @@ public final class Utils {
     }
 
 
-    public static String orderNo(){
-        return generateOfDate()+getRandomCode(true,4);
+    public static String orderNo() {
+        return generateOfDate() + getRandomCode(true, 4);
     }
 
     /**

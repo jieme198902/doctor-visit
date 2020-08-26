@@ -3,9 +3,9 @@ package com.doctor.visit.service;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusUserDto;
-import com.doctor.visit.repository.BusDictMapper;
-import com.doctor.visit.repository.BusLogMapper;
-import com.doctor.visit.repository.BusUserMapper;
+import com.doctor.visit.domain.dto.SysMenuDto;
+import com.doctor.visit.repository.*;
+import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,14 +43,22 @@ public class UserService {
     private final BusUserMapper busUserMapper;
     private final BusDictMapper busDictMapper;
     private final BusLogMapper busLogMapper;
+    //权限
+    private final SysMenuMapper sysMenuMapper;
+    private final SysPermissionMapper sysPermissionMapper;
+    private final SysRelationUserRoleMapper sysRelationUserRoleMapper;
+    //
     private Gson gson = new Gson();
 
-    public UserService(CommonService commonService, UploadService uploadService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper) {
+    public UserService(CommonService commonService, UploadService uploadService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper, SysMenuMapper sysMenuMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busUserMapper = busUserMapper;
         this.busDictMapper = busDictMapper;
         this.busLogMapper = busLogMapper;
+        this.sysMenuMapper = sysMenuMapper;
+        this.sysPermissionMapper = sysPermissionMapper;
+        this.sysRelationUserRoleMapper = sysRelationUserRoleMapper;
     }
 
     /**
@@ -188,6 +195,47 @@ public class UserService {
         } catch (Exception e) {
             logger.error("login.error-->{}", e.getMessage());
             return ComResponse.fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 获取系统用户菜单列表
+     *
+     * @param bus
+     * @return
+     */
+    public ComResponse<List<SysMenuDto>> listSysUserMenu(SysPermission bus) {
+        Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
+        if (usernameOptional.isPresent()) {
+            JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
+            if (null == jhiUser) {
+                return ComResponse.failNotFound();
+            } else {
+                List<SysMenuDto> sysMenuDtos = Lists.newArrayList();
+                //获取用户的角色，可能是多个
+                SysRelationUserRole userRole = new SysRelationUserRole();
+                userRole.setUserId(jhiUser.getId());
+                List<SysRelationUserRole> userRoles = sysRelationUserRoleMapper.select(userRole);
+                if (null != userRoles && !userRoles.isEmpty()) {
+                    List<SysMenu> userAllMenu = Lists.newArrayList();
+                    userRoles.forEach(userRoleOne -> {
+                        SysPermission record = new SysPermission();
+                        record.setRoleId(userRoleOne.getRoleId());
+                        List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(record);
+                        if (null != sysMenus && !sysMenus.isEmpty()) {
+                            userAllMenu.addAll(sysMenus);
+                        }
+                    });
+                    //去重
+                    Set<SysMenu> set = new HashSet<>(userAllMenu);
+                    userAllMenu.clear();
+                    userAllMenu.addAll(set);
+                    sysMenuDtos.addAll(Utils.menuListToTree(userAllMenu));
+                }
+                return ComResponse.ok(sysMenuDtos);
+            }
+        } else {
+            return ComResponse.failUnauthorized();
         }
     }
 

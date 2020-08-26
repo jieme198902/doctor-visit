@@ -17,4 +17,15 @@
     <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="CHAR" />
   </resultMap>
+
+
+    <select id="selectUserRole" resultMap="BaseResultMap">
+        SELECT
+            ro.*
+        FROM
+            sys_relation_user_role ru
+            LEFT JOIN sys_role ro ON ru.role_id = ro.id
+        WHERE
+            ru.user_id = #{userId}
+    </select>
 </mapper>

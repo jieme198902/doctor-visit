@@ -5,13 +5,13 @@ import com.doctor.visit.domain.SysMenu;
 import java.util.List;
 
 public class SysMenuDto extends SysMenu {
-    private List<SysMenu> children;
+    private List<SysMenuDto> children;
 
-    public List<SysMenu> getChildren() {
+    public List<SysMenuDto> getChildren() {
         return children;
     }
 
-    public void setChildren(List<SysMenu> children) {
+    public void setChildren(List<SysMenuDto> children) {
         this.children = children;
     }
 }

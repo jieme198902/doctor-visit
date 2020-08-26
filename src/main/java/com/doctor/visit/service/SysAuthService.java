@@ -1,13 +1,11 @@
 package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.JhiUser;
-import com.doctor.visit.domain.SysMenu;
-import com.doctor.visit.domain.SysPermission;
-import com.doctor.visit.domain.SysRole;
+import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.SysMenuDto;
 import com.doctor.visit.repository.SysMenuMapper;
 import com.doctor.visit.repository.SysPermissionMapper;
+import com.doctor.visit.repository.SysRelationUserRoleMapper;
 import com.doctor.visit.repository.SysRoleMapper;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
@@ -15,7 +13,6 @@ import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.google.gson.reflect.TypeToken;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
@@ -32,12 +29,14 @@ public class SysAuthService {
     private final SysRoleMapper sysRoleMapper;
     private final SysMenuMapper sysMenuMapper;
     private final SysPermissionMapper sysPermissionMapper;
+    private final SysRelationUserRoleMapper sysRelationUserRoleMapper;
 
-    public SysAuthService(CommonService commonService, SysRoleMapper sysRoleMapper, SysMenuMapper sysMenuMapper, SysPermissionMapper sysPermissionMapper) {
+    public SysAuthService(CommonService commonService, SysRoleMapper sysRoleMapper, SysMenuMapper sysMenuMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper) {
         this.commonService = commonService;
         this.sysRoleMapper = sysRoleMapper;
         this.sysMenuMapper = sysMenuMapper;
         this.sysPermissionMapper = sysPermissionMapper;
+        this.sysRelationUserRoleMapper = sysRelationUserRoleMapper;
     }
 
     /**
@@ -109,7 +108,7 @@ public class SysAuthService {
             SysRole delRecord = new SysRole();
             delRecord.setIsDel(Constants.DELETE);
             delRecord.setId(Long.parseLong(id));
-            int i = sysRoleMapper.deleteByPrimaryKey(delRecord);
+            int i = sysRoleMapper.updateByPrimaryKeySelective(delRecord);
             if (1 == i) {
                 delIds.append(id);
             }
@@ -153,7 +152,7 @@ public class SysAuthService {
         record.setIsDel("0");
         List<SysMenu> sysMenus = sysMenuMapper.select(record);
         //把这个集合处理成树状结构
-        List<SysMenuDto> treeMenu = menuListToTree(sysMenus);
+        List<SysMenuDto> treeMenu = Utils.menuListToTree(sysMenus);
         return ComResponse.ok(treeMenu);
     }
 
@@ -170,39 +169,13 @@ public class SysAuthService {
         }
         List<String> ids = Lists.newArrayList();
         List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(bus);
-        sysMenus.forEach(it -> ids.add(it.getId().toString()));
+        if (null != sysMenus && !sysMenus.isEmpty()) {
+            sysMenus.forEach(it -> ids.add(it.getId().toString()));
+        }
         //把这个集合处理成树状结构
         return ComResponse.ok(ids);
     }
 
-    /**
-     * 将菜单集合转换成树状结构的数据
-     *
-     * @param trees
-     * @return
-     */
-    private List<SysMenuDto> menuListToTree(List<SysMenu> trees) {
-        List<SysMenuDto> copyMenus = Utils.gson(trees, new TypeToken<List<SysMenuDto>>() {
-        }.getType());
-        List<SysMenuDto> rootTrees = Lists.newArrayList();
-        for (SysMenuDto tree : copyMenus) {
-            if (null == tree.getPid() || 0 == tree.getPid()) {
-                rootTrees.add(tree);
-            }
-            for (SysMenu t : trees) {
-                if (null != t.getPid() && t.getPid().equals(tree.getId())) {
-                    if (tree.getChildren() == null) {
-                        List<SysMenu> children = Lists.newArrayList();
-                        children.add(t);
-                        tree.setChildren(children);
-                    } else {
-                        tree.getChildren().add(t);
-                    }
-                }
-            }
-        }
-        return rootTrees;
-    }
 
     /**
      * 更新或者修改菜单
@@ -249,7 +222,7 @@ public class SysAuthService {
             SysMenu delRecord = new SysMenu();
             delRecord.setIsDel(Constants.DELETE);
             delRecord.setId(Long.parseLong(id));
-            int i = sysMenuMapper.deleteByPrimaryKey(delRecord);
+            int i = sysMenuMapper.updateByPrimaryKeySelective(delRecord);
             if (1 == i) {
                 delIds.append(id);
             }
@@ -295,4 +268,33 @@ public class SysAuthService {
         }
     }
 
+
+    /**
+     * 修改用户的角色
+     *
+     * @param bus
+     * @param roles   角色ids
+     * @param request
+     * @return
+     */
+    public ComResponse<String> insertOrUpdateUserRole(SysRelationUserRole bus, String roles, HttpServletRequest request) {
+        if (null == bus.getUserId() || StringUtils.isBlank(roles)) {
+            return ComResponse.failBadRequest();
+        }
+        //直接删除全部
+        SysRelationUserRole delRecord = new SysRelationUserRole();
+        delRecord.setUserId(bus.getUserId());
+        sysRelationUserRoleMapper.delete(delRecord);
+        //保存新的
+        String[] roleAry = roles.split(Constants.COMMA);
+        for (String role : roleAry) {
+            SysRelationUserRole insert = new SysRelationUserRole();
+            insert.setUserId(bus.getUserId());
+            insert.setId(IDKeyUtil.generateId());
+            insert.setRoleId(Long.parseLong(role));
+            sysRelationUserRoleMapper.insertSelective(insert);
+        }
+
+        return ComResponse.ok();
+    }
 }

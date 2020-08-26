@@ -3,9 +3,9 @@ package com.doctor.visit.web.rest.vm.sys;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.SysMenu;
 import com.doctor.visit.domain.SysPermission;
+import com.doctor.visit.domain.SysRelationUserRole;
 import com.doctor.visit.domain.SysRole;
 import com.doctor.visit.service.SysAuthService;
-import com.doctor.visit.web.rest.util.ComResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -188,12 +188,37 @@ public class SysAuthResource {
 
 
     /////////////////////
-    @ApiImplicitParams({
 
+    /**
+     * 修改权限
+     * @param bus
+     * @param menus
+     * @param request
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysPermission.class)
     })
     @ApiOperation(value = "修改权限")
     @PostMapping("insertOrUpdatePermission")
     public Object insertOrUpdatePermission(SysPermission bus, String menus, HttpServletRequest request) {
         return sysAuthService.insertOrUpdatePermission(bus, menus, request);
+    }
+
+
+    /**
+     * 修改用户的角色
+     * @param bus
+     * @param roles
+     * @param request
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysRelationUserRole.class)
+    })
+    @ApiOperation(value = "修改用户的角色")
+    @PostMapping("insertOrUpdateUserRole")
+    public Object insertOrUpdateUserRole(SysRelationUserRole bus, String roles, HttpServletRequest request) {
+        return sysAuthService.insertOrUpdateUserRole(bus, roles, request);
     }
 }

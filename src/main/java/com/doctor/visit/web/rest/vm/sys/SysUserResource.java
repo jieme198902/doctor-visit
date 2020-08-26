@@ -1,9 +1,7 @@
 package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusFeedback;
-import com.doctor.visit.domain.BusUser;
-import com.doctor.visit.domain.JhiUser;
+import com.doctor.visit.domain.*;
 import com.doctor.visit.service.FeedbackService;
 import com.doctor.visit.service.JhiUserService;
 import com.doctor.visit.service.UserService;
@@ -34,6 +32,23 @@ public class SysUserResource {
         this.userService = userService;
         this.jhiUserService = jhiUserService;
     }
+
+
+    /**
+     * 获取系统用户菜单列表
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysPermission.class)
+    })
+    @PostMapping("listSysUserMenu")
+    @ApiOperation(value = "获取系统用户菜单列表")
+    public Object listSysUserMenu(SysPermission bus) {
+        return userService.listSysUserMenu(bus);
+    }
+
 
     /**
      * 获取意见反馈列表
