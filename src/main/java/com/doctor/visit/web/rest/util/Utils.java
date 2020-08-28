@@ -3,6 +3,7 @@ package com.doctor.visit.web.rest.util;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.SysMenu;
 import com.doctor.visit.domain.dto.SysMenuDto;
+import com.doctor.visit.repository.SysButtonMapper;
 import com.doctor.visit.web.rest.errors.UnAuthorizedException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -135,7 +136,7 @@ public final class Utils {
      * @param trees
      * @return
      */
-    public static List<SysMenuDto> menuListToTree(List<SysMenu> trees) {
+    public static List<SysMenuDto> menuListToTree(List<SysMenu> trees, SysButtonMapper sysButtonMapper) {
         List<SysMenuDto> copyMenus = Utils.gson(trees, new TypeToken<List<SysMenuDto>>() {
         }.getType());
         List<SysMenuDto> rootTrees = Lists.newArrayList();
@@ -143,6 +144,8 @@ public final class Utils {
             if (null == tree.getPid() || 0 == tree.getPid()) {
                 rootTrees.add(tree);
             }
+            tree.setButtons(sysButtonMapper.selectByMenuId(tree.getId()));
+            tree.setButton(tree.getIsDel());
             for (SysMenuDto t : copyMenus) {
                 if (null != t.getPid() && t.getPid().equals(tree.getId())) {
                     if (tree.getChildren() == null) {

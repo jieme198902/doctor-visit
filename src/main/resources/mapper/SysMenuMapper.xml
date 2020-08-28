@@ -23,14 +23,45 @@
   </resultMap>
 
 
-    <select id="selectMenuByRoleId" parameterType="com.doctor.visit.domain.SysPermission" resultMap="BaseResultMap">
+    <select id="selectMenuByRoleId" resultMap="BaseResultMap">
         SELECT
+        (
+            SELECT
+                GROUP_CONCAT( b.NAME )
+            FROM
+                sys_relation_menu_button rmb
+                LEFT JOIN sys_button b ON rmb.button_id = b.id
+            WHERE
+                rmb.menu_id = m.id
+            ) AS is_del,
             m.*
         FROM
             sys_permission p
             LEFT JOIN sys_menu m ON p.menu_id = m.id
         WHERE
             role_id = #{roleId}
+    </select>
+
+
+    <select id="selectMenu" parameterType="com.doctor.visit.domain.SysMenu" resultMap="BaseResultMap">
+        SELECT
+            (
+            SELECT
+                GROUP_CONCAT( b.NAME )
+            FROM
+                sys_relation_menu_button rmb
+                LEFT JOIN sys_button b ON rmb.button_id = b.id
+            WHERE
+                rmb.menu_id = m.id
+            ) AS is_del,
+            m.*
+        FROM
+            sys_menu m
+        WHERE 1=1
+        <if test="null!=isDel">
+            AND m.is_del = #{isDel}
+        </if>
+
     </select>
 
 </mapper>

@@ -45,18 +45,20 @@ public class UserService {
     private final BusLogMapper busLogMapper;
     //权限
     private final SysMenuMapper sysMenuMapper;
+    private final SysButtonMapper sysButtonMapper;
     private final SysPermissionMapper sysPermissionMapper;
     private final SysRelationUserRoleMapper sysRelationUserRoleMapper;
     //
     private Gson gson = new Gson();
 
-    public UserService(CommonService commonService, UploadService uploadService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper, SysMenuMapper sysMenuMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper) {
+    public UserService(CommonService commonService, UploadService uploadService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper, SysMenuMapper sysMenuMapper, SysButtonMapper sysButtonMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busUserMapper = busUserMapper;
         this.busDictMapper = busDictMapper;
         this.busLogMapper = busLogMapper;
         this.sysMenuMapper = sysMenuMapper;
+        this.sysButtonMapper = sysButtonMapper;
         this.sysPermissionMapper = sysPermissionMapper;
         this.sysRelationUserRoleMapper = sysRelationUserRoleMapper;
     }
@@ -219,9 +221,7 @@ public class UserService {
                 if (null != userRoles && !userRoles.isEmpty()) {
                     List<SysMenu> userAllMenu = Lists.newArrayList();
                     userRoles.forEach(userRoleOne -> {
-                        SysPermission record = new SysPermission();
-                        record.setRoleId(userRoleOne.getRoleId());
-                        List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(record);
+                        List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(userRoleOne.getRoleId());
                         if (null != sysMenus && !sysMenus.isEmpty()) {
                             userAllMenu.addAll(sysMenus);
                         }
@@ -230,7 +230,7 @@ public class UserService {
                     Set<SysMenu> set = new HashSet<>(userAllMenu);
                     userAllMenu.clear();
                     userAllMenu.addAll(set);
-                    sysMenuDtos.addAll(Utils.menuListToTree(userAllMenu));
+                    sysMenuDtos.addAll(Utils.menuListToTree(userAllMenu,sysButtonMapper));
                 }
                 return ComResponse.ok(sysMenuDtos);
             }

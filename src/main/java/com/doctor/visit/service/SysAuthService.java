@@ -3,10 +3,7 @@ package com.doctor.visit.service;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.SysMenuDto;
-import com.doctor.visit.repository.SysMenuMapper;
-import com.doctor.visit.repository.SysPermissionMapper;
-import com.doctor.visit.repository.SysRelationUserRoleMapper;
-import com.doctor.visit.repository.SysRoleMapper;
+import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -28,15 +25,19 @@ public class SysAuthService {
     //
     private final SysRoleMapper sysRoleMapper;
     private final SysMenuMapper sysMenuMapper;
+    private final SysButtonMapper sysButtonMapper;
     private final SysPermissionMapper sysPermissionMapper;
     private final SysRelationUserRoleMapper sysRelationUserRoleMapper;
+    private final SysRelationMenuButtonMapper sysRelationMenuButtonMapper;
 
-    public SysAuthService(CommonService commonService, SysRoleMapper sysRoleMapper, SysMenuMapper sysMenuMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper) {
+    public SysAuthService(CommonService commonService, SysRoleMapper sysRoleMapper, SysMenuMapper sysMenuMapper, SysButtonMapper sysButtonMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper, SysRelationMenuButtonMapper sysRelationMenuButtonMapper) {
         this.commonService = commonService;
         this.sysRoleMapper = sysRoleMapper;
         this.sysMenuMapper = sysMenuMapper;
+        this.sysButtonMapper = sysButtonMapper;
         this.sysPermissionMapper = sysPermissionMapper;
         this.sysRelationUserRoleMapper = sysRelationUserRoleMapper;
+        this.sysRelationMenuButtonMapper = sysRelationMenuButtonMapper;
     }
 
     /**
@@ -54,6 +55,7 @@ public class SysAuthService {
         if (StringUtils.isNotBlank(bus.getName())) {
             record.setName(bus.getName());
         }
+        record.setIsDel(Constants.EXIST);
         if (null != pageable) {
             Page<SysRole> busList = (Page<SysRole>) sysRoleMapper.select(record);
             return ComResponse.ok(busList.getResult(), busList.getTotal());
@@ -133,6 +135,7 @@ public class SysAuthService {
         if (StringUtils.isNotBlank(bus.getTitle())) {
             record.setTitle(bus.getTitle());
         }
+        record.setIsDel(Constants.EXIST);
         if (null != pageable) {
             Page<SysMenu> busList = (Page<SysMenu>) sysMenuMapper.select(record);
             return ComResponse.ok(busList.getResult(), busList.getTotal());
@@ -150,9 +153,9 @@ public class SysAuthService {
     public ComResponse<List<SysMenuDto>> listMenuTree(SysMenu bus) {
         SysMenu record = new SysMenu();
         record.setIsDel("0");
-        List<SysMenu> sysMenus = sysMenuMapper.select(record);
+        List<SysMenu> sysMenus = sysMenuMapper.selectMenu(record);
         //把这个集合处理成树状结构
-        List<SysMenuDto> treeMenu = Utils.menuListToTree(sysMenus);
+        List<SysMenuDto> treeMenu = Utils.menuListToTree(sysMenus,sysButtonMapper);
         return ComResponse.ok(treeMenu);
     }
 
@@ -168,7 +171,7 @@ public class SysAuthService {
             return ComResponse.failBadRequest();
         }
         List<String> ids = Lists.newArrayList();
-        List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(bus);
+        List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(bus.getRoleId());
         if (null != sysMenus && !sysMenus.isEmpty()) {
             sysMenus.forEach(it -> ids.add(it.getId().toString()));
         }
@@ -257,8 +260,8 @@ public class SysAuthService {
             String[] menuAry = menus.split(Constants.COMMA);
             for (String menuId : menuAry) {
                 SysPermission insertPermission = new SysPermission();
-                insertPermission.setRoleId(bus.getRoleId());
                 insertPermission.setId(IDKeyUtil.generateId());
+                insertPermission.setRoleId(bus.getRoleId());
                 insertPermission.setMenuId(Long.parseLong(menuId));
                 sysPermissionMapper.insertSelective(insertPermission);
             }
@@ -289,12 +292,130 @@ public class SysAuthService {
         String[] roleAry = roles.split(Constants.COMMA);
         for (String role : roleAry) {
             SysRelationUserRole insert = new SysRelationUserRole();
-            insert.setUserId(bus.getUserId());
             insert.setId(IDKeyUtil.generateId());
+            insert.setUserId(bus.getUserId());
             insert.setRoleId(Long.parseLong(role));
             sysRelationUserRoleMapper.insertSelective(insert);
         }
 
         return ComResponse.ok();
+    }
+
+
+    /////////////////////////
+
+    /**
+     * 按钮列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    public ComResponse<List<SysButton>> listButton(SysButton bus, Pageable pageable) {
+        if (null != pageable) {
+            PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize(), "sort_by desc");
+        }
+        SysButton record = new SysButton();
+        if (StringUtils.isNotBlank(bus.getName())) {
+            record.setName(bus.getName());
+        }
+        record.setIsDel(Constants.EXIST);
+        if (null != pageable) {
+            Page<SysButton> busList = (Page<SysButton>) sysButtonMapper.select(record);
+            return ComResponse.ok(busList.getResult(), busList.getTotal());
+        } else {
+            return ComResponse.ok(sysButtonMapper.select(record));
+        }
+    }
+
+
+    /**
+     * 更新或者修改按钮
+     *
+     * @param bus
+     * @param request
+     * @return
+     */
+    public ComResponse<SysButton> insertOrUpdateButton(SysButton bus, HttpServletRequest request) {
+        Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
+        if (usernameOptional.isPresent()) {
+            JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
+            if (null == jhiUser) {
+                return ComResponse.failNotFound();
+            }
+            bus.setEditTime(new Date());
+            bus.setEditBy(jhiUser.getId());
+            bus.setEditName(jhiUser.getFirstName());
+            if (null != bus.getId()) {
+                sysButtonMapper.updateByPrimaryKeySelective(bus);
+            } else {
+                bus.setId(IDKeyUtil.generateId());
+                bus.setCreateTime(new Date());
+                bus.setCreateBy(jhiUser.getId());
+                bus.setCreateName(jhiUser.getFirstName());
+                sysButtonMapper.insertSelective(bus);
+            }
+            return ComResponse.ok(bus);
+        } else {
+            return ComResponse.failUnauthorized();
+        }
+    }
+
+    /**
+     * 根据id删除角色
+     *
+     * @param ids
+     * @return
+     */
+    public ComResponse<StringBuilder> deleteButton(String ids) {
+        String[] idsAry = ids.split(Constants.COMMA);
+        StringBuilder delIds = new StringBuilder();
+        for (String id : idsAry) {
+            SysButton delRecord = new SysButton();
+            delRecord.setIsDel(Constants.DELETE);
+            delRecord.setId(Long.parseLong(id));
+            int i = sysButtonMapper.updateByPrimaryKeySelective(delRecord);
+            if (1 == i) {
+                delIds.append(id);
+            }
+        }
+        return ComResponse.ok(delIds);
+    }
+
+    /**
+     * 更新或者修改菜单
+     *
+     * @param bus
+     * @param buttons
+     * @param request
+     * @return
+     */
+    public ComResponse<SysRelationMenuButton> insertOrUpdateRelationMenuButton(SysRelationMenuButton bus, String buttons, HttpServletRequest request) {
+        if (null == bus.getMenuId() || StringUtils.isBlank(buttons)) {
+            return ComResponse.failBadRequest();
+        }
+        Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
+        if (usernameOptional.isPresent()) {
+            JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
+            if (null == jhiUser) {
+                return ComResponse.failNotFound();
+            }
+            //直接删除全部
+            SysRelationMenuButton delRecord = new SysRelationMenuButton();
+            delRecord.setMenuId(bus.getMenuId());
+            sysRelationMenuButtonMapper.delete(delRecord);
+            //直接添加新的
+            String[] buttonAry = buttons.split(Constants.COMMA);
+            for (String buttonId : buttonAry) {
+                SysRelationMenuButton insert = new SysRelationMenuButton();
+                insert.setId(IDKeyUtil.generateId());
+                insert.setMenuId(bus.getMenuId());
+                insert.setButtonId(Long.parseLong(buttonId));
+                sysRelationMenuButtonMapper.insertSelective(insert);
+            }
+            return ComResponse.ok();
+        } else {
+            return ComResponse.failUnauthorized();
+        }
     }
 }

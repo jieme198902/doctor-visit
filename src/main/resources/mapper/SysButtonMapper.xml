@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.doctor.visit.repository.SysButtonMapper" >
+  <resultMap id="BaseResultMap" type="com.doctor.visit.domain.SysButton" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="btn_type" property="btnType" jdbcType="CHAR" />
+    <result column="btn_class" property="btnClass" jdbcType="VARCHAR" />
+    <result column="sort_by" property="sortBy" jdbcType="INTEGER" />
+    <result column="create_by" property="createBy" jdbcType="BIGINT" />
+    <result column="create_name" property="createName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="edit_by" property="editBy" jdbcType="BIGINT" />
+    <result column="edit_name" property="editName" jdbcType="VARCHAR" />
+    <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="CHAR" />
+  </resultMap>
+<!--    根据菜单id获取按钮列表 -->
+    <select id="selectByMenuId" resultMap="BaseResultMap">
+        SELECT
+            btn.*
+        FROM
+            sys_relation_menu_button rmb
+            LEFT JOIN sys_button btn ON rmb.button_id = btn.id
+        WHERE
+            rmb.menu_id = #{menuId}
+    </select>
+
+</mapper>

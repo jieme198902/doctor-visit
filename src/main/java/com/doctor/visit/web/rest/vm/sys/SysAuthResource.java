@@ -1,10 +1,7 @@
 package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.SysMenu;
-import com.doctor.visit.domain.SysPermission;
-import com.doctor.visit.domain.SysRelationUserRole;
-import com.doctor.visit.domain.SysRole;
+import com.doctor.visit.domain.*;
 import com.doctor.visit.service.SysAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -191,6 +188,7 @@ public class SysAuthResource {
 
     /**
      * 修改权限
+     *
      * @param bus
      * @param menus
      * @param request
@@ -208,6 +206,7 @@ public class SysAuthResource {
 
     /**
      * 修改用户的角色
+     *
      * @param bus
      * @param roles
      * @param request
@@ -221,4 +220,87 @@ public class SysAuthResource {
     public Object insertOrUpdateUserRole(SysRelationUserRole bus, String roles, HttpServletRequest request) {
         return sysAuthService.insertOrUpdateUserRole(bus, roles, request);
     }
+
+    //////////////////
+
+    /**
+     * 查询按钮列表
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysButton.class)
+    })
+    @PostMapping("listButton")
+    @ApiOperation(value = "查询按钮列表")
+    public Object listButton(SysButton bus, Pageable pageable) {
+        return sysAuthService.listButton(bus, pageable);
+    }
+
+    /**
+     * 查询无分页的按钮列表
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysButton.class)
+    })
+    @PostMapping("listButtonNoPage")
+    @ApiOperation(value = "查询无分页的按钮列表")
+    public Object listButtonNoPage(SysButton bus) {
+        return sysAuthService.listButton(bus, null);
+    }
+
+
+    /**
+     * 新增或者修改按钮
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysButton.class)
+    })
+    @PostMapping("insertOrUpdateButton")
+    @ApiOperation(value = "新增或者修改按钮")
+    public Object insertOrUpdateButton(SysButton bus, HttpServletRequest request) {
+        return sysAuthService.insertOrUpdateButton(bus, request);
+    }
+
+    /**
+     * 根据id删除按钮
+     *
+     * @param ids
+     * @return
+     */
+    @ApiImplicitParams({
+
+    })
+    @PostMapping("deleteButton")
+    @ApiOperation(value = "根据id删除按钮")
+    public Object deleteButton(String ids) {
+        return sysAuthService.deleteButton(ids);
+    }
+
+
+    /**
+     * 修改 菜单-按钮 关系表
+     *
+     * @param bus
+     * @param buttons
+     * @param request
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysRelationMenuButton.class)
+    })
+    @ApiOperation(value = "修改 菜单-按钮 关系表")
+    @PostMapping("insertOrUpdateRelationMenuButton")
+    public Object insertOrUpdateRelationMenuButton(SysRelationMenuButton bus, String buttons, HttpServletRequest request) {
+        return sysAuthService.insertOrUpdateRelationMenuButton(bus, buttons, request);
+    }
+
+
 }
