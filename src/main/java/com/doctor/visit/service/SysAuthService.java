@@ -244,7 +244,7 @@ public class SysAuthService {
             List<SysButton> sysButtons = sysButtonMapper.selectByMenuId(sysMenu.getId());
             return ComResponse.ok(sysButtons);
         }
-        if(StringUtils.isNotBlank(sysMenu.getCode())){
+        if (StringUtils.isNotBlank(sysMenu.getCode())) {
             List<SysButton> sysButtons = sysButtonMapper.selectByMenuCode(sysMenu.getCode());
             return ComResponse.ok(sysButtons);
         }
@@ -262,7 +262,7 @@ public class SysAuthService {
      * @param request
      * @return
      */
-    public ComResponse<SysPermission> insertOrUpdatePermission(SysPermission bus, String menus, HttpServletRequest request) {
+    public ComResponse<SysPermission> insertOrUpdatePermission(SysPermission bus, String menus, String buttons, HttpServletRequest request) {
         if (null == bus.getRoleId() || StringUtils.isBlank(menus)) {
             return ComResponse.failBadRequest();
         }
@@ -276,14 +276,27 @@ public class SysAuthService {
             SysPermission delRecord = new SysPermission();
             delRecord.setRoleId(bus.getRoleId());
             sysPermissionMapper.delete(delRecord);
-            //直接添加新的
+            //直接添加新的菜单
             String[] menuAry = menus.split(Constants.COMMA);
             for (String menuId : menuAry) {
                 SysPermission insertPermission = new SysPermission();
                 insertPermission.setId(IDKeyUtil.generateId());
                 insertPermission.setRoleId(bus.getRoleId());
-                insertPermission.setMenuId(Long.parseLong(menuId));
+                insertPermission.setMenuButtonId(Long.parseLong(menuId));
+                insertPermission.setMenuButtonType("0");
                 sysPermissionMapper.insertSelective(insertPermission);
+            }
+            //直接添加新的按钮
+            if (StringUtils.isNotBlank(buttons)) {
+                String[] buttonAry = buttons.split(Constants.COMMA);
+                for (String buttonId : buttonAry) {
+                    SysPermission insertPermission = new SysPermission();
+                    insertPermission.setId(IDKeyUtil.generateId());
+                    insertPermission.setRoleId(bus.getRoleId());
+                    insertPermission.setMenuButtonId(Long.parseLong(buttonId));
+                    insertPermission.setMenuButtonType("1");
+                    sysPermissionMapper.insertSelective(insertPermission);
+                }
             }
             return ComResponse.ok();
         } else {

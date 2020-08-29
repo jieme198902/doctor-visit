@@ -7,6 +7,8 @@
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="role_id" property="roleId" jdbcType="BIGINT" />
-    <result column="menu_id" property="menuId" jdbcType="BIGINT" />
+    <result column="menu_button_id" property="menuButtonId" jdbcType="BIGINT" />
+    <result column="menu_button_type" property="menuButtonType" jdbcType="VARCHAR" />
+
   </resultMap>
 </mapper>

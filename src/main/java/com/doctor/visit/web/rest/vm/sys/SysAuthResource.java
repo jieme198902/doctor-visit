@@ -213,8 +213,8 @@ public class SysAuthResource {
     })
     @ApiOperation(value = "修改权限")
     @PostMapping("insertOrUpdatePermission")
-    public Object insertOrUpdatePermission(SysPermission bus, String menus, HttpServletRequest request) {
-        return sysAuthService.insertOrUpdatePermission(bus, menus, request);
+    public Object insertOrUpdatePermission(SysPermission bus, String menus,String buttons, HttpServletRequest request) {
+        return sysAuthService.insertOrUpdatePermission(bus, menus, buttons,request);
     }
 
 

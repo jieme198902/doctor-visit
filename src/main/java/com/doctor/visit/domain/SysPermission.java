@@ -20,11 +20,18 @@ public class SysPermission implements Serializable {
     private Long roleId;
 
     /**
-     * 菜单id
+     * 菜单id或者按钮id
      */
-    @Column(name = "menu_id")
+    @Column(name = "menu_button_id")
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long menuId;
+    private Long menuButtonId;
+
+
+    /**
+     * 菜单或者按钮：0菜单；1按钮
+     */
+    @Column(name = "menu_button_type")
+    private String menuButtonType;
 
     private static final long serialVersionUID = 1L;
 
@@ -61,20 +68,34 @@ public class SysPermission implements Serializable {
     }
 
     /**
-     * 获取菜单id
-     *
-     * @return menu_id - 菜单id
+     * 菜单id或者按钮id
+     * @return
      */
-    public Long getMenuId() {
-        return menuId;
+    public Long getMenuButtonId() {
+        return menuButtonId;
     }
 
     /**
-     * 设置菜单id
-     *
-     * @param menuId 菜单id
+     * 菜单id或者按钮id
+     * @param menuButtonId
      */
-    public void setMenuId(Long menuId) {
-        this.menuId = menuId;
+    public void setMenuButtonId(Long menuButtonId) {
+        this.menuButtonId = menuButtonId;
+    }
+
+    /**
+     * 菜单或者按钮：0菜单；1按钮
+     * @return
+     */
+    public String getMenuButtonType() {
+        return menuButtonType;
+    }
+
+    /**
+     * 菜单或者按钮：0菜单；1按钮
+     * @param menuButtonType
+     */
+    public void setMenuButtonType(String menuButtonType) {
+        this.menuButtonType = menuButtonType;
     }
 }
