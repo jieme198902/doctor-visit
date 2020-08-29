@@ -14,4 +14,11 @@ public interface SysButtonMapper extends CommMapper<SysButton> {
      * @return
      */
     List<SysButton> selectByMenuId(@Param("menuId") Long menuId);
+
+    /**
+     * 根据菜单id获取按钮列表
+     * @param menuCode
+     * @return
+     */
+    List<SysButton> selectByMenuCode(@Param("menuCode") String menuCode);
 }

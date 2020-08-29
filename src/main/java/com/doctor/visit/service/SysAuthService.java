@@ -155,7 +155,7 @@ public class SysAuthService {
         record.setIsDel("0");
         List<SysMenu> sysMenus = sysMenuMapper.selectMenu(record);
         //把这个集合处理成树状结构
-        List<SysMenuDto> treeMenu = Utils.menuListToTree(sysMenus,sysButtonMapper);
+        List<SysMenuDto> treeMenu = Utils.menuListToTree(sysMenus, sysButtonMapper);
         return ComResponse.ok(treeMenu);
     }
 
@@ -232,6 +232,26 @@ public class SysAuthService {
         }
         return ComResponse.ok(delIds);
     }
+
+    /**
+     * 根据菜单id获取按钮列表
+     *
+     * @param sysMenu
+     * @return
+     */
+    public ComResponse<List<SysButton>> selectByMenu(SysMenu sysMenu) {
+        if (null != sysMenu.getId()) {
+            List<SysButton> sysButtons = sysButtonMapper.selectByMenuId(sysMenu.getId());
+            return ComResponse.ok(sysButtons);
+        }
+        if(StringUtils.isNotBlank(sysMenu.getCode())){
+            List<SysButton> sysButtons = sysButtonMapper.selectByMenuCode(sysMenu.getCode());
+            return ComResponse.ok(sysButtons);
+        }
+
+        return ComResponse.failBadRequest();
+    }
+
     ///////
 
 

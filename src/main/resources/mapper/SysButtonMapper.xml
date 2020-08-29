@@ -30,4 +30,15 @@
             rmb.menu_id = #{menuId}
     </select>
 
+    <select id="selectByMenuCode" resultMap="BaseResultMap">
+        SELECT
+            btn.*
+        FROM
+            sys_relation_menu_button rmb
+            LEFT JOIN sys_button btn ON rmb.button_id = btn.id
+            LEFT JOIN sys_menu menu ON rmb.menu_id = menu.id
+        WHERE
+            menu.CODE = #{menuCode}
+    </select>
+
 </mapper>

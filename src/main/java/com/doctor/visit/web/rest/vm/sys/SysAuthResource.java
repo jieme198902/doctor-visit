@@ -184,6 +184,20 @@ public class SysAuthResource {
     }
 
 
+    /**
+     * 根据菜单获取按钮列表
+     *
+     * @param sysMenu
+     * @return
+     */
+    @ApiImplicitParams({
+
+    })
+    @PostMapping("selectByMenu")
+    @ApiOperation(value = "根据菜单获取按钮列表")
+    public Object selectByMenu(SysMenu sysMenu) {
+        return sysAuthService.selectByMenu(sysMenu);
+    }
     /////////////////////
 
     /**
@@ -301,6 +315,8 @@ public class SysAuthResource {
     public Object insertOrUpdateRelationMenuButton(SysRelationMenuButton bus, String buttons, HttpServletRequest request) {
         return sysAuthService.insertOrUpdateRelationMenuButton(bus, buttons, request);
     }
+
+
 
 
 }

@@ -146,6 +146,7 @@ public final class Utils {
             }
             tree.setButtons(sysButtonMapper.selectByMenuId(tree.getId()));
             tree.setButton(tree.getIsDel());
+            tree.setIsDel(null);
             for (SysMenuDto t : copyMenus) {
                 if (null != t.getPid() && t.getPid().equals(tree.getId())) {
                     if (tree.getChildren() == null) {
