@@ -70,6 +70,21 @@ public class FeedbackService {
         return ComResponse.ok(bus);
     }
 
+    /**
+     * 插入或者更新意见反馈的状态
+     *
+     * @param bus
+     * @return
+     * @throws Exception
+     */
+    public ComResponse<BusFeedback> insertOrUpdateFeedbackState(BusFeedback bus) throws Exception {
+        BusFeedback update = new BusFeedback();
+        update.setId(bus.getId());
+        update.setState(bus.getState());
+        busFeedbackMapper.updateByPrimaryKeySelective(update);
+        return ComResponse.ok(update);
+    }
+
 
     /**
      * 根据id删除意见反馈

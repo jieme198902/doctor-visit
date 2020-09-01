@@ -19,6 +19,10 @@ public final class Constants {
      * 行政区划
      */
     public static final ExpiringMap<String, List<Map<String,Object>>> areaMap = ExpiringMap.builder().variableExpiration().build();
+    /**
+     * 验证码
+     */
+    public static final ExpiringMap<String, String> codeMap = ExpiringMap.builder().variableExpiration().build();
 
 
     public static final String COMMA = ",";

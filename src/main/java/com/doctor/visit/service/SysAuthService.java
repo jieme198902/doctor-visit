@@ -305,7 +305,7 @@ public class SysAuthService {
             SysPermission delRecord = new SysPermission();
             delRecord.setRoleId(bus.getRoleId());
             int count = sysPermissionMapper.delete(delRecord);
-            logger.info("delete role's permission -->{}", count);
+//            logger.info("delete role's permission -->{}", count);
             List<SysPermission> sysMenuDtos = Utils.fromJson(permissions, new TypeToken<List<SysPermission>>() {
             }.getType());
             if (null == sysMenuDtos || sysMenuDtos.isEmpty()) {

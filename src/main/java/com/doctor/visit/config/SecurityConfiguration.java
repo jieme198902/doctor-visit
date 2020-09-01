@@ -55,6 +55,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .authorizeRequests()
             .antMatchers("/api/authenticate").permitAll()
+            .antMatchers("/api/code").permitAll()
+            .antMatchers("/api/checkCode").permitAll()
             //前端的接口不用授权，自己对权限验证
             .antMatchers(Constants.API_BASE_FRONT + "/**").permitAll()
             //后台的接口需要授权

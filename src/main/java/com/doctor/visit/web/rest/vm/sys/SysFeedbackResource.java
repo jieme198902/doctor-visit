@@ -44,4 +44,20 @@ public class SysFeedbackResource {
     public Object listFeedback(BusFeedback bus, Pageable pageable) {
         return feedbackService.listFeedback(bus, pageable);
     }
+
+    /**
+     * 插入或者更新意见反馈的状态
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusFeedback.class)
+    })
+    @PostMapping("insertOrUpdateFeedbackState")
+    @ApiOperation(value = "插入或者更新意见反馈的状态")
+    public Object insertOrUpdateFeedbackState(BusFeedback bus) throws Exception {
+        return feedbackService.insertOrUpdateFeedbackState(bus);
+    }
+
 }
