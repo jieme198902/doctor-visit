@@ -122,6 +122,21 @@ public class SysAuthResource {
     }
 
     /**
+     * 获取菜单树，带选中状态的数
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = SysMenu.class)
+    })
+    @PostMapping("listMenuTreeByState")
+    @ApiOperation(value = "获取菜单树，带选中状态的数")
+    public Object listMenuTreeByState(SysMenu bus,String roleId) {
+        return sysAuthService.listMenuTreeByState(bus,roleId);
+    }
+
+    /**
      * 获取菜单树根据角色id
      *
      * @param bus
@@ -205,6 +220,7 @@ public class SysAuthResource {
      *
      * @param bus
      * @param menus
+     * @param permissions
      * @param request
      * @return
      */
@@ -213,8 +229,8 @@ public class SysAuthResource {
     })
     @ApiOperation(value = "修改权限")
     @PostMapping("insertOrUpdatePermission")
-    public Object insertOrUpdatePermission(SysPermission bus, String menus,String buttons, HttpServletRequest request) {
-        return sysAuthService.insertOrUpdatePermission(bus, menus, buttons,request);
+    public Object insertOrUpdatePermission(SysPermission bus, String menus,String permissions, HttpServletRequest request) {
+        return sysAuthService.insertOrUpdatePermission(bus,  menus, permissions,request);
     }
 
 

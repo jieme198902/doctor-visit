@@ -30,6 +30,30 @@
             rmb.menu_id = #{menuId}
     </select>
 
+
+    <select id="selectByMenuIdAndRoleId" resultMap="BaseResultMap">
+        SELECT
+            (
+            SELECT
+                FIND_IN_SET(
+                    btn.id,
+                    GROUP_CONCAT( p.button_id )
+                )
+            FROM
+                sys_permission p
+            WHERE
+                p.button_id = btn.id
+                AND p.role_id = #{roleId}
+                AND p.menu_id = #{menuId}
+            ) AS is_del,
+            btn.*
+        FROM
+            sys_relation_menu_button rmb
+            LEFT JOIN sys_button btn ON rmb.button_id = btn.id
+        WHERE
+            rmb.menu_id = #{menuId}
+    </select>
+
     <select id="selectByMenuCode" resultMap="BaseResultMap">
         SELECT
             btn.*

@@ -37,9 +37,9 @@
             m.*
         FROM
             sys_permission p
-            LEFT JOIN sys_menu m ON p.menu_button_id = m.id
+            LEFT JOIN sys_menu m ON p.menu_id = m.id
         WHERE
-            role_id = #{roleId}
+            role_id =#{roleId} AND m.id is not null AND m.is_del = '0'
     </select>
 
 

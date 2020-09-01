@@ -10,8 +10,11 @@ import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,8 @@ import java.util.*;
 
 @Service
 public class SysAuthService {
+
+    private Logger logger = LoggerFactory.getLogger(SysAuthService.class);
 
     private final CommonService commonService;
     //
@@ -160,6 +165,24 @@ public class SysAuthService {
     }
 
     /**
+     * 根据当前登录用户获取用户的按钮权限
+     *
+     * @param bus
+     * @return
+     */
+    public ComResponse<List<SysMenuDto>> listMenuTreeByState(SysMenu bus, String roleId) {
+        if (StringUtils.isBlank(roleId)) {
+            return ComResponse.failBadRequest();
+        }
+        SysMenu record = new SysMenu();
+        record.setIsDel("0");
+        List<SysMenu> sysMenus = sysMenuMapper.selectMenu(record);
+        //把这个集合处理成树状结构
+        List<SysMenuDto> treeMenu = Utils.menuListToTree(sysMenus, sysButtonMapper, roleId);
+        return ComResponse.ok(treeMenu);
+    }
+
+    /**
      * 获取菜单树根据角色id
      *
      * @param bus
@@ -173,7 +196,11 @@ public class SysAuthService {
         List<String> ids = Lists.newArrayList();
         List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(bus.getRoleId());
         if (null != sysMenus && !sysMenus.isEmpty()) {
-            sysMenus.forEach(it -> ids.add(it.getId().toString()));
+            sysMenus.forEach(it -> {
+                if (null != it && null != it.getId()) {
+                    ids.add(it.getId().toString());
+                }
+            });
         }
         //把这个集合处理成树状结构
         return ComResponse.ok(ids);
@@ -259,11 +286,13 @@ public class SysAuthService {
      * 更新或者修改菜单
      *
      * @param bus
+     * @param menus
+     * @param permissions
      * @param request
      * @return
      */
-    public ComResponse<SysPermission> insertOrUpdatePermission(SysPermission bus, String menus, String buttons, HttpServletRequest request) {
-        if (null == bus.getRoleId() || StringUtils.isBlank(menus)) {
+    public ComResponse<Integer> insertOrUpdatePermission(SysPermission bus, String menus, String permissions, HttpServletRequest request) {
+        if (null == bus.getRoleId() || StringUtils.isBlank(menus) || StringUtils.isBlank(permissions)) {
             return ComResponse.failBadRequest();
         }
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
@@ -275,30 +304,36 @@ public class SysAuthService {
             //直接删除全部
             SysPermission delRecord = new SysPermission();
             delRecord.setRoleId(bus.getRoleId());
-            sysPermissionMapper.delete(delRecord);
-            //直接添加新的菜单
-            String[] menuAry = menus.split(Constants.COMMA);
-            for (String menuId : menuAry) {
+            int count = sysPermissionMapper.delete(delRecord);
+            logger.info("delete role's permission -->{}", count);
+            List<SysPermission> sysMenuDtos = Utils.fromJson(permissions, new TypeToken<List<SysPermission>>() {
+            }.getType());
+            if (null == sysMenuDtos || sysMenuDtos.isEmpty()) {
+                return ComResponse.fail("数据解析异常");
+            }
+            int updateCount = 0;
+            //保存菜单
+            String[] menusAry = menus.split(Constants.COMMA);
+            for (String m : menusAry) {
+                //保存菜单
                 SysPermission insertPermission = new SysPermission();
                 insertPermission.setId(IDKeyUtil.generateId());
                 insertPermission.setRoleId(bus.getRoleId());
-                insertPermission.setMenuButtonId(Long.parseLong(menuId));
-                insertPermission.setMenuButtonType("0");
-                sysPermissionMapper.insertSelective(insertPermission);
+                insertPermission.setMenuId(Long.parseLong(m));
+                updateCount += sysPermissionMapper.insertSelective(insertPermission);
             }
-            //直接添加新的按钮
-            if (StringUtils.isNotBlank(buttons)) {
-                String[] buttonAry = buttons.split(Constants.COMMA);
-                for (String buttonId : buttonAry) {
-                    SysPermission insertPermission = new SysPermission();
-                    insertPermission.setId(IDKeyUtil.generateId());
-                    insertPermission.setRoleId(bus.getRoleId());
-                    insertPermission.setMenuButtonId(Long.parseLong(buttonId));
-                    insertPermission.setMenuButtonType("1");
-                    sysPermissionMapper.insertSelective(insertPermission);
-                }
+            //保存按钮
+
+            for (SysPermission permission : sysMenuDtos) {
+                //保存按钮
+                SysPermission insertPermission = new SysPermission();
+                insertPermission.setId(IDKeyUtil.generateId());
+                insertPermission.setRoleId(bus.getRoleId());
+                insertPermission.setMenuId(permission.getMenuId());
+                insertPermission.setButtonId(permission.getButtonId());
+                updateCount += sysPermissionMapper.insertSelective(insertPermission);
             }
-            return ComResponse.ok();
+            return ComResponse.ok(updateCount);
         } else {
             return ComResponse.failUnauthorized();
         }

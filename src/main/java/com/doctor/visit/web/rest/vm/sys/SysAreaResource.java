@@ -33,6 +33,36 @@ public class SysAreaResource {
 
 
     /**
+     * 新增或者修改地区
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusArea.class)
+    })
+    @PostMapping("insertOrUpdateArea")
+    @ApiOperation(value = "新增或者修改地区")
+    public Object insertOrUpdateArea(BusArea bus) {
+        return areaService.insertOrUpdateArea(bus);
+    }
+
+    /**
+     * 删除地区
+     *
+     * @param ids
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusArea.class)
+    })
+    @PostMapping("deleteArea")
+    @ApiOperation(value = "删除地区")
+    public Object deleteArea(String ids) {
+        return areaService.deleteArea(ids);
+    }
+
+    /**
      * 查询地区列表
      *
      * @param bus

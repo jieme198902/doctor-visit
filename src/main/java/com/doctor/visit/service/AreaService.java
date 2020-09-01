@@ -2,6 +2,7 @@ package com.doctor.visit.service;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArea;
+import com.doctor.visit.domain.BusDict;
 import com.doctor.visit.repository.BusAreaMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.github.pagehelper.Page;
@@ -27,6 +28,41 @@ public class AreaService {
     }
 
     /**
+     * 新增或者修改地区
+     * @param bus
+     * @return
+     */
+    public ComResponse<BusArea> insertOrUpdateArea(BusArea bus) {
+        int count = 0;
+        if (StringUtils.isNotBlank(bus.getWgbm())) {
+            count = busAreaMapper.updateByPrimaryKeySelective(bus);
+        } else {
+            count = busAreaMapper.insertSelective(bus);
+        }
+        return 1 == count ? ComResponse.ok(bus) : ComResponse.fail();
+    }
+
+    /**
+     * 删除地区
+     * @param ids
+     * @return
+     */
+    public ComResponse<StringBuilder> deleteArea(String ids) {
+        String[] idsAry = ids.split(Constants.COMMA);
+        StringBuilder delIds = new StringBuilder();
+        for (String id : idsAry) {
+            BusArea delRecord = new BusArea();
+            delRecord.setIsDel(Constants.DELETE);
+            delRecord.setWgbm(id);
+            int i = busAreaMapper.updateByPrimaryKeySelective(delRecord);
+            if (1 == i) {
+                delIds.append(id);
+            }
+        }
+        return ComResponse.ok(delIds);
+    }
+
+    /**
      * 地区列表
      *
      * @param bus
@@ -47,6 +83,7 @@ public class AreaService {
         if (StringUtils.isNotBlank(bus.getWgmc())) {
             record.setWgmc(bus.getWgmc());
         }
+        record.setIsDel(Constants.EXIST);
         if (null != pageable) {
             Page<BusArea> busList = (Page<BusArea>) busAreaMapper.select(record);
             return ComResponse.ok(busList.getResult(), busList.getTotal());

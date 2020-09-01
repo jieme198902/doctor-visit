@@ -68,6 +68,12 @@ public class BusArea implements Serializable {
     @Column(name = "LNG")
     private String lng;
 
+    /**
+     * 是否删除，1是0否
+     */
+    @Column(name = "is_del")
+    private String isDel;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -248,5 +254,22 @@ public class BusArea implements Serializable {
      */
     public void setLng(String lng) {
         this.lng = lng;
+    }
+    /**
+     * 获取是否删除，1是0否
+     *
+     * @return is_del - 是否删除，1是0否
+     */
+    public String getIsDel() {
+        return isDel;
+    }
+
+    /**
+     * 设置是否删除，1是0否
+     *
+     * @param isDel 是否删除，1是0否
+     */
+    public void setIsDel(String isDel) {
+        this.isDel = isDel;
     }
 }

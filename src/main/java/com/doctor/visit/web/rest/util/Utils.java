@@ -74,10 +74,29 @@ public final class Utils {
         }
     }
 
-    public static <T, S> T gson(S s, Type t) {
+    /**
+     *
+     * @param s
+     * @param t
+     * @param <T>
+     * @param <S>
+     * @return
+     */
+    public static <T, S> T fromJson(S s, Type t) {
         return gson.fromJson(gson.toJson(s), t);
     }
 
+
+    /**
+     *
+     * @param s
+     * @param t
+     * @param <T>
+     * @return
+     */
+    public static <T> T fromJson(String s, Type t) {
+        return gson.fromJson(s, t);
+    }
 
     /**
      * 横向递归遍历数据并填充
@@ -129,22 +148,38 @@ public final class Utils {
         }
     }
 
+    /**
+     * 将菜单集合转换成树状结构的数据
+     *
+     * @param trees
+     * @param sysButtonMapper
+     * @return
+     */
+    public static List<SysMenuDto> menuListToTree(List<SysMenu> trees, SysButtonMapper sysButtonMapper) {
+        return menuListToTree(trees, sysButtonMapper, null);
+    }
 
     /**
      * 将菜单集合转换成树状结构的数据
      *
      * @param trees
+     * @param sysButtonMapper
+     * @param roleId
      * @return
      */
-    public static List<SysMenuDto> menuListToTree(List<SysMenu> trees, SysButtonMapper sysButtonMapper) {
-        List<SysMenuDto> copyMenus = Utils.gson(trees, new TypeToken<List<SysMenuDto>>() {
+    public static List<SysMenuDto> menuListToTree(List<SysMenu> trees, SysButtonMapper sysButtonMapper, String roleId) {
+        List<SysMenuDto> copyMenus = Utils.fromJson(trees, new TypeToken<List<SysMenuDto>>() {
         }.getType());
         List<SysMenuDto> rootTrees = Lists.newArrayList();
         for (SysMenuDto tree : copyMenus) {
             if (null == tree.getPid() || 0 == tree.getPid()) {
                 rootTrees.add(tree);
             }
-            tree.setButtons(sysButtonMapper.selectByMenuId(tree.getId()));
+            if (StringUtils.isNotBlank(roleId)) {
+                tree.setButtons(sysButtonMapper.selectByMenuIdAndRoleId(tree.getId(), roleId));
+            } else {
+                tree.setButtons(sysButtonMapper.selectByMenuId(tree.getId()));
+            }
             tree.setButton(tree.getIsDel());
             tree.setIsDel(null);
             for (SysMenuDto t : copyMenus) {
