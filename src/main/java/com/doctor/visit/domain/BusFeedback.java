@@ -26,6 +26,10 @@ public class BusFeedback implements Serializable {
     private String content;
 
     /**
+     * 状态：0待回复，1已回复
+     */
+    private String state;
+    /**
      * 创建者id
      */
     @Column(name = "create_by")
@@ -72,6 +76,23 @@ public class BusFeedback implements Serializable {
     private String isDel;
 
     private static final long serialVersionUID = 1L;
+
+
+    /**
+     * 状态：0待回复，1已回复
+     * @return
+     */
+    public String getState() {
+        return state;
+    }
+
+    /**
+     * 状态：0待回复，1已回复
+     * @param state
+     */
+    public void setState(String state) {
+        this.state = state;
+    }
 
     /**
      * @return id
