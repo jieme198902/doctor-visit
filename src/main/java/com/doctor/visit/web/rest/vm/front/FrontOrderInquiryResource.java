@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusOrderInquiry;
-import com.doctor.visit.service.OrderInquiryService;
+import com.doctor.visit.service.impl.OrderInquiryServiceImpl;
 import com.doctor.visit.web.rest.util.Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,9 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 @Api("微信 下问诊订单")
 @RequestMapping(Constants.API_BASE_FRONT + "/order/inquiry")
 public class FrontOrderInquiryResource {
-    private final OrderInquiryService orderInquiryService;
+    private final OrderInquiryServiceImpl orderInquiryService;
 
-    public FrontOrderInquiryResource(OrderInquiryService orderInquiryService) {
+    public FrontOrderInquiryResource(OrderInquiryServiceImpl orderInquiryService) {
         this.orderInquiryService = orderInquiryService;
     }
 

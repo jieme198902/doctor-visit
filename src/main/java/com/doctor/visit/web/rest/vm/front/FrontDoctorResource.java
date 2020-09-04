@@ -4,7 +4,7 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusDoctor;
 import com.doctor.visit.domain.BusHospital;
 import com.doctor.visit.domain.BusRelationUserDoctor;
-import com.doctor.visit.service.DoctorService;
+import com.doctor.visit.service.impl.DoctorServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,9 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping(Constants.API_BASE_FRONT + "/doctor")
 public class FrontDoctorResource {
-    private final DoctorService doctorService;
+    private final DoctorServiceImpl doctorService;
 
-    public FrontDoctorResource(DoctorService doctorService) {
+    public FrontDoctorResource(DoctorServiceImpl doctorService) {
         this.doctorService = doctorService;
     }
 

@@ -3,7 +3,7 @@ package com.doctor.visit.web.rest.vm.sys;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArticle;
 import com.doctor.visit.domain.BusArticleClass;
-import com.doctor.visit.service.ArticleService;
+import com.doctor.visit.service.impl.ArticleServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,9 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_SYS + "/article")
 public class SysArticleResource {
 
-    private final ArticleService articleService;
+    private final ArticleServiceImpl articleService;
 
-    public SysArticleResource(ArticleService articleService) {
+    public SysArticleResource(ArticleServiceImpl articleService) {
         this.articleService = articleService;
     }
 

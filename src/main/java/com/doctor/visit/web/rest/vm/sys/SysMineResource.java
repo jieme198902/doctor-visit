@@ -1,7 +1,7 @@
 package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.service.MineService;
+import com.doctor.visit.service.impl.MineServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(Constants.API_BASE_SYS + "/mine")
 public class SysMineResource {
-    private final MineService mineService;
+    private final MineServiceImpl mineService;
 
-    public SysMineResource(MineService mineService) {
+    public SysMineResource(MineServiceImpl mineService) {
         this.mineService = mineService;
     }
 

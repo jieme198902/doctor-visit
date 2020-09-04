@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusFile;
@@ -7,6 +7,8 @@ import com.doctor.visit.domain.BusOrderInquiry;
 import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.dto.BusOrderInquiryDto;
 import com.doctor.visit.repository.*;
+import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -28,7 +30,7 @@ import java.util.List;
  * 问诊订单
  */
 @Service
-public class OrderInquiryService {
+public class OrderInquiryServiceImpl {
 
     @Value("${custom.requestPath}")
     private String requestPath;
@@ -44,7 +46,7 @@ public class OrderInquiryService {
     private final BusGoodsInquiryMapper busGoodsInquiryMapper;
     private final BusOrderChangeRecordMapper busOrderChangeRecordMapper;
 
-    public OrderInquiryService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusOrderChangeRecordMapper busOrderChangeRecordMapper) {
+    public OrderInquiryServiceImpl(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusOrderChangeRecordMapper busOrderChangeRecordMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busFileMapper = busFileMapper;

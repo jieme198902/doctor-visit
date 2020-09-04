@@ -1,10 +1,11 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusGoodsSpecification;
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusGoodsSpecificationMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -21,13 +22,13 @@ import java.util.Optional;
  * 商品规格 逻辑
  */
 @Service
-public class GoodsSpecificationService {
+public class GoodsSpecificationServiceImpl {
 
     private final CommonService commonService;
 
     private final BusGoodsSpecificationMapper busGoodsSpecificationMapper;
 
-    public GoodsSpecificationService(CommonService commonService, BusGoodsSpecificationMapper busGoodsSpecificationMapper) {
+    public GoodsSpecificationServiceImpl(CommonService commonService, BusGoodsSpecificationMapper busGoodsSpecificationMapper) {
         this.commonService = commonService;
         this.busGoodsSpecificationMapper = busGoodsSpecificationMapper;
     }

@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusGoodsSpecification;
@@ -8,6 +8,7 @@ import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusSelfDiagnoseMapper;
 import com.doctor.visit.repository.BusSelfDiagnosisMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -26,13 +27,13 @@ import java.util.Optional;
  * 自诊
  */
 @Service
-public class SelfDiagnosticsService {
+public class SelfDiagnosticsServiceImpl {
     private final CommonService commonService;
     //
     private final BusSelfDiagnoseMapper busSelfDiagnoseMapper;
     private final BusSelfDiagnosisMapper busSelfDiagnosisMapper;
 
-    public SelfDiagnosticsService(CommonService commonService, BusSelfDiagnoseMapper busSelfDiagnoseMapper, BusSelfDiagnosisMapper busSelfDiagnosisMapper) {
+    public SelfDiagnosticsServiceImpl(CommonService commonService, BusSelfDiagnoseMapper busSelfDiagnoseMapper, BusSelfDiagnosisMapper busSelfDiagnosisMapper) {
         this.commonService = commonService;
         this.busSelfDiagnoseMapper = busSelfDiagnoseMapper;
         this.busSelfDiagnosisMapper = busSelfDiagnosisMapper;

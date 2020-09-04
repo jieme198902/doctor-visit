@@ -2,8 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusDict;
-import com.doctor.visit.domain.BusHospital;
-import com.doctor.visit.service.DictService;
+import com.doctor.visit.service.impl.DictServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_SYS + "/dict")
 public class SysDictResource {
 
-    private final DictService dictService;
+    private final DictServiceImpl dictService;
 
-    public SysDictResource(DictService dictService) {
+    public SysDictResource(DictServiceImpl dictService) {
         this.dictService = dictService;
     }
 

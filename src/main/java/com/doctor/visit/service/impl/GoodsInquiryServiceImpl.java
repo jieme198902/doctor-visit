@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusDoctor;
@@ -7,6 +7,7 @@ import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusDoctorMapper;
 import com.doctor.visit.repository.BusGoodsInquiryMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -25,13 +26,13 @@ import java.util.Optional;
  * 问诊的商品
  */
 @Service
-public class GoodsInquiryService {
+public class GoodsInquiryServiceImpl {
     private final CommonService commonService;
 
     private final BusDoctorMapper busDoctorMapper;
     private final BusGoodsInquiryMapper busGoodsInquiryMapper;
 
-    public GoodsInquiryService(CommonService commonService, BusDoctorMapper busDoctorMapper, BusGoodsInquiryMapper busGoodsInquiryMapper) {
+    public GoodsInquiryServiceImpl(CommonService commonService, BusDoctorMapper busDoctorMapper, BusGoodsInquiryMapper busGoodsInquiryMapper) {
         this.commonService = commonService;
         this.busDoctorMapper = busDoctorMapper;
         this.busGoodsInquiryMapper = busGoodsInquiryMapper;

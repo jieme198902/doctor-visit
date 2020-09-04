@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
@@ -7,6 +7,8 @@ import com.doctor.visit.repository.BusAreaMapper;
 import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusHospitalMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -31,7 +33,7 @@ import java.util.Optional;
  * @date 2020-06-29
  */
 @Service
-public class HospitalService {
+public class HospitalServiceImpl {
     private final CommonService commonService;
     private final UploadService uploadService;
     //
@@ -41,7 +43,7 @@ public class HospitalService {
     @Value("${custom.requestPath}")
     private String requestPath;
 
-    public HospitalService(CommonService commonService, UploadService uploadService, BusHospitalMapper busHospitalMapper, BusAreaMapper busAreaMapper, BusFileMapper busFileMapper) {
+    public HospitalServiceImpl(CommonService commonService, UploadService uploadService, BusHospitalMapper busHospitalMapper, BusAreaMapper busAreaMapper, BusFileMapper busFileMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busHospitalMapper = busHospitalMapper;

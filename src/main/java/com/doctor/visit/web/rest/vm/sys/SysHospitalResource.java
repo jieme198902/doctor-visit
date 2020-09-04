@@ -2,8 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusHospital;
-import com.doctor.visit.domain.BusHospital;
-import com.doctor.visit.service.HospitalService;
+import com.doctor.visit.service.impl.HospitalServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,10 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_SYS + "/hospital")
 public class SysHospitalResource {
 
-    private final HospitalService hospitalService;
+    private final HospitalServiceImpl hospitalService;
 
 
-    public SysHospitalResource(HospitalService hospitalService) {
+    public SysHospitalResource(HospitalServiceImpl hospitalService) {
         this.hospitalService = hospitalService;
     }
 

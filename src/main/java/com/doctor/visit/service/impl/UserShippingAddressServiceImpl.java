@@ -1,10 +1,11 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusPatient;
 import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.BusUserShippingAddress;
 import com.doctor.visit.repository.BusUserShippingAddressMapper;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -23,11 +24,11 @@ import java.util.List;
  * 用户地址管理
  */
 @Service
-public class UserShippingAddressService {
+public class UserShippingAddressServiceImpl {
     private final CommonService commonService;
     private final BusUserShippingAddressMapper busUserShippingAddressMapper;
 
-    public UserShippingAddressService(CommonService commonService, BusUserShippingAddressMapper busUserShippingAddressMapper) {
+    public UserShippingAddressServiceImpl(CommonService commonService, BusUserShippingAddressMapper busUserShippingAddressMapper) {
         this.commonService = commonService;
         this.busUserShippingAddressMapper = busUserShippingAddressMapper;
     }

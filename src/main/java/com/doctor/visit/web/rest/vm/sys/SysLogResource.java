@@ -1,10 +1,8 @@
 package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusArea;
 import com.doctor.visit.domain.BusLog;
-import com.doctor.visit.service.AreaService;
-import com.doctor.visit.service.SysLogService;
+import com.doctor.visit.service.impl.SysLogServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(Constants.API_BASE_SYS + "/log")
 public class SysLogResource {
 
-    private final SysLogService sysLogService;
+    private final SysLogServiceImpl sysLogService;
 
-    public SysLogResource(SysLogService sysLogService) {
+    public SysLogResource(SysLogServiceImpl sysLogService) {
         this.sysLogService = sysLogService;
     }
 

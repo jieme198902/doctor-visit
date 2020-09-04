@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.domain.SysRole;
@@ -22,12 +22,12 @@ import java.util.List;
  * @author kuanwang
  */
 @Service
-public class JhiUserService {
+public class JhiUserServiceImpl {
 
     private final JhiUserMapper jhiUserMapper;
     private final SysRoleMapper sysRoleMapper;
 
-    public JhiUserService(JhiUserMapper jhiUserMapper, SysRoleMapper sysRoleMapper) {
+    public JhiUserServiceImpl(JhiUserMapper jhiUserMapper, SysRoleMapper sysRoleMapper) {
         this.jhiUserMapper = jhiUserMapper;
         this.sysRoleMapper = sysRoleMapper;
     }

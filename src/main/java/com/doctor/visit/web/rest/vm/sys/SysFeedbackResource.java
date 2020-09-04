@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusFeedback;
-import com.doctor.visit.service.FeedbackService;
+import com.doctor.visit.service.impl.FeedbackServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(Constants.API_BASE_SYS + "/feedback")
 public class SysFeedbackResource {
 
-    private final FeedbackService feedbackService;
+    private final FeedbackServiceImpl feedbackService;
 
-    public SysFeedbackResource(FeedbackService feedbackService) {
+    public SysFeedbackResource(FeedbackServiceImpl feedbackService) {
         this.feedbackService = feedbackService;
     }
 

@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusPatient;
@@ -6,6 +6,7 @@ import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.BusUserShoppingCart;
 import com.doctor.visit.domain.BusUserShoppingCart;
 import com.doctor.visit.repository.BusUserShoppingCartMapper;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -23,11 +24,11 @@ import java.util.List;
  * 购物车
  */
 @Service
-public class UserShoppingCartService {
+public class UserShoppingCartServiceImpl {
     private final CommonService commonService;
     private final BusUserShoppingCartMapper busUserShoppingCartMapper;
 
-    public UserShoppingCartService(CommonService commonService, BusUserShoppingCartMapper busUserShoppingCartMapper) {
+    public UserShoppingCartServiceImpl(CommonService commonService, BusUserShoppingCartMapper busUserShoppingCartMapper) {
         this.commonService = commonService;
         this.busUserShoppingCartMapper = busUserShoppingCartMapper;
     }

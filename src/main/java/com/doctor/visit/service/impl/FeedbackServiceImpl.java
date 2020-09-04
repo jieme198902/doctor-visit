@@ -1,8 +1,9 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.BusFeedbackMapper;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -19,11 +20,11 @@ import java.util.List;
  * 意见反馈
  */
 @Service
-public class FeedbackService {
+public class FeedbackServiceImpl {
     private final CommonService commonService;
     private final BusFeedbackMapper busFeedbackMapper;
 
-    public FeedbackService(CommonService commonService, BusFeedbackMapper busFeedbackMapper) {
+    public FeedbackServiceImpl(CommonService commonService, BusFeedbackMapper busFeedbackMapper) {
         this.commonService = commonService;
         this.busFeedbackMapper = busFeedbackMapper;
     }

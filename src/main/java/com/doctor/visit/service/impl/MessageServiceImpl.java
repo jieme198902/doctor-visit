@@ -1,9 +1,10 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -22,14 +23,14 @@ import java.util.Optional;
  * @date 2020-06-29
  */
 @Service
-public class MessageService {
+public class MessageServiceImpl {
 
     private final CommonService commonService;
     //
     private final BusMessageMapper busMessageMapper;
     private final BusRelationMessageUserMapper busRelationMessageUserMapper;
 
-    public MessageService(CommonService commonService, BusMessageMapper busMessageMapper, BusRelationMessageUserMapper busRelationMessageUserMapper) {
+    public MessageServiceImpl(CommonService commonService, BusMessageMapper busMessageMapper, BusRelationMessageUserMapper busRelationMessageUserMapper) {
         this.commonService = commonService;
         this.busMessageMapper = busMessageMapper;
         this.busRelationMessageUserMapper = busRelationMessageUserMapper;

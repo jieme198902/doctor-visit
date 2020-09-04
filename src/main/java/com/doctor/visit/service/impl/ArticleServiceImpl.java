@@ -1,10 +1,12 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusArticleDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -30,7 +32,7 @@ import java.util.Optional;
  * @date 2020-06-29
  */
 @Service
-public class ArticleService {
+public class ArticleServiceImpl {
 
     @Value("${custom.rootPath}")
     private String rootPath;
@@ -47,7 +49,7 @@ public class ArticleService {
     private final BusRelationUserArticleMapper busRelationUserArticleMapper;
     private final BusRelationUserArticleShareMapper busRelationUserArticleShareMapper;
 
-    public ArticleService(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusRelationUserArticleMapper busRelationUserArticleMapper, BusRelationUserArticleShareMapper busRelationUserArticleShareMapper) {
+    public ArticleServiceImpl(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusRelationUserArticleMapper busRelationUserArticleMapper, BusRelationUserArticleShareMapper busRelationUserArticleShareMapper) {
         this.busArticleClassMapper = busArticleClassMapper;
         this.busArticleMapper = busArticleMapper;
         this.commonService = commonService;

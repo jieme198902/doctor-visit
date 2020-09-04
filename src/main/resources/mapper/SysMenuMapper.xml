@@ -42,6 +42,27 @@
             role_id =#{roleId} AND m.id is not null AND m.is_del = '0'
     </select>
 
+    <select id="selectMenuByAccount" resultMap="BaseResultMap">
+       SELECT
+            (
+            SELECT
+                GROUP_CONCAT( b.code )
+            FROM
+                sys_relation_menu_button rmb
+                LEFT JOIN sys_button b ON rmb.button_id = b.id
+            WHERE
+                rmb.menu_id = m.id
+            ) AS is_del,
+            m.*
+        FROM
+            sys_permission p
+            LEFT JOIN sys_menu m ON p.menu_id = m.id
+            LEFT JOIN sys_relation_user_role role ON p.role_id = role.role_id
+            LEFT JOIN jhi_user u ON u.id = role.user_id
+        WHERE
+            u.login = #{account} AND m.id is not null AND m.is_del = '0'
+    </select>
+
 
     <select id="selectMenu" parameterType="com.doctor.visit.domain.SysMenu" resultMap="BaseResultMap">
         SELECT

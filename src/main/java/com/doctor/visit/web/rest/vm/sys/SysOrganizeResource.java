@@ -18,12 +18,12 @@ import javax.servlet.http.HttpServletRequest;
  * 权鉴接口
  */
 @RestController
-@Api("权鉴接口")
-@RequestMapping(Constants.API_BASE_SYS + "/auth")
-public class SysAuthResource {
+@Api("组织架构接口")
+@RequestMapping(Constants.API_BASE_SYS + "/organize")
+public class SysOrganizeResource {
     private final SysAuthServiceImpl sysAuthService;
 
-    public SysAuthResource(SysAuthServiceImpl sysAuthService) {
+    public SysOrganizeResource(SysAuthServiceImpl sysAuthService) {
         this.sysAuthService = sysAuthService;
     }
 

@@ -1,10 +1,11 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.SysMenuDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -22,9 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
-public class SysAuthService {
+public class SysAuthServiceImpl {
 
-    private Logger logger = LoggerFactory.getLogger(SysAuthService.class);
+    private Logger logger = LoggerFactory.getLogger(SysAuthServiceImpl.class);
 
     private final CommonService commonService;
     //
@@ -35,7 +36,7 @@ public class SysAuthService {
     private final SysRelationUserRoleMapper sysRelationUserRoleMapper;
     private final SysRelationMenuButtonMapper sysRelationMenuButtonMapper;
 
-    public SysAuthService(CommonService commonService, SysRoleMapper sysRoleMapper, SysMenuMapper sysMenuMapper, SysButtonMapper sysButtonMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper, SysRelationMenuButtonMapper sysRelationMenuButtonMapper) {
+    public SysAuthServiceImpl(CommonService commonService, SysRoleMapper sysRoleMapper, SysMenuMapper sysMenuMapper, SysButtonMapper sysButtonMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper, SysRelationMenuButtonMapper sysRelationMenuButtonMapper) {
         this.commonService = commonService;
         this.sysRoleMapper = sysRoleMapper;
         this.sysMenuMapper = sysMenuMapper;
@@ -484,6 +485,39 @@ public class SysAuthService {
             return ComResponse.ok();
         } else {
             return ComResponse.failUnauthorized();
+        }
+    }
+
+
+    /**
+     * 判断是否有权限访问
+     *
+     * @return
+     */
+    public boolean hasPermission(HttpServletRequest request) {
+        //
+        Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
+        if (usernameOptional.isPresent()) {
+            String uri = request.getRequestURI();
+            String menuCode = request.getParameter("menuCode");
+            String buttonCode = request.getParameter("menuCode");
+
+            //菜单可以判断
+            //获取用户的菜单
+            List<SysMenu> sysMenus = sysMenuMapper.selectMenuByAccount(usernameOptional.get());
+            boolean hasMenuPermission = false;
+            for (SysMenu sysMenu:sysMenus){
+                if(sysMenu.getCode().equalsIgnoreCase(menuCode)){
+                    hasMenuPermission = true;
+                    break;
+                }
+            }
+            //按钮怎么判断？
+
+
+            return true;
+        } else {
+            return false;
         }
     }
 }

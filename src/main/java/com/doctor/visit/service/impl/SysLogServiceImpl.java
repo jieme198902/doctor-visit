@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.domain.BusLog;
 import com.doctor.visit.repository.BusLogMapper;
@@ -15,11 +15,11 @@ import java.util.List;
  * 日志
  */
 @Service
-public class SysLogService {
+public class SysLogServiceImpl {
 
     private final BusLogMapper busLogMapper;
 
-    public SysLogService(BusLogMapper busLogMapper) {
+    public SysLogServiceImpl(BusLogMapper busLogMapper) {
         this.busLogMapper = busLogMapper;
     }
 

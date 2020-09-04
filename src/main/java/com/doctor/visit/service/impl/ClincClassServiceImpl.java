@@ -1,10 +1,11 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusClincClass;
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusClincClassMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -26,12 +27,12 @@ import java.util.Optional;
  * @date 2020-06-29
  */
 @Service
-public class ClincClassService {
+public class ClincClassServiceImpl {
     private final CommonService commonService;
     //
     private final BusClincClassMapper busClincClassMapper;
 
-    public ClincClassService(CommonService commonService, BusClincClassMapper busClincClassMapper) {
+    public ClincClassServiceImpl(CommonService commonService, BusClincClassMapper busClincClassMapper) {
         this.commonService = commonService;
         this.busClincClassMapper = busClincClassMapper;
     }

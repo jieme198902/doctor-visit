@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArea;
@@ -19,11 +19,11 @@ import java.util.concurrent.TimeUnit;
  * 地区管理
  */
 @Service
-public class AreaService {
+public class AreaServiceImpl {
 
     private final BusAreaMapper busAreaMapper;
 
-    public AreaService(BusAreaMapper busAreaMapper) {
+    public AreaServiceImpl(BusAreaMapper busAreaMapper) {
         this.busAreaMapper = busAreaMapper;
     }
 

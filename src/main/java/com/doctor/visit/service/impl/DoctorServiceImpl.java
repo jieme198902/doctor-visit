@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
@@ -7,6 +7,8 @@ import com.doctor.visit.domain.dto.BusDoctorHospitalDto;
 import com.doctor.visit.domain.dto.BusHospitalDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -29,7 +31,7 @@ import java.util.Optional;
  * 医生的业务层
  */
 @Service
-public class DoctorService {
+public class DoctorServiceImpl {
 
     private final CommonService commonService;
     private final UploadService uploadService;
@@ -44,7 +46,7 @@ public class DoctorService {
     @Value("${custom.requestPath}")
     private String requestPath;
 
-    public DoctorService(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusHospitalMapper busHospitalMapper, BusClincClassMapper busClincClassMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusRelationUserDoctorMapper busRelationUserDoctorMapper) {
+    public DoctorServiceImpl(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusHospitalMapper busHospitalMapper, BusClincClassMapper busClincClassMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusRelationUserDoctorMapper busRelationUserDoctorMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busFileMapper = busFileMapper;

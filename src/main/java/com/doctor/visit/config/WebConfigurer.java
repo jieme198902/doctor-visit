@@ -1,12 +1,15 @@
 package com.doctor.visit.config;
 
+import com.doctor.visit.config.filter.AuthFilter;
 import com.doctor.visit.security.jwt.TokenProvider;
+import com.doctor.visit.service.impl.SysAuthServiceImpl;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +31,10 @@ public class WebConfigurer implements ServletContextInitializer {
     private final Environment env;
 
     private final JHipsterProperties jHipsterProperties;
+
+    @Autowired
+    private SysAuthServiceImpl sysAuthService;
+
     @Autowired
     private TokenProvider tokenProvider;
 
@@ -65,18 +72,19 @@ public class WebConfigurer implements ServletContextInitializer {
         return new CorsFilter(source);
     }
 
-//    /**
-//     * 自定义过滤器
-//     *
-//     * @return
-//     */
-//    @Bean
-//    public FilterRegistrationBean filterRegistrationBean() {
-//        FilterRegistrationBean bean = new FilterRegistrationBean();
-//        bean.setFilter(new UDUserJWTFilter(excludeLogin, tokenProvider));
-//        bean.addUrlPatterns(Constants.API_BASE_FRONT+"/*");
-//        bean.setOrder(2);
-//        return bean;
-//    }
+
+    /**
+     * 权限过滤器
+     *
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean<AuthFilter> filterRegistrationBean() {
+        FilterRegistrationBean<AuthFilter> bean = new FilterRegistrationBean<>();
+        bean.setFilter(new AuthFilter(sysAuthService));
+        bean.addUrlPatterns(Constants.API_BASE_SYS + "/*");
+        bean.setOrder(2);
+        return bean;
+    }
 
 }

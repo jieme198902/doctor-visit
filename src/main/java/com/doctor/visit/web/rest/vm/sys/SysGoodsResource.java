@@ -5,8 +5,8 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusEvaluate;
 import com.doctor.visit.domain.BusGoods;
 import com.doctor.visit.domain.BusGoodsClass;
-import com.doctor.visit.service.EvaluateService;
-import com.doctor.visit.service.GoodsService;
+import com.doctor.visit.service.impl.EvaluateServiceImpl;
+import com.doctor.visit.service.impl.GoodsServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -28,11 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(Constants.API_BASE_SYS + "/goods")
 public class SysGoodsResource {
 
-    private final GoodsService goodsService;
-    private final EvaluateService evaluateService;
+    private final GoodsServiceImpl goodsService;
+    private final EvaluateServiceImpl evaluateService;
 
 
-    public SysGoodsResource(GoodsService goodsService, EvaluateService evaluateService) {
+    public SysGoodsResource(GoodsServiceImpl goodsService, EvaluateServiceImpl evaluateService) {
         this.goodsService = goodsService;
         this.evaluateService = evaluateService;
     }

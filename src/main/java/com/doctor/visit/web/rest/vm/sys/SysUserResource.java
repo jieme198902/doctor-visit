@@ -2,9 +2,9 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
-import com.doctor.visit.service.FeedbackService;
-import com.doctor.visit.service.JhiUserService;
-import com.doctor.visit.service.UserService;
+import com.doctor.visit.service.impl.FeedbackServiceImpl;
+import com.doctor.visit.service.impl.JhiUserServiceImpl;
+import com.doctor.visit.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(Constants.API_BASE_SYS + "/user")
 public class SysUserResource {
 
-    private final FeedbackService feedbackService;
-    private final UserService userService;
-    private final JhiUserService jhiUserService;
+    private final FeedbackServiceImpl feedbackService;
+    private final UserServiceImpl userService;
+    private final JhiUserServiceImpl jhiUserService;
 
-    public SysUserResource(FeedbackService feedbackService, UserService userService, JhiUserService jhiUserService) {
+    public SysUserResource(FeedbackServiceImpl feedbackService, UserServiceImpl userService, JhiUserServiceImpl jhiUserService) {
         this.feedbackService = feedbackService;
         this.userService = userService;
         this.jhiUserService = jhiUserService;

@@ -3,7 +3,7 @@ package com.doctor.visit.web.rest.vm.sys;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusSelfDiagnose;
 import com.doctor.visit.domain.BusSelfDiagnosis;
-import com.doctor.visit.service.SelfDiagnosticsService;
+import com.doctor.visit.service.impl.SelfDiagnosticsServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping(Constants.API_BASE_SYS + "/self/diagnostics")
 public class SysSelfDiagnosticsResource {
-    private final SelfDiagnosticsService selfDiagnosticsService;
+    private final SelfDiagnosticsServiceImpl selfDiagnosticsService;
 
-    public SysSelfDiagnosticsResource(SelfDiagnosticsService selfDiagnosticsService) {
+    public SysSelfDiagnosticsResource(SelfDiagnosticsServiceImpl selfDiagnosticsService) {
         this.selfDiagnosticsService = selfDiagnosticsService;
     }
 

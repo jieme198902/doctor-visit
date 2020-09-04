@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusClincClass;
-import com.doctor.visit.service.ClincClassService;
+import com.doctor.visit.service.impl.ClincClassServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_SYS + "/clincClass")
 public class SysClincClassResource {
 
-    private final ClincClassService clincClassService;
+    private final ClincClassServiceImpl clincClassService;
 
-    public SysClincClassResource(ClincClassService clincClassService) {
+    public SysClincClassResource(ClincClassServiceImpl clincClassService) {
         this.clincClassService = clincClassService;
     }
 

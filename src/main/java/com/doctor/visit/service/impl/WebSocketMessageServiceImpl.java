@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusSocketMessage;
@@ -22,12 +22,12 @@ import java.util.List;
  */
 @Service
 @EnableAsync
-public class WebSocketMessageService {
+public class WebSocketMessageServiceImpl {
 
     private final BusSocketMessageMapper busSocketMessageMapper;
 
 
-    public WebSocketMessageService(BusSocketMessageMapper busSocketMessageMapper) {
+    public WebSocketMessageServiceImpl(BusSocketMessageMapper busSocketMessageMapper) {
         this.busSocketMessageMapper = busSocketMessageMapper;
     }
 

@@ -5,7 +5,7 @@ import com.doctor.visit.domain.BusArticle;
 import com.doctor.visit.domain.BusArticleClass;
 import com.doctor.visit.domain.BusRelationUserArticle;
 import com.doctor.visit.domain.BusRelationUserArticleShare;
-import com.doctor.visit.service.ArticleService;
+import com.doctor.visit.service.impl.ArticleServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,9 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping(Constants.API_BASE_FRONT + "/article")
 public class FrontArticleResource {
-    private final ArticleService articleService;
+    private final ArticleServiceImpl articleService;
 
-    public FrontArticleResource(ArticleService articleService) {
+    public FrontArticleResource(ArticleServiceImpl articleService) {
         this.articleService = articleService;
     }
 

@@ -16,6 +16,13 @@ public interface SysMenuMapper extends CommMapper<SysMenu> {
     List<SysMenu> selectMenuByRoleId(@Param("roleId") Long roleId);
 
     /**
+     * 根据用户登录名 获取该角色的菜单列表
+     * @param account
+     * @return
+     */
+    List<SysMenu> selectMenuByAccount(@Param("account") String account);
+
+    /**
      *
      * @param sysMenu
      * @return

@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArticle;
@@ -18,12 +18,12 @@ import java.util.List;
  * 评价表
  */
 @Service
-public class EvaluateService {
+public class EvaluateServiceImpl {
 
     //
     private final BusEvaluateMapper busEvaluateMapper;
 
-    public EvaluateService(BusEvaluateMapper busEvaluateMapper) {
+    public EvaluateServiceImpl(BusEvaluateMapper busEvaluateMapper) {
         this.busEvaluateMapper = busEvaluateMapper;
     }
 

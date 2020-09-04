@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusHospital;
@@ -7,6 +7,7 @@ import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusPatientMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -25,12 +26,12 @@ import java.util.List;
  * 患者信息 业务层
  */
 @Service
-public class PatientService {
+public class PatientServiceImpl {
 
     private final CommonService commonService;
     private final BusPatientMapper busPatientMapper;
 
-    public PatientService(CommonService commonService, BusPatientMapper busPatientMapper) {
+    public PatientServiceImpl(CommonService commonService, BusPatientMapper busPatientMapper) {
         this.commonService = commonService;
         this.busPatientMapper = busPatientMapper;
     }

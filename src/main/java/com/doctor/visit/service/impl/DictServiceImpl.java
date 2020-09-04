@@ -1,9 +1,10 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.BusDictMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -20,11 +21,11 @@ import java.util.Optional;
  * 字典管理
  */
 @Service
-public class DictService {
+public class DictServiceImpl {
     private final CommonService commonService;
     private final BusDictMapper busDictMapper;
 
-    public DictService(CommonService commonService, BusDictMapper busDictMapper) {
+    public DictServiceImpl(CommonService commonService, BusDictMapper busDictMapper) {
         this.commonService = commonService;
         this.busDictMapper = busDictMapper;
     }

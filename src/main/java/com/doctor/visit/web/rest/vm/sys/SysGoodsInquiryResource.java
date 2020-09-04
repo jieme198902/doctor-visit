@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusGoodsInquiry;
-import com.doctor.visit.service.GoodsInquiryService;
+import com.doctor.visit.service.impl.GoodsInquiryServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_SYS + "/goods/inquiry")
 public class SysGoodsInquiryResource {
 
-    private final GoodsInquiryService goodsInquiryService;
+    private final GoodsInquiryServiceImpl goodsInquiryService;
 
-    public SysGoodsInquiryResource(GoodsInquiryService goodsInquiryService) {
+    public SysGoodsInquiryResource(GoodsInquiryServiceImpl goodsInquiryService) {
         this.goodsInquiryService = goodsInquiryService;
     }
 

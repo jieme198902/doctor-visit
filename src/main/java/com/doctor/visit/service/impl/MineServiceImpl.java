@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
@@ -7,6 +7,8 @@ import com.doctor.visit.repository.BusFeedbackMapper;
 import com.doctor.visit.repository.BusUserMapper;
 import com.doctor.visit.repository.JhiPersistentAuditEventMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.UploadService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -22,7 +24,7 @@ import java.util.Optional;
  * 我的业务层
  */
 @Service
-public class MineService {
+public class MineServiceImpl {
 
     private final CommonService commonService;
     private final UploadService uploadService;
@@ -33,7 +35,7 @@ public class MineService {
     private final BusFeedbackMapper busFeedbackMapper;
     private final JhiPersistentAuditEventMapper jhiPersistentAuditEventMapper;
 
-    public MineService(CommonService commonService, UploadService uploadService, BusEvaluateMapper busEvaluateMapper, BusUserMapper busUserMapper, BusFeedbackMapper busFeedbackMapper, JhiPersistentAuditEventMapper jhiPersistentAuditEventMapper) {
+    public MineServiceImpl(CommonService commonService, UploadService uploadService, BusEvaluateMapper busEvaluateMapper, BusUserMapper busUserMapper, BusFeedbackMapper busFeedbackMapper, JhiPersistentAuditEventMapper jhiPersistentAuditEventMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busEvaluateMapper = busEvaluateMapper;

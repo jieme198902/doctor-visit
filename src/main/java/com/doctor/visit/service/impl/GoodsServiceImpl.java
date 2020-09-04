@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusGoods;
@@ -7,6 +7,7 @@ import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusGoodsClassMapper;
 import com.doctor.visit.repository.BusGoodsMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -26,7 +27,7 @@ import java.util.Optional;
  * 商品服务
  */
 @Service
-public class GoodsService {
+public class GoodsServiceImpl {
 
     @Value("${custom.rootPath}")
     private String rootPath;
@@ -37,7 +38,7 @@ public class GoodsService {
     private final BusGoodsMapper busGoodsMapper;
     private final BusGoodsClassMapper busGoodsClassMapper;
 
-    public GoodsService(CommonService commonService, BusGoodsClassMapper busGoodsClassMapper, BusGoodsMapper busGoodsMapper) {
+    public GoodsServiceImpl(CommonService commonService, BusGoodsClassMapper busGoodsClassMapper, BusGoodsMapper busGoodsMapper) {
         this.commonService = commonService;
         this.busGoodsClassMapper = busGoodsClassMapper;
         this.busGoodsMapper = busGoodsMapper;

@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
@@ -6,6 +6,8 @@ import com.doctor.visit.domain.dto.BusUserDto;
 import com.doctor.visit.domain.dto.SysMenuDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.UploadService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -33,9 +35,9 @@ import java.util.concurrent.TimeUnit;
  * 前端的用户 业务层
  */
 @Service
-public class UserService {
+public class UserServiceImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final CommonService commonService;
     private final UploadService uploadService;
@@ -51,7 +53,7 @@ public class UserService {
     //
     private Gson gson = new Gson();
 
-    public UserService(CommonService commonService, UploadService uploadService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper, SysMenuMapper sysMenuMapper, SysButtonMapper sysButtonMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper) {
+    public UserServiceImpl(CommonService commonService, UploadService uploadService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper, SysMenuMapper sysMenuMapper, SysButtonMapper sysButtonMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busUserMapper = busUserMapper;
