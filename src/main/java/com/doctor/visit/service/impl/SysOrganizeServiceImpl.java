@@ -104,6 +104,9 @@ public class SysOrganizeServiceImpl implements SysOrganizeService {
         if (StringUtils.isNotBlank(bus.getName())) {
             criteria.andLike("name", bus.getName() + "%");
         }
+        if(null!=bus.getEnabled()){
+            criteria.andEqualTo("enabled",bus.getEnabled());
+        }
         Page<SysJob> busList =  (Page<SysJob>) sysJobMapper.selectByExample(example);
 
         return ComResponse.ok(busList.getResult(), busList.getTotal());
