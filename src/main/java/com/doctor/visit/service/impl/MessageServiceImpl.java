@@ -4,7 +4,7 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -23,7 +23,7 @@ import java.util.Optional;
  * @date 2020-06-29
  */
 @Service
-public class MessageServiceImpl {
+public class MessageServiceImpl implements com.doctor.visit.service.MessageService {
 
     private final CommonService commonService;
     //
@@ -44,6 +44,7 @@ public class MessageServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse listMessage(BusMessage bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
@@ -57,6 +58,7 @@ public class MessageServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<BusMessage> insertOrUpdateMessage(BusMessage bus) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -86,6 +88,7 @@ public class MessageServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteMessage(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -108,6 +111,7 @@ public class MessageServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse deleteMyMessage(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -131,6 +135,7 @@ public class MessageServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusMessage>> listMyMessage(BusMessage bus, Pageable pageable) {
         if (null == bus.getCreateBy()) {
             return ComResponse.failBadRequest();

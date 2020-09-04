@@ -1,12 +1,10 @@
 package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusPatient;
 import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.BusUserShoppingCart;
-import com.doctor.visit.domain.BusUserShoppingCart;
 import com.doctor.visit.repository.BusUserShoppingCartMapper;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -24,7 +22,7 @@ import java.util.List;
  * 购物车
  */
 @Service
-public class UserShoppingCartServiceImpl {
+public class UserShoppingCartServiceImpl implements com.doctor.visit.service.UserShoppingCartService {
     private final CommonService commonService;
     private final BusUserShoppingCartMapper busUserShoppingCartMapper;
 
@@ -40,7 +38,8 @@ public class UserShoppingCartServiceImpl {
      * @param pageable
      * @return
      */
-    public ComResponse<List<BusUserShoppingCart>> listUserShoppingCart(BusUserShoppingCart bus, Pageable pageable,HttpServletRequest request) throws Exception {
+    @Override
+    public ComResponse<List<BusUserShoppingCart>> listUserShoppingCart(BusUserShoppingCart bus, Pageable pageable, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
             return ComResponse.failUnauthorized();
@@ -68,6 +67,7 @@ public class UserShoppingCartServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusUserShoppingCart> insertOrUpdateUserShoppingCart(BusUserShoppingCart bus, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
@@ -96,6 +96,7 @@ public class UserShoppingCartServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteUserShoppingCart(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

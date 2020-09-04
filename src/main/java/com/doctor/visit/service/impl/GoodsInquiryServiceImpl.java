@@ -7,7 +7,7 @@ import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusDoctorMapper;
 import com.doctor.visit.repository.BusGoodsInquiryMapper;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -26,7 +26,7 @@ import java.util.Optional;
  * 问诊的商品
  */
 @Service
-public class GoodsInquiryServiceImpl {
+public class GoodsInquiryServiceImpl implements com.doctor.visit.service.GoodsInquiryService {
     private final CommonService commonService;
 
     private final BusDoctorMapper busDoctorMapper;
@@ -45,6 +45,7 @@ public class GoodsInquiryServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusGoodsInquiry>> listGoodsInquiry(BusGoodsInquiry bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
 
@@ -66,6 +67,7 @@ public class GoodsInquiryServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusGoodsInquiry> insertOrUpdateGoodsInquiry(BusGoodsInquiry bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
 
@@ -115,6 +117,7 @@ public class GoodsInquiryServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteGoodsInquiry(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

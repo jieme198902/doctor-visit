@@ -1,6 +1,6 @@
 package com.doctor.visit.web.rest.vm;
 
-import com.doctor.visit.service.impl.WebSocketMessageServiceImpl;
+import com.doctor.visit.service.WebSocketMessageService;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -56,7 +56,7 @@ public class WebSocketServer {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
 
     @Autowired
-    private WebSocketMessageServiceImpl webSocketMessageService;
+    private WebSocketMessageService webSocketMessageService;
 
     /**
      * 当有新的连接进入时，对该方法进行回调 注入参数的类型:Session、HttpHeaders ...

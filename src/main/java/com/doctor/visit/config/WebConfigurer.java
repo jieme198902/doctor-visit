@@ -2,7 +2,7 @@ package com.doctor.visit.config;
 
 import com.doctor.visit.config.filter.AuthFilter;
 import com.doctor.visit.security.jwt.TokenProvider;
-import com.doctor.visit.service.impl.SysAuthServiceImpl;
+import com.doctor.visit.service.SysAuthService;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class WebConfigurer implements ServletContextInitializer {
     private final JHipsterProperties jHipsterProperties;
 
     @Autowired
-    private SysAuthServiceImpl sysAuthService;
+    private SysAuthService sysAuthService;
 
     @Autowired
     private TokenProvider tokenProvider;

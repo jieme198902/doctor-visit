@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusPatient;
-import com.doctor.visit.service.impl.PatientServiceImpl;
+import com.doctor.visit.service.PatientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_SYS + "/patient")
 public class SysPatientResource {
 
-    private final PatientServiceImpl patientService;
+    private final PatientService patientService;
 
-    public SysPatientResource(PatientServiceImpl patientService) {
+    public SysPatientResource(PatientService patientService) {
         this.patientService = patientService;
     }
 

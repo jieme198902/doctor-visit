@@ -6,8 +6,8 @@ import com.doctor.visit.domain.dto.BusUserDto;
 import com.doctor.visit.domain.dto.SysMenuDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
-import com.doctor.visit.service.UploadService;
+import com.doctor.visit.service.common.CommonService;
+import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * 前端的用户 业务层
  */
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements com.doctor.visit.service.UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -71,6 +71,7 @@ public class UserServiceImpl {
      * @param jsCode
      * @return
      */
+    @Override
     public ComResponse<BusUserDto> authenticate(String jsCode, HttpServletRequest httpServletRequest) throws Exception {
         if (StringUtils.isBlank(jsCode)) {
             return ComResponse.failBadRequest();
@@ -208,6 +209,7 @@ public class UserServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<List<SysMenuDto>> listSysUserMenu(SysPermission bus) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -249,6 +251,7 @@ public class UserServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusUser>> listBusUser(BusUser bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusUser.class);
@@ -271,6 +274,7 @@ public class UserServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> insertOrUpdateUserPullToBlacklist(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -293,6 +297,7 @@ public class UserServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> insertOrUpdateUserPushFromBlacklist(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -315,6 +320,7 @@ public class UserServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusFile> uploadFile(BusFile bus, HttpServletRequest request) throws Exception {
         if (StringUtils.isAnyBlank(bus.getBus(), bus.getFileType())) {
             return ComResponse.failBadRequest();

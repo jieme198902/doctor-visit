@@ -7,8 +7,8 @@ import com.doctor.visit.repository.BusFeedbackMapper;
 import com.doctor.visit.repository.BusUserMapper;
 import com.doctor.visit.repository.JhiPersistentAuditEventMapper;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
-import com.doctor.visit.service.UploadService;
+import com.doctor.visit.service.common.CommonService;
+import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -24,7 +24,7 @@ import java.util.Optional;
  * 我的业务层
  */
 @Service
-public class MineServiceImpl {
+public class MineServiceImpl implements com.doctor.visit.service.MineService {
 
     private final CommonService commonService;
     private final UploadService uploadService;
@@ -51,6 +51,7 @@ public class MineServiceImpl {
      * @return
      * @throws Exception
      */
+    @Override
     public ComResponse findMineCount(BusUser bus, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
@@ -68,6 +69,7 @@ public class MineServiceImpl {
      * @param request 这里需要处理文件
      * @return
      */
+    @Override
     public ComResponse<BusEvaluate> insertOrUpdateEvaluate(BusEvaluate bus, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
@@ -103,6 +105,7 @@ public class MineServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteEvaluate(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -124,6 +127,7 @@ public class MineServiceImpl {
      *
      * @return
      */
+    @Override
     public ComResponse<Map<String,Integer>> findStatisticsUser() {
         Integer allCount = busUserMapper.countAllUser(null);
         Integer thisMonthCount = busUserMapper.countAllUser("thisMonth");
@@ -142,6 +146,7 @@ public class MineServiceImpl {
      *
      * @return
      */
+    @Override
     public ComResponse<JhiPersistentAuditEvent> findLastLoginInfo() {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {

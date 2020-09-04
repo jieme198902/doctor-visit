@@ -1,6 +1,6 @@
 package com.doctor.visit.config.filter;
 
-import com.doctor.visit.service.impl.SysAuthServiceImpl;
+import com.doctor.visit.service.SysAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +14,9 @@ import java.io.IOException;
  */
 public class AuthFilter implements Filter {
 
-    private final SysAuthServiceImpl sysAuthService;
+    private final SysAuthService sysAuthService;
 
-    public AuthFilter(SysAuthServiceImpl sysAuthService) {
+    public AuthFilter(SysAuthService sysAuthService) {
         this.sysAuthService = sysAuthService;
     }
 

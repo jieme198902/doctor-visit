@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
-import com.doctor.visit.service.impl.SysAuthServiceImpl;
+import com.doctor.visit.service.SysAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 @Api("权鉴接口")
 @RequestMapping(Constants.API_BASE_SYS + "/auth")
 public class SysAuthResource {
-    private final SysAuthServiceImpl sysAuthService;
+    private final SysAuthService sysAuthService;
 
-    public SysAuthResource(SysAuthServiceImpl sysAuthService) {
+    public SysAuthResource(SysAuthService sysAuthService) {
         this.sysAuthService = sysAuthService;
     }
 

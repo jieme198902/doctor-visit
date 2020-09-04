@@ -3,7 +3,7 @@ package com.doctor.visit.web.rest.vm.front;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusSelfDiagnose;
 import com.doctor.visit.domain.BusSelfDiagnosis;
-import com.doctor.visit.service.impl.SelfDiagnosticsServiceImpl;
+import com.doctor.visit.service.SelfDiagnosticsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(Constants.API_BASE_FRONT + "/self/diagnostics")
 public class FrontSelfDiagnosticsResource {
-    private final SelfDiagnosticsServiceImpl selfDiagnosticsService;
+    private final SelfDiagnosticsService selfDiagnosticsService;
 
-    public FrontSelfDiagnosticsResource(SelfDiagnosticsServiceImpl selfDiagnosticsService) {
+    public FrontSelfDiagnosticsResource(SelfDiagnosticsService selfDiagnosticsService) {
         this.selfDiagnosticsService = selfDiagnosticsService;
     }
 

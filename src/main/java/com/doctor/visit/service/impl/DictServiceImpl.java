@@ -4,7 +4,7 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.BusDictMapper;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -21,7 +21,7 @@ import java.util.Optional;
  * 字典管理
  */
 @Service
-public class DictServiceImpl {
+public class DictServiceImpl implements com.doctor.visit.service.DictService {
     private final CommonService commonService;
     private final BusDictMapper busDictMapper;
 
@@ -37,6 +37,7 @@ public class DictServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusDict>> listDict(BusDict bus, Pageable pageable) {
         if (null != pageable) {
             PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
@@ -73,6 +74,7 @@ public class DictServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusDict> insertOrUpdateDict(BusDict bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -101,6 +103,7 @@ public class DictServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteDict(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

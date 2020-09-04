@@ -2,10 +2,10 @@ package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
-import com.doctor.visit.service.impl.MineServiceImpl;
-import com.doctor.visit.service.impl.PatientServiceImpl;
-import com.doctor.visit.service.impl.UserShippingAddressServiceImpl;
-import com.doctor.visit.service.impl.UserShoppingCartServiceImpl;
+import com.doctor.visit.service.MineService;
+import com.doctor.visit.service.PatientService;
+import com.doctor.visit.service.UserShippingAddressService;
+import com.doctor.visit.service.UserShoppingCartService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,12 +25,12 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_FRONT + "/mine")
 public class FrontMineResource {
 
-    private final MineServiceImpl mineService;
-    private final PatientServiceImpl patientService;
-    private final UserShippingAddressServiceImpl userShippingAddressService;
-    private final UserShoppingCartServiceImpl userShoppingCartService;
+    private final MineService mineService;
+    private final PatientService patientService;
+    private final UserShippingAddressService userShippingAddressService;
+    private final UserShoppingCartService userShoppingCartService;
 
-    public FrontMineResource(MineServiceImpl mineService, PatientServiceImpl patientService, UserShippingAddressServiceImpl userShippingAddressService, UserShoppingCartServiceImpl userShoppingCartService) {
+    public FrontMineResource(MineService mineService, PatientService patientService, UserShippingAddressService userShippingAddressService, UserShoppingCartService userShoppingCartService) {
         this.mineService = mineService;
         this.patientService = patientService;
         this.userShippingAddressService = userShippingAddressService;

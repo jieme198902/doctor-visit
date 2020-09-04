@@ -5,7 +5,7 @@ import com.doctor.visit.domain.BusGoodsSpecification;
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusGoodsSpecificationMapper;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -22,7 +22,7 @@ import java.util.Optional;
  * 商品规格 逻辑
  */
 @Service
-public class GoodsSpecificationServiceImpl {
+public class GoodsSpecificationServiceImpl implements com.doctor.visit.service.GoodsSpecificationService {
 
     private final CommonService commonService;
 
@@ -40,6 +40,7 @@ public class GoodsSpecificationServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusGoodsSpecification>> listGoodsSpecification(BusGoodsSpecification bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
@@ -55,6 +56,7 @@ public class GoodsSpecificationServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusGoodsSpecification> insertOrUpdateGoodsSpecification(BusGoodsSpecification bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -87,6 +89,7 @@ public class GoodsSpecificationServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteGoodsSpecification(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

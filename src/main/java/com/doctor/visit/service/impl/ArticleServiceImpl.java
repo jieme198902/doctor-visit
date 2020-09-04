@@ -5,8 +5,8 @@ import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusArticleDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
-import com.doctor.visit.service.UploadService;
+import com.doctor.visit.service.common.CommonService;
+import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -32,7 +32,7 @@ import java.util.Optional;
  * @date 2020-06-29
  */
 @Service
-public class ArticleServiceImpl {
+public class ArticleServiceImpl implements com.doctor.visit.service.ArticleService {
 
     @Value("${custom.rootPath}")
     private String rootPath;
@@ -67,6 +67,7 @@ public class ArticleServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse listArticleClass(BusArticleClass bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusArticleClass.class);
@@ -85,6 +86,7 @@ public class ArticleServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<BusArticleClass> insertOrUpdateArticleClass(BusArticleClass bus) {
         if (StringUtils.isBlank(bus.getName())) {
             return ComResponse.failBadRequest();
@@ -120,6 +122,7 @@ public class ArticleServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteArticleClass(String ids) {
         if (StringUtils.isBlank(ids)) {
             return ComResponse.fail("ids参数为空。");
@@ -146,6 +149,7 @@ public class ArticleServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusArticleDto>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusArticle> busList = null;
@@ -178,6 +182,7 @@ public class ArticleServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusArticleDto>> listFavArticle(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
         //获取用户的id
         bus.setCreateBy(Utils.getUserId(request));
@@ -200,6 +205,7 @@ public class ArticleServiceImpl {
      * @param request 处理封面
      * @return
      */
+    @Override
     public ComResponse<BusArticle> insertOrUpdateArticle(BusArticle bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -244,6 +250,7 @@ public class ArticleServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteArticle(String ids) {
         if (StringUtils.isBlank(ids)) {
             return ComResponse.fail("ids为空");
@@ -268,6 +275,7 @@ public class ArticleServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse insertOrUpdateRelationUserArticle(BusRelationUserArticle bus, HttpServletRequest request) throws Exception {
         //获取用户的id
         if (Utils.isBlank(bus.getArticleId())) {
@@ -299,6 +307,7 @@ public class ArticleServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse insertOrUpdateRelationUserArticleShare(BusRelationUserArticleShare bus, HttpServletRequest request) throws Exception {
         //获取用户的id
         if (Utils.isBlank(bus.getArticleId())) {
@@ -332,6 +341,7 @@ public class ArticleServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusArticleDto>> listArticleShare(BusArticle bus, Pageable pageable, HttpServletRequest request) throws Exception {
         //获取用户的id
         Long userId = Utils.getUserId(request);

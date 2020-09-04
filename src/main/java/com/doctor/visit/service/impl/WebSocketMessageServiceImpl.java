@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Service
 @EnableAsync
-public class WebSocketMessageServiceImpl {
+public class WebSocketMessageServiceImpl implements com.doctor.visit.service.WebSocketMessageService {
 
     private final BusSocketMessageMapper busSocketMessageMapper;
 
@@ -36,6 +36,7 @@ public class WebSocketMessageServiceImpl {
      *
      * @param bus
      */
+    @Override
     @Async
     public void saveSocketMessage(BusSocketMessage bus) {
         bus.setSendTime(new Date());
@@ -47,6 +48,7 @@ public class WebSocketMessageServiceImpl {
      *
      * @param bus
      */
+    @Override
     @Async
     public void deleteSocketMessage(BusSocketMessage bus) {
         bus.setIsDel(Constants.DELETE);
@@ -59,6 +61,7 @@ public class WebSocketMessageServiceImpl {
      * @param bus
      * @param pageable
      */
+    @Override
     public ComResponse<List<BusSocketMessage>> listSocketMessage(BusSocketMessage bus, Pageable pageable) {
         bus.setIsDel(Constants.EXIST);
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());

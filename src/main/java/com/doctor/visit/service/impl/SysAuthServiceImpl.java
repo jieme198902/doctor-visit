@@ -5,7 +5,7 @@ import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.SysMenuDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
-public class SysAuthServiceImpl {
+public class SysAuthServiceImpl implements com.doctor.visit.service.SysAuthService {
 
     private Logger logger = LoggerFactory.getLogger(SysAuthServiceImpl.class);
 
@@ -53,6 +53,7 @@ public class SysAuthServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<SysRole>> listRole(SysRole bus, Pageable pageable) {
         if (null != pageable) {
             PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize(), "sort_by desc");
@@ -78,6 +79,7 @@ public class SysAuthServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<SysRole> insertOrUpdateRole(SysRole bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -109,6 +111,7 @@ public class SysAuthServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteRole(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -133,6 +136,7 @@ public class SysAuthServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<SysMenu>> listMenu(SysMenu bus, Pageable pageable) {
         if (null != pageable) {
             PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
@@ -156,6 +160,7 @@ public class SysAuthServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<List<SysMenuDto>> listMenuTree(SysMenu bus) {
         SysMenu record = new SysMenu();
         record.setIsDel("0");
@@ -171,6 +176,7 @@ public class SysAuthServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<List<SysMenuDto>> listMenuTreeByState(SysMenu bus, String roleId) {
         if (StringUtils.isBlank(roleId)) {
             return ComResponse.failBadRequest();
@@ -189,6 +195,7 @@ public class SysAuthServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<List<String>> listMenuByRoleId(SysPermission bus) {
         ///
         if (null == bus.getRoleId()) {
@@ -215,6 +222,7 @@ public class SysAuthServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<SysMenu> insertOrUpdateMenu(SysMenu bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -246,6 +254,7 @@ public class SysAuthServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteMenu(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -267,6 +276,7 @@ public class SysAuthServiceImpl {
      * @param sysMenu
      * @return
      */
+    @Override
     public ComResponse<List<SysButton>> selectByMenu(SysMenu sysMenu) {
         if (null != sysMenu.getId()) {
             List<SysButton> sysButtons = sysButtonMapper.selectByMenuId(sysMenu.getId());
@@ -292,6 +302,7 @@ public class SysAuthServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<Integer> insertOrUpdatePermission(SysPermission bus, String menus, String permissions, HttpServletRequest request) {
         if (null == bus.getRoleId() || StringUtils.isBlank(menus) || StringUtils.isBlank(permissions)) {
             return ComResponse.failBadRequest();
@@ -349,6 +360,7 @@ public class SysAuthServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<String> insertOrUpdateUserRole(SysRelationUserRole bus, String roles, HttpServletRequest request) {
         if (null == bus.getUserId() || StringUtils.isBlank(roles)) {
             return ComResponse.failBadRequest();
@@ -380,6 +392,7 @@ public class SysAuthServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<SysButton>> listButton(SysButton bus, Pageable pageable) {
         if (null != pageable) {
             PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize(), "sort_by desc");
@@ -405,6 +418,7 @@ public class SysAuthServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<SysButton> insertOrUpdateButton(SysButton bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -436,6 +450,7 @@ public class SysAuthServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteButton(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -459,6 +474,7 @@ public class SysAuthServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<SysRelationMenuButton> insertOrUpdateRelationMenuButton(SysRelationMenuButton bus, String buttons, HttpServletRequest request) {
         if (null == bus.getMenuId() || StringUtils.isBlank(buttons)) {
             return ComResponse.failBadRequest();
@@ -494,6 +510,7 @@ public class SysAuthServiceImpl {
      *
      * @return
      */
+    @Override
     public boolean hasPermission(HttpServletRequest request) {
         //
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();

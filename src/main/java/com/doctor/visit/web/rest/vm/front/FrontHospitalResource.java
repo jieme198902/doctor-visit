@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusHospital;
-import com.doctor.visit.service.impl.HospitalServiceImpl;
+import com.doctor.visit.service.HospitalService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(Constants.API_BASE_FRONT + "/hospital")
 public class FrontHospitalResource {
 
-    private final HospitalServiceImpl hospitalService;
+    private final HospitalService hospitalService;
 
 
-    public FrontHospitalResource(HospitalServiceImpl hospitalService) {
+    public FrontHospitalResource(HospitalService hospitalService) {
         this.hospitalService = hospitalService;
     }
 

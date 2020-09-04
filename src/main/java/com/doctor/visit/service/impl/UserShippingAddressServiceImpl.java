@@ -5,13 +5,12 @@ import com.doctor.visit.domain.BusPatient;
 import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.BusUserShippingAddress;
 import com.doctor.visit.repository.BusUserShippingAddressMapper;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -24,7 +23,7 @@ import java.util.List;
  * 用户地址管理
  */
 @Service
-public class UserShippingAddressServiceImpl {
+public class UserShippingAddressServiceImpl implements com.doctor.visit.service.UserShippingAddressService {
     private final CommonService commonService;
     private final BusUserShippingAddressMapper busUserShippingAddressMapper;
 
@@ -40,6 +39,7 @@ public class UserShippingAddressServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusUserShippingAddress>> listUserShippingAddress(BusUserShippingAddress bus, Pageable pageable, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
@@ -66,6 +66,7 @@ public class UserShippingAddressServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusUserShippingAddress> insertOrUpdateUserShippingAddress(BusUserShippingAddress bus, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
@@ -94,6 +95,7 @@ public class UserShippingAddressServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteUserShippingAddress(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

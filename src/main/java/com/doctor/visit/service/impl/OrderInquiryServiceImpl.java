@@ -7,8 +7,8 @@ import com.doctor.visit.domain.BusOrderInquiry;
 import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.dto.BusOrderInquiryDto;
 import com.doctor.visit.repository.*;
-import com.doctor.visit.service.CommonService;
-import com.doctor.visit.service.UploadService;
+import com.doctor.visit.service.common.CommonService;
+import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -30,7 +30,7 @@ import java.util.List;
  * 问诊订单
  */
 @Service
-public class OrderInquiryServiceImpl {
+public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderInquiryService {
 
     @Value("${custom.requestPath}")
     private String requestPath;
@@ -64,6 +64,7 @@ public class OrderInquiryServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusOrderInquiryDto>> listOrderInquiry(BusOrderInquiry bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusOrderInquiry.class);
@@ -88,6 +89,7 @@ public class OrderInquiryServiceImpl {
      * @return
      * @throws Exception
      */
+    @Override
     public ComResponse<BusOrderInquiry> insertOrUpdateOrderInquiryOrderState(BusOrderInquiry bus, HttpServletRequest request) throws Exception {
         if (null == bus.getId()) {
             return ComResponse.failBadRequest();
@@ -131,6 +133,7 @@ public class OrderInquiryServiceImpl {
      * @param request 这里需要处理文件
      * @return
      */
+    @Override
     public ComResponse<BusOrderInquiryDto> insertOrUpdateOrderInquiry(BusOrderInquiry bus, HttpServletRequest request) throws Exception {
         bus.setCreateBy(Utils.getUserId(request));
         if (null == bus.getCreateBy()) {
@@ -172,6 +175,7 @@ public class OrderInquiryServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteOrderInquiry(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

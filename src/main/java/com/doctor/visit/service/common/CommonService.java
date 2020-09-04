@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.common;
 
 import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.JhiUser;

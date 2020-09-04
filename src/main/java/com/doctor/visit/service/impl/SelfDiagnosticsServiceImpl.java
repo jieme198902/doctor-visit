@@ -1,14 +1,13 @@
 package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusGoodsSpecification;
 import com.doctor.visit.domain.BusSelfDiagnose;
 import com.doctor.visit.domain.BusSelfDiagnosis;
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusSelfDiagnoseMapper;
 import com.doctor.visit.repository.BusSelfDiagnosisMapper;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -27,7 +26,7 @@ import java.util.Optional;
  * 自诊
  */
 @Service
-public class SelfDiagnosticsServiceImpl {
+public class SelfDiagnosticsServiceImpl implements com.doctor.visit.service.SelfDiagnosticsService {
     private final CommonService commonService;
     //
     private final BusSelfDiagnoseMapper busSelfDiagnoseMapper;
@@ -46,6 +45,7 @@ public class SelfDiagnosticsServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusSelfDiagnose>> listSelfDiagnose(BusSelfDiagnose bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusSelfDiagnose.class);
@@ -68,6 +68,7 @@ public class SelfDiagnosticsServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusSelfDiagnose> insertOrUpdateSelfDiagnose(BusSelfDiagnose bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -100,6 +101,7 @@ public class SelfDiagnosticsServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteSelfDiagnose(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -123,6 +125,7 @@ public class SelfDiagnosticsServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusSelfDiagnosis>> listSelfDiagnosis(BusSelfDiagnosis bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusSelfDiagnosis.class);
@@ -143,6 +146,7 @@ public class SelfDiagnosticsServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusSelfDiagnosis> insertOrUpdateSelfDiagnosis(BusSelfDiagnosis bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -175,6 +179,7 @@ public class SelfDiagnosticsServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteSelfDiagnosis(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

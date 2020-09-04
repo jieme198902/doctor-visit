@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusArea;
-import com.doctor.visit.service.impl.AreaServiceImpl;
+import com.doctor.visit.service.AreaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(Constants.API_BASE_SYS + "/area")
 public class SysAreaResource {
 
-    private final AreaServiceImpl areaService;
+    private final AreaService areaService;
 
-    public SysAreaResource(AreaServiceImpl areaService) {
+    public SysAreaResource(AreaService areaService) {
         this.areaService = areaService;
     }
 

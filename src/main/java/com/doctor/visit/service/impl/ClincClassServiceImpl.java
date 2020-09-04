@@ -5,7 +5,7 @@ import com.doctor.visit.domain.BusClincClass;
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusClincClassMapper;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
@@ -27,7 +27,7 @@ import java.util.Optional;
  * @date 2020-06-29
  */
 @Service
-public class ClincClassServiceImpl {
+public class ClincClassServiceImpl implements com.doctor.visit.service.ClincClassService {
     private final CommonService commonService;
     //
     private final BusClincClassMapper busClincClassMapper;
@@ -44,6 +44,7 @@ public class ClincClassServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusClincClass>> listClincClass(BusClincClass bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
 
@@ -66,6 +67,7 @@ public class ClincClassServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusClincClass> insertOrUpdateClincClass(BusClincClass bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -99,6 +101,7 @@ public class ClincClassServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteClincClass(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

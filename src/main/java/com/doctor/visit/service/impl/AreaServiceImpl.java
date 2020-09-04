@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * 地区管理
  */
 @Service
-public class AreaServiceImpl {
+public class AreaServiceImpl implements com.doctor.visit.service.AreaService {
 
     private final BusAreaMapper busAreaMapper;
 
@@ -32,6 +32,7 @@ public class AreaServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<BusArea> insertOrUpdateArea(BusArea bus) {
         int count = 0;
         if (StringUtils.isNotBlank(bus.getWgbm())) {
@@ -47,6 +48,7 @@ public class AreaServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteArea(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -69,6 +71,7 @@ public class AreaServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusArea>> listArea(BusArea bus, Pageable pageable) {
         if (null != pageable) {
             PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
@@ -98,6 +101,7 @@ public class AreaServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<List<Map<String, Object>>> listAreaForSelect(BusArea bus) {
         List<Map<String, Object>> areas = Constants.areaMap.get(bus.getSjwgbm() + bus.getWgjb());
         if (null != areas && !areas.isEmpty()) {

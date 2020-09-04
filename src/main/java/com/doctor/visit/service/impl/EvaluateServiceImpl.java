@@ -18,7 +18,7 @@ import java.util.List;
  * 评价表
  */
 @Service
-public class EvaluateServiceImpl {
+public class EvaluateServiceImpl implements com.doctor.visit.service.EvaluateService {
 
     //
     private final BusEvaluateMapper busEvaluateMapper;
@@ -34,6 +34,7 @@ public class EvaluateServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusEvaluate>> listEvaluate(BusEvaluate bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
@@ -48,6 +49,7 @@ public class EvaluateServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteEvaluate(String ids) {
         if (StringUtils.isBlank(ids)) {
             return ComResponse.fail("ids为空");

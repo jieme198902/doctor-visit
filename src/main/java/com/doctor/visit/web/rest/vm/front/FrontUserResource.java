@@ -5,8 +5,8 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusFeedback;
 import com.doctor.visit.domain.BusFile;
 import com.doctor.visit.domain.BusUser;
-import com.doctor.visit.service.impl.FeedbackServiceImpl;
-import com.doctor.visit.service.impl.UserServiceImpl;
+import com.doctor.visit.service.FeedbackService;
+import com.doctor.visit.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,10 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_FRONT + "/user")
 public class FrontUserResource {
 
-    private final UserServiceImpl userService;
-    private final FeedbackServiceImpl feedbackService;
+    private final UserService userService;
+    private final FeedbackService feedbackService;
 
-    public FrontUserResource(UserServiceImpl userService, FeedbackServiceImpl feedbackService) {
+    public FrontUserResource(UserService userService, FeedbackService feedbackService) {
         this.userService = userService;
         this.feedbackService = feedbackService;
     }

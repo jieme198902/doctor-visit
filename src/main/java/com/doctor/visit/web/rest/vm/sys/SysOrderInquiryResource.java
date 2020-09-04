@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusOrderInquiry;
-import com.doctor.visit.service.impl.OrderInquiryServiceImpl;
+import com.doctor.visit.service.OrderInquiryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_SYS + "/order/inquiry")
 public class SysOrderInquiryResource {
 
-    private final OrderInquiryServiceImpl orderInquiryService;
+    private final OrderInquiryService orderInquiryService;
 
-    public SysOrderInquiryResource(OrderInquiryServiceImpl orderInquiryService) {
+    public SysOrderInquiryResource(OrderInquiryService orderInquiryService) {
         this.orderInquiryService = orderInquiryService;
     }
 

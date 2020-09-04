@@ -7,8 +7,8 @@ import com.doctor.visit.domain.dto.BusDoctorHospitalDto;
 import com.doctor.visit.domain.dto.BusHospitalDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
-import com.doctor.visit.service.UploadService;
+import com.doctor.visit.service.common.CommonService;
+import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -31,7 +31,7 @@ import java.util.Optional;
  * 医生的业务层
  */
 @Service
-public class DoctorServiceImpl {
+public class DoctorServiceImpl implements com.doctor.visit.service.DoctorService {
 
     private final CommonService commonService;
     private final UploadService uploadService;
@@ -66,6 +66,7 @@ public class DoctorServiceImpl {
      * @return
      * @throws Exception
      */
+    @Override
     public ComResponse<BusDoctorHospitalDto> listDoctorOrHospital(BusHospital bus, Pageable pageable, HttpServletRequest request) throws Exception {
         BusDoctorHospitalDto doctorHospitalDto = new BusDoctorHospitalDto();
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
@@ -102,6 +103,7 @@ public class DoctorServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusDoctorDto>> listDoctor(BusDoctor bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusDoctor.class);
@@ -142,6 +144,7 @@ public class DoctorServiceImpl {
      * @param request 这里需要处理文件
      * @return
      */
+    @Override
     public ComResponse<BusDoctor> insertOrUpdateDoctor(BusDoctor bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -207,6 +210,7 @@ public class DoctorServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteDoctor(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();
@@ -230,6 +234,7 @@ public class DoctorServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusDoctorDto>> listFavDoctor(BusDoctor bus, Pageable pageable, HttpServletRequest request) throws Exception {
         //获取用户的id
         Long userId = Utils.getUserId(request);
@@ -250,6 +255,7 @@ public class DoctorServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse insertOrUpdateRelationUserDoctor(BusRelationUserDoctor bus, HttpServletRequest request) throws Exception {
         //获取用户的id
         if (null == bus.getDoctorId()) {

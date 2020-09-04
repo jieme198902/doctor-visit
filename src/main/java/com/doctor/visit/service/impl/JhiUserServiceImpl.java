@@ -22,7 +22,7 @@ import java.util.List;
  * @author kuanwang
  */
 @Service
-public class JhiUserServiceImpl {
+public class JhiUserServiceImpl implements com.doctor.visit.service.JhiUserService {
 
     private final JhiUserMapper jhiUserMapper;
     private final SysRoleMapper sysRoleMapper;
@@ -39,6 +39,7 @@ public class JhiUserServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<JhiUserDto>> listJhiUser(JhiUser bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         JhiUser record = new JhiUser();

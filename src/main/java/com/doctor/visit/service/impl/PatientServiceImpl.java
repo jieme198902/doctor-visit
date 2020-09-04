@@ -1,13 +1,10 @@
 package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusHospital;
 import com.doctor.visit.domain.BusPatient;
 import com.doctor.visit.domain.BusUser;
-import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusPatientMapper;
-import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -26,7 +23,7 @@ import java.util.List;
  * 患者信息 业务层
  */
 @Service
-public class PatientServiceImpl {
+public class PatientServiceImpl implements com.doctor.visit.service.PatientService {
 
     private final CommonService commonService;
     private final BusPatientMapper busPatientMapper;
@@ -43,6 +40,7 @@ public class PatientServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusPatient>> listPatient(BusPatient bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusPatient.class);
@@ -69,6 +67,7 @@ public class PatientServiceImpl {
      * @param request
      * @return
      */
+    @Override
     public ComResponse<BusPatient> insertOrUpdatePatient(BusPatient bus, HttpServletRequest request) throws Exception {
         Long userId = Utils.getUserId(request);
         bus.setCreateBy(userId);
@@ -102,6 +101,7 @@ public class PatientServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deletePatient(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

@@ -7,8 +7,8 @@ import com.doctor.visit.repository.BusAreaMapper;
 import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusHospitalMapper;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
-import com.doctor.visit.service.UploadService;
+import com.doctor.visit.service.common.CommonService;
+import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -33,7 +33,7 @@ import java.util.Optional;
  * @date 2020-06-29
  */
 @Service
-public class HospitalServiceImpl {
+public class HospitalServiceImpl implements com.doctor.visit.service.HospitalService {
     private final CommonService commonService;
     private final UploadService uploadService;
     //
@@ -58,6 +58,7 @@ public class HospitalServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusHospitalDto>> listHospital(BusHospital bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusHospital.class);
@@ -87,6 +88,7 @@ public class HospitalServiceImpl {
      * @param request 这里需要处理文件
      * @return
      */
+    @Override
     public ComResponse<BusHospital> insertOrUpdateHospital(BusHospital bus, HttpServletRequest request) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -135,6 +137,7 @@ public class HospitalServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteHospital(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

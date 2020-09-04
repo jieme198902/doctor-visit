@@ -3,7 +3,7 @@ package com.doctor.visit.service.impl;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.BusFeedbackMapper;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -20,7 +20,7 @@ import java.util.List;
  * 意见反馈
  */
 @Service
-public class FeedbackServiceImpl {
+public class FeedbackServiceImpl implements com.doctor.visit.service.FeedbackService {
     private final CommonService commonService;
     private final BusFeedbackMapper busFeedbackMapper;
 
@@ -36,6 +36,7 @@ public class FeedbackServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusFeedback>> listFeedback(BusFeedback bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
@@ -51,6 +52,7 @@ public class FeedbackServiceImpl {
      * @param request 这里需要处理文件
      * @return
      */
+    @Override
     public ComResponse<BusFeedback> insertOrUpdateFeedback(BusFeedback bus, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
@@ -78,6 +80,7 @@ public class FeedbackServiceImpl {
      * @return
      * @throws Exception
      */
+    @Override
     public ComResponse<BusFeedback> insertOrUpdateFeedbackState(BusFeedback bus) throws Exception {
         BusFeedback update = new BusFeedback();
         update.setId(bus.getId());
@@ -93,6 +96,7 @@ public class FeedbackServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteFeedback(String ids) {
         String[] idsAry = ids.split(Constants.COMMA);
         StringBuilder delIds = new StringBuilder();

@@ -15,7 +15,7 @@ import java.util.List;
  * 日志
  */
 @Service
-public class SysLogServiceImpl {
+public class SysLogServiceImpl implements com.doctor.visit.service.SysLogService {
 
     private final BusLogMapper busLogMapper;
 
@@ -30,6 +30,7 @@ public class SysLogServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse<List<BusLog>> listLog(BusLog bus, Pageable pageable) {
         if (null != pageable) {
             PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize(),"create_time desc");

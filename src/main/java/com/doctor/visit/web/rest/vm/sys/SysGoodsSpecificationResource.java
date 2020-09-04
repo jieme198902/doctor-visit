@@ -2,7 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusGoodsSpecification;
-import com.doctor.visit.service.impl.GoodsSpecificationServiceImpl;
+import com.doctor.visit.service.GoodsSpecificationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(Constants.API_BASE_SYS + "/goods/specification")
 public class SysGoodsSpecificationResource {
 
-    private final GoodsSpecificationServiceImpl goodsSpecificationService;
+    private final GoodsSpecificationService goodsSpecificationService;
 
-    public SysGoodsSpecificationResource(GoodsSpecificationServiceImpl goodsSpecificationService) {
+    public SysGoodsSpecificationResource(GoodsSpecificationService goodsSpecificationService) {
         this.goodsSpecificationService = goodsSpecificationService;
     }
 

@@ -1,4 +1,4 @@
-package com.doctor.visit.service;
+package com.doctor.visit.service.common;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusFile;

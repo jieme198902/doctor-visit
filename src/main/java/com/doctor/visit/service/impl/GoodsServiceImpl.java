@@ -7,7 +7,7 @@ import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusGoodsClassMapper;
 import com.doctor.visit.repository.BusGoodsMapper;
 import com.doctor.visit.security.SecurityUtils;
-import com.doctor.visit.service.CommonService;
+import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
@@ -27,7 +27,7 @@ import java.util.Optional;
  * 商品服务
  */
 @Service
-public class GoodsServiceImpl {
+public class GoodsServiceImpl implements com.doctor.visit.service.GoodsService {
 
     @Value("${custom.rootPath}")
     private String rootPath;
@@ -51,6 +51,7 @@ public class GoodsServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse listGoodsClass(BusGoodsClass bus, Pageable pageable) {
         if (null != pageable) {
             PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
@@ -76,6 +77,7 @@ public class GoodsServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<BusGoodsClass> insertOrUpdateGoodsClass(BusGoodsClass bus) {
         if (StringUtils.isBlank(bus.getName())) {
             return ComResponse.failBadRequest();
@@ -111,6 +113,7 @@ public class GoodsServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteGoodsClass(String ids) {
         if (StringUtils.isBlank(ids)) {
             return ComResponse.fail("ids参数为空。");
@@ -136,6 +139,7 @@ public class GoodsServiceImpl {
      * @param pageable
      * @return
      */
+    @Override
     public ComResponse listGoods(BusGoods bus, Pageable pageable) {
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusGoods.class);
@@ -161,6 +165,7 @@ public class GoodsServiceImpl {
      * @param bus
      * @return
      */
+    @Override
     public ComResponse<BusGoods> insertOrUpdateGoods(BusGoods bus) {
         Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
         if (usernameOptional.isPresent()) {
@@ -198,6 +203,7 @@ public class GoodsServiceImpl {
      * @param ids
      * @return
      */
+    @Override
     public ComResponse<StringBuilder> deleteGoods(String ids) {
         if (StringUtils.isBlank(ids)) {
             return ComResponse.fail("ids为空");
