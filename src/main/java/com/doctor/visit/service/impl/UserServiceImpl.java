@@ -221,20 +221,16 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
                 //获取用户的角色，可能是多个
                 SysRelationUserRole userRole = new SysRelationUserRole();
                 userRole.setUserId(jhiUser.getId());
-                List<SysRelationUserRole> userRoles = sysRelationUserRoleMapper.select(userRole);
-                if (null != userRoles && !userRoles.isEmpty()) {
-                    List<SysMenu> userAllMenu = Lists.newArrayList();
-                    userRoles.forEach(userRoleOne -> {
-                        List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(userRoleOne.getRoleId());
-                        if (null != sysMenus && !sysMenus.isEmpty()) {
-                            userAllMenu.addAll(sysMenus);
-                        }
-                    });
-                    //去重
-                    Set<SysMenu> set = new HashSet<>(userAllMenu);
-                    userAllMenu.clear();
-                    userAllMenu.addAll(set);
-                    sysMenuDtos.addAll(Utils.menuListToTree(userAllMenu,sysButtonMapper));
+                SysRelationUserRole userRoles = sysRelationUserRoleMapper.selectOne(userRole);
+                if (null != userRoles ) {
+                    List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(userRoles.getRoleId());
+                    if (null != sysMenus && !sysMenus.isEmpty()) {
+                        //去重
+                        Set<SysMenu> set = new HashSet<>(sysMenus);
+                        sysMenus.clear();
+                        sysMenus.addAll(set);
+                        sysMenuDtos.addAll(Utils.menuListToTree(sysMenus,sysButtonMapper));
+                    }
                 }
                 return ComResponse.ok(sysMenuDtos);
             }
