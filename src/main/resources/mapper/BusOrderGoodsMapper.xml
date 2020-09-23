@@ -7,6 +7,8 @@
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+    <result column="goods_specification_id" property="goodsSpecificationId" jdbcType="BIGINT" />
+    <result column="goods_specification_name" property="goodsSpecificationName" jdbcType="VARCHAR" />
     <result column="order_id" property="orderId" jdbcType="BIGINT" />
     <result column="market_price" property="marketPrice" jdbcType="INTEGER" />
     <result column="price" property="price" jdbcType="INTEGER" />

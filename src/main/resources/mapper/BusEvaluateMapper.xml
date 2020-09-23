@@ -20,4 +20,19 @@
         <result column="edit_time" property="editTime" jdbcType="TIMESTAMP"/>
         <result column="is_del" property="isDel" jdbcType="CHAR"/>
     </resultMap>
+
+
+    <select id="selectEvaluateByGoodsId">
+        SELECT
+            eva.*
+        FROM
+            bus_evaluate eva
+            LEFT JOIN bus_order_goods orde ON eva.order_id = orde.id
+            LEFT JOIN bus_goods goods ON orde.goods_id = goods.id
+        WHERE 1=1 AND eva.is_del = '0'
+         <if test="null!=goodsId and ''!=goodsId">
+         AND goods.id = #{goodsId}
+         </if>
+    </select>
+
 </mapper>

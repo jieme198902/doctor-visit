@@ -17,6 +17,15 @@ public interface EvaluateService {
     ComResponse<List<BusEvaluate>> listEvaluate(BusEvaluate bus, Pageable pageable);
 
     /**
+     * 根据商品id获取商品评论列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    ComResponse<List<BusEvaluate>> listEvaluateByGoodsId(BusEvaluate bus, Pageable pageable);
+
+    /**
      * 后台 - 删除评价列表
      *
      * @param ids

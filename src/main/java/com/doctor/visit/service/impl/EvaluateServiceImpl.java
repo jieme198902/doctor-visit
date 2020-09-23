@@ -44,6 +44,20 @@ public class EvaluateServiceImpl implements com.doctor.visit.service.EvaluateSer
     }
 
     /**
+     * 根据商品id获取商品评论列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    @Override
+    public ComResponse<List<BusEvaluate>> listEvaluateByGoodsId(BusEvaluate bus, Pageable pageable) {
+        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        Page<BusEvaluate> busEvaluateList = (Page<BusEvaluate>) busEvaluateMapper.selectEvaluateByGoodsId(bus.getId());
+        return ComResponse.ok(busEvaluateList.getResult(), busEvaluateList.getTotal());
+    }
+
+    /**
      * 后台 - 删除评价列表
      *
      * @param ids

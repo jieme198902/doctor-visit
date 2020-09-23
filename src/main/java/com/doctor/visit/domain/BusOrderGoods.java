@@ -23,6 +23,18 @@ public class BusOrderGoods implements Serializable {
     private Long goodsId;
 
     /**
+     * 商品规格id
+     */
+    @Column(name = "goods_specification_id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long goodsSpecificationId;
+
+    /**
+     * 商品规格名字
+     */
+    @Column(name = "goods_specification_name")
+    private String goodsSpecificationName;
+    /**
      * 商品大订单id
      */
     @Column(name = "order_id")
@@ -368,5 +380,21 @@ public class BusOrderGoods implements Serializable {
      */
     public void setIsDel(String isDel) {
         this.isDel = isDel;
+    }
+
+    public Long getGoodsSpecificationId() {
+        return goodsSpecificationId;
+    }
+
+    public void setGoodsSpecificationId(Long goodsSpecificationId) {
+        this.goodsSpecificationId = goodsSpecificationId;
+    }
+
+    public String getGoodsSpecificationName() {
+        return goodsSpecificationName;
+    }
+
+    public void setGoodsSpecificationName(String goodsSpecificationName) {
+        this.goodsSpecificationName = goodsSpecificationName;
     }
 }
