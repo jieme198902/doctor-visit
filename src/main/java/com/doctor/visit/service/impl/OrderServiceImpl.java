@@ -11,10 +11,12 @@ import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
+import com.github.pagehelper.PageHelper;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -180,6 +182,39 @@ public class OrderServiceImpl implements OrderService {
         BusOrderGoodsTotalDto result = new BusOrderGoodsTotalDto();
         BeanUtils.copyProperties(insertOrder, result);
         result.setBusOrderGoods(busOrderGoods);
+        return ComResponse.ok(result);
+    }
+
+    /**
+     * 获取用户的商品订单列表
+     *
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public ComResponse<List<BusOrderGoodsTotalDto>> listOrder(BusOrderGoodsTotal bus, Pageable pageable, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
+        if (null == busUser) {
+            return ComResponse.failUnauthorized();
+        }
+        bus.setIsDel(Constants.EXIST);
+        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+
+        List<BusOrderGoodsTotal> orderGoodsTotals = busOrderGoodsTotalMapper.select(bus);
+        List<BusOrderGoodsTotalDto> result = Lists.newArrayList();
+        orderGoodsTotals.forEach(it->{
+            BusOrderGoods perOrderGoods = new BusOrderGoods();
+            perOrderGoods.setOrderId(it.getId());
+            perOrderGoods.setIsDel(Constants.EXIST);
+            List<BusOrderGoods> busOrderGoods = busOrderGoodsMapper.select(perOrderGoods);
+            BusOrderGoodsTotalDto dto = new BusOrderGoodsTotalDto();
+            BeanUtils.copyProperties(it,dto);
+            dto.setBusOrderGoods(busOrderGoods);
+            result.add(dto);
+        });
+
         return ComResponse.ok(result);
     }
 }

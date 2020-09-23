@@ -340,4 +340,18 @@ public class FrontMineResource {
         return null;
     }
 
+
+    /**
+     * 获取用户的商品订单列表
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("listOrder")
+    @ApiOperation(value = "获取用户的商品订单列表")
+    public Object listOrder(BusOrderGoodsTotal bus,Pageable pageable,HttpServletRequest request)throws Exception{
+        return orderService.listOrder(bus, pageable,request);
+    }
+
 }
