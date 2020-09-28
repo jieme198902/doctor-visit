@@ -73,10 +73,12 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.qq.com
+    port: 587
+    username: 923498782@qq.com
+    #lqddmrnykxjobbge
+    password: lvdutieeaflxbgaa
+
   thymeleaf:
     cache: true
   sleuth:

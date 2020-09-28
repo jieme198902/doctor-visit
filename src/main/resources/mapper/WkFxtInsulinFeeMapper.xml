@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.doctor.visit.repository.WkFxtInsulinFeeMapper" >
+  <resultMap id="BaseResultMap" type="com.doctor.visit.domain.WkFxtInsulinFee" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="bed_no" property="bedNo" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="hospital_no" property="hospitalNo" jdbcType="INTEGER" />
+    <result column="group_no" property="groupNo" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="total_time" property="totalTime" jdbcType="DECIMAL" />
+    <result column="total_fee" property="totalFee" jdbcType="DECIMAL" />
+    <result column="medical_fee" property="medicalFee" jdbcType="DECIMAL" />
+    <result column="nurse_fee" property="nurseFee" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

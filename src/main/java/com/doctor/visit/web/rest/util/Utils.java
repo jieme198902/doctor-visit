@@ -75,7 +75,6 @@ public final class Utils {
     }
 
     /**
-     *
      * @param s
      * @param t
      * @param <T>
@@ -87,8 +86,12 @@ public final class Utils {
     }
 
 
+    public static String toJson(Object obj){
+        return gson.toJson(obj);
+    }
+
+
     /**
-     *
      * @param s
      * @param t
      * @param <T>
@@ -400,6 +403,42 @@ public final class Utils {
         return result;
     }
 
+
+    public static String getGroupNoName(Integer groupNo) {
+        switch (groupNo) {
+            case 1:
+                return "一组";
+            case 2:
+                return "二组";
+            case 3:
+                return "三组";
+            case 4:
+                return "四组";
+            case 5:
+                return "五组";
+            case 9:
+                return "科外泵";
+        }
+        return "未知";
+    }
+
+    public static Integer getGroupNoValue(String groupName) {
+        switch (groupName) {
+            case "一组":
+                return 1;
+            case "二组":
+                return 2;
+            case "三组":
+                return 3;
+            case "四组":
+                return 4;
+            case "五组":
+                return 5;
+            case "科外泵":
+                return 9;
+        }
+        return 0;
+    }
 
     public static String orderNo() {
         return generateOfDate() + getRandomCode(true, 4);
