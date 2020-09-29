@@ -169,7 +169,8 @@ public class SysGoodsResource {
      * @return
      */
     @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusGoods.class)
+        @ApiImplicitParam(name ="goodsId", value = "商品id"),
+        @ApiImplicitParam(name ="name", value = "商品名称")
     })
     @PostMapping("insertOrUpdateGoodsSpecification")
     @ApiOperation(value = "新增或者更新商品规格")
