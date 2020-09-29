@@ -8,8 +8,10 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="goods_id" property="goodsId" jdbcType="BIGINT" />
     <result column="specification" property="specification" jdbcType="VARCHAR" />
+    <result column="specification_name" property="specificationName" jdbcType="VARCHAR" />
     <result column="sort_by" property="sortBy" jdbcType="INTEGER" />
     <result column="price" property="price" jdbcType="INTEGER" />
+    <result column="market_price" property="marketPrice" jdbcType="INTEGER" />
     <result column="create_by" property="createBy" jdbcType="BIGINT" />
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -18,4 +20,23 @@
     <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="CHAR" />
   </resultMap>
+
+
+    <select id="selectByGoods" resultMap="BaseResultMap">
+        SELECT
+            g.name as is_del,
+            s.*
+        FROM
+            bus_goods_specification s
+            LEFT JOIN bus_goods g ON s.goods_id = g.id
+        WHERE
+            g.is_del = '0'
+            AND s.is_del = '0'
+        <if test="null!=goodsId">
+            AND g.id = #{goodsId}
+        </if>
+        <if test="null!=goodsName and ''!=goodsName">
+            AND g.name LIKE CONCAT(#{goodsName},'%')
+        </if>
+    </select>
 </mapper>

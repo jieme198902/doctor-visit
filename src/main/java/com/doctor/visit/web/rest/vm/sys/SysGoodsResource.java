@@ -5,6 +5,7 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusEvaluate;
 import com.doctor.visit.domain.BusGoods;
 import com.doctor.visit.domain.BusGoodsClass;
+import com.doctor.visit.domain.BusGoodsSpecification;
 import com.doctor.visit.service.EvaluateService;
 import com.doctor.visit.service.GoodsService;
 import io.swagger.annotations.Api;
@@ -141,6 +142,54 @@ public class SysGoodsResource {
     @ApiOperation(value = "根据id删除商品")
     public Object deleteGoods(String ids) {
         return goodsService.deleteGoods(ids);
+    }
+
+
+
+    /**
+     * 商品规格列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusGoods.class)
+    })
+    @PostMapping("listGoodsSpecification")
+    @ApiOperation(value = "商品规格列表")
+    public Object listGoodsSpecification(BusGoodsSpecification bus,BusGoods busGoods, Pageable pageable) {
+        return goodsService.listGoodsSpecification(bus, busGoods, pageable);
+    }
+
+    /**
+     * 新增或者更新商品规格
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusGoods.class)
+    })
+    @PostMapping("insertOrUpdateGoodsSpecification")
+    @ApiOperation(value = "新增或者更新商品规格")
+    public Object insertOrUpdateGoodsSpecification(BusGoodsSpecification bus,BusGoods busGoods) {
+        return goodsService.insertOrUpdateGoodsSpecification(bus,busGoods);
+    }
+
+    /**
+     * 根据id删除商品规格
+     *
+     * @param ids
+     * @return
+     */
+    @ApiImplicitParams({
+
+    })
+    @PostMapping("deleteGoodsSpecification")
+    @ApiOperation(value = "根据id删除商品规格")
+    public Object deleteGoodsSpecification(String ids) {
+        return goodsService.deleteGoodsSpecification(ids);
     }
 
 

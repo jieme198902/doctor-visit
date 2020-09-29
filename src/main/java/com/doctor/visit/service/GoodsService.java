@@ -2,6 +2,7 @@ package com.doctor.visit.service;
 
 import com.doctor.visit.domain.BusGoods;
 import com.doctor.visit.domain.BusGoodsClass;
+import com.doctor.visit.domain.BusGoodsSpecification;
 import com.doctor.visit.web.rest.util.ComResponse;
 import org.springframework.data.domain.Pageable;
 
@@ -56,4 +57,30 @@ public interface GoodsService {
      * @return
      */
     ComResponse<StringBuilder> deleteGoods(String ids);
+
+
+    /**
+     * 商品规格列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    ComResponse listGoodsSpecification(BusGoodsSpecification bus, BusGoods busGoods,Pageable pageable);
+
+    /**
+     * 新增或者更新商品规格
+     *
+     * @param bus
+     * @return
+     */
+    ComResponse<BusGoodsSpecification> insertOrUpdateGoodsSpecification(BusGoodsSpecification bus,BusGoods busGoods);
+
+    /**
+     * 根据id删除商品规格
+     *
+     * @param ids
+     * @return
+     */
+    ComResponse<StringBuilder> deleteGoodsSpecification(String ids);
 }

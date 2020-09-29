@@ -3,9 +3,11 @@ package com.doctor.visit.service.impl;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusGoods;
 import com.doctor.visit.domain.BusGoodsClass;
+import com.doctor.visit.domain.BusGoodsSpecification;
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.repository.BusGoodsClassMapper;
 import com.doctor.visit.repository.BusGoodsMapper;
+import com.doctor.visit.repository.BusGoodsSpecificationMapper;
 import com.doctor.visit.security.SecurityUtils;
 import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
@@ -37,11 +39,13 @@ public class GoodsServiceImpl implements com.doctor.visit.service.GoodsService {
     private final CommonService commonService;
     private final BusGoodsMapper busGoodsMapper;
     private final BusGoodsClassMapper busGoodsClassMapper;
+    private final BusGoodsSpecificationMapper busGoodsSpecificationMapper;
 
-    public GoodsServiceImpl(CommonService commonService, BusGoodsClassMapper busGoodsClassMapper, BusGoodsMapper busGoodsMapper) {
+    public GoodsServiceImpl(CommonService commonService, BusGoodsClassMapper busGoodsClassMapper, BusGoodsMapper busGoodsMapper, BusGoodsSpecificationMapper busGoodsSpecificationMapper) {
         this.commonService = commonService;
         this.busGoodsClassMapper = busGoodsClassMapper;
         this.busGoodsMapper = busGoodsMapper;
+        this.busGoodsSpecificationMapper = busGoodsSpecificationMapper;
     }
 
     /**
@@ -148,8 +152,8 @@ public class GoodsServiceImpl implements com.doctor.visit.service.GoodsService {
         if (StringUtils.isNotBlank(bus.getName())) {
             criteria.andLike("name", bus.getName() + "%");
         }
-        if(null!=bus.getClassId()){
-            criteria.andEqualTo("classId",bus.getClassId());
+        if (null != bus.getClassId()) {
+            criteria.andEqualTo("classId", bus.getClassId());
         }
         Page<BusGoods> busList = (Page<BusGoods>) busGoodsMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal()).setStarDataListener(list -> {
@@ -215,6 +219,92 @@ public class GoodsServiceImpl implements com.doctor.visit.service.GoodsService {
             delRecord.setIsDel(Constants.DELETE);
             delRecord.setId(Long.parseLong(id));
             int i = busGoodsMapper.updateByPrimaryKeySelective(delRecord);
+            if (1 == i) {
+                delIds.append(id);
+            }
+        }
+        return ComResponse.ok(delIds);
+    }
+
+
+    /**
+     * 后台 - 商品规格列表
+     *
+     * @param bus
+     * @param pageable
+     * @return
+     */
+    @Override
+    public ComResponse listGoodsSpecification(BusGoodsSpecification bus, BusGoods busGoods, Pageable pageable) {
+        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        return ComResponse.ok(busGoodsSpecificationMapper.selectByGoods(bus.getGoodsId(), busGoods.getName()));
+    }
+
+    /**
+     * 新增或者更新商品规格
+     *
+     * @param bus
+     * @return
+     */
+    @Override
+    public ComResponse<BusGoodsSpecification> insertOrUpdateGoodsSpecification(BusGoodsSpecification bus, BusGoods busGoods) {
+        Optional<String> usernameOptional = SecurityUtils.getCurrentUserLogin();
+        if (usernameOptional.isPresent()) {
+            JhiUser jhiUser = commonService.getJhiUser(usernameOptional.get());
+            if (null == jhiUser) {
+                return ComResponse.failNotFound();
+            }
+
+            //根据商品名称查询商品
+            BusGoods goods = new BusGoods();
+            goods.setName(busGoods.getName());
+            goods.setIsDel(Constants.EXIST);
+            List<BusGoods> busGoodsList = busGoodsMapper.select(goods);
+            if (null == busGoodsList || busGoodsList.isEmpty()) {
+                return ComResponse.fail("未找到该商品");
+            }
+            if (busGoodsList.size() != 1) {
+                return ComResponse.fail("根据商品名称找到多个商品");
+            }
+            bus.setGoodsId(busGoodsList.get(0).getId());
+            bus.setEditTime(new Date());
+            bus.setEditBy(jhiUser.getId());
+            bus.setEditName(jhiUser.getFirstName());
+            if (null != bus.getId()) {
+                busGoodsSpecificationMapper.updateByPrimaryKeySelective(bus);
+            } else {
+                bus.setId(IDKeyUtil.generateId());
+                bus.setCreateTime(new Date());
+                bus.setCreateBy(jhiUser.getId());
+                bus.setCreateName(jhiUser.getFirstName());
+                busGoodsSpecificationMapper.insertSelective(bus);
+            }
+        } else {
+            return ComResponse.failUnauthorized();
+        }
+
+        return ComResponse.ok(bus);
+    }
+
+
+    /**
+     * 根据id删除商品规格
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public ComResponse<StringBuilder> deleteGoodsSpecification(String ids) {
+        if (StringUtils.isBlank(ids)) {
+            return ComResponse.fail("ids为空");
+        }
+        String[] idsAry = ids.split(Constants.COMMA);
+        StringBuilder delIds = new StringBuilder();
+        for (String id : idsAry) {
+            BusGoodsSpecification delRecord = new BusGoodsSpecification();
+            delRecord.setIsDel(Constants.DELETE);
+            delRecord.setId(Long.parseLong(id));
+            int i = busGoodsSpecificationMapper.updateByPrimaryKeySelective(delRecord);
             if (1 == i) {
                 delIds.append(id);
             }

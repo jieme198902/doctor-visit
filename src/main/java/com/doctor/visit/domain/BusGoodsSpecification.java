@@ -28,6 +28,12 @@ public class BusGoodsSpecification implements Serializable {
     private String specification;
 
     /**
+     * 商品规格描述
+     */
+    @Column(name = "specification_name")
+    private String specificationName;
+
+    /**
      * 排序
      */
     @Column(name = "sort_by")
@@ -38,6 +44,8 @@ public class BusGoodsSpecification implements Serializable {
      */
     private Integer price;
 
+    @Column(name = "market_price")
+    private Integer marketPrice;
     /**
      * 创建者id
      */
@@ -85,6 +93,22 @@ public class BusGoodsSpecification implements Serializable {
     private String isDel;
 
     private static final long serialVersionUID = 1L;
+
+    public Integer getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(Integer marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public String getSpecificationName() {
+        return specificationName;
+    }
+
+    public void setSpecificationName(String specificationName) {
+        this.specificationName = specificationName;
+    }
 
     /**
      * @return id
