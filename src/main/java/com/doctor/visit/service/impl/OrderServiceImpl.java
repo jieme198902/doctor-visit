@@ -236,7 +236,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<BusOrderGoodsTotal> orderGoodsTotals = busOrderGoodsTotalMapper.select(bus);
         List<BusOrderGoodsTotalDto> result = Lists.newArrayList();
-        orderGoodsTotals.forEach(it -> {
+        for (BusOrderGoodsTotal it : orderGoodsTotals) {
             BusOrderGoods perOrderGoods = new BusOrderGoods();
             perOrderGoods.setOrderId(it.getId());
             perOrderGoods.setIsDel(Constants.EXIST);
@@ -245,8 +245,7 @@ public class OrderServiceImpl implements OrderService {
             BeanUtils.copyProperties(it, dto);
             dto.setBusOrderGoods(busOrderGoods);
             result.add(dto);
-        });
-
+        }
         return ComResponse.ok(result);
     }
 }
