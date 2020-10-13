@@ -1,4 +1,4 @@
-package com.doctor.visit.web.rest.vm.front;
+package com.doctor.visit.web.rest.vm;
 
 
 import com.doctor.visit.config.Constants;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Ignore
 @RestController
-@Api("微信用户的接口")
+@Api("胰岛素泵费用")
 @RequestMapping(Constants.API_BASE_FRONT + "/f")
 public class FrontResource {
 

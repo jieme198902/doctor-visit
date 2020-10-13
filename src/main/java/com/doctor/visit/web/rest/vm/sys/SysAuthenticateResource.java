@@ -3,7 +3,6 @@ package com.doctor.visit.web.rest.vm.sys;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.config.domain.code.LoginCodeEnum;
 import com.doctor.visit.config.domain.code.LoginProperties;
-import com.doctor.visit.config.domain.code.SecurityProperties;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.Utils;
@@ -32,13 +31,9 @@ import java.util.concurrent.TimeUnit;
 @Api("权鉴接口")
 @RequestMapping(Constants.API_BASE_SYS)
 public class SysAuthenticateResource {
-    private final SecurityProperties properties;
     @Resource
     private LoginProperties loginProperties;
 
-    public SysAuthenticateResource(SecurityProperties properties) {
-        this.properties = properties;
-    }
 
     /**
      * 获取验证码
@@ -77,7 +72,7 @@ public class SysAuthenticateResource {
     public Object code() {
         // 获取运算的结果
         Captcha captcha = loginProperties.getCaptcha();
-        String uuid = properties.getCodeKey() + Utils.generate();
+        String uuid = Utils.generate();
         //当验证码类型为 arithmetic时且长度 >= 2 时，captcha.text()的结果有几率为浮点型
         String captchaValue = captcha.text();
         if (captcha.getCharType() - 1 == LoginCodeEnum.arithmetic.ordinal() && captchaValue.contains(".")) {
