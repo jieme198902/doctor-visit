@@ -186,6 +186,38 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * TODO 处理支付信息
+     * 更新订单，支付，回调
+     *
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Object updateOrderStateForPay(BusOrderGoodsTotal bus, HttpServletRequest request) throws Exception {
+        BusOrderGoodsTotal orderGoodsTotal = new BusOrderGoodsTotal();
+        orderGoodsTotal.setOrderNo(bus.getOrderNo());
+        List<BusOrderGoodsTotal> busOrderGoodsTotals = busOrderGoodsTotalMapper.select(orderGoodsTotal);
+        if (null == busOrderGoodsTotals || busOrderGoodsTotals.isEmpty()) {
+            return ComResponse.fail("未找到该订单号");
+        } else if (busOrderGoodsTotals.size() != 1) {
+            return ComResponse.fail("找到多个订单，订单异常");
+        } else {
+            //  `order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待发货；2已支付，已发货；4已评价；5已取消',
+            BusOrderGoodsTotal updateOrder = busOrderGoodsTotals.get(0);
+            if ("0".equals(updateOrder.getOrderState())) {
+                updateOrder.setOrderState("1");
+                updateOrder.setPayTime(new Date());
+                busOrderGoodsTotalMapper.updateByPrimaryKeySelective(updateOrder);
+                return ComResponse.ok("已支付");
+            }
+            return ComResponse.ok("已支付:" + updateOrder.getOrderState());
+
+        }
+    }
+
+    /**
      * 获取用户的商品订单列表
      *
      * @param bus
@@ -204,13 +236,13 @@ public class OrderServiceImpl implements OrderService {
 
         List<BusOrderGoodsTotal> orderGoodsTotals = busOrderGoodsTotalMapper.select(bus);
         List<BusOrderGoodsTotalDto> result = Lists.newArrayList();
-        orderGoodsTotals.forEach(it->{
+        orderGoodsTotals.forEach(it -> {
             BusOrderGoods perOrderGoods = new BusOrderGoods();
             perOrderGoods.setOrderId(it.getId());
             perOrderGoods.setIsDel(Constants.EXIST);
             List<BusOrderGoods> busOrderGoods = busOrderGoodsMapper.select(perOrderGoods);
             BusOrderGoodsTotalDto dto = new BusOrderGoodsTotalDto();
-            BeanUtils.copyProperties(it,dto);
+            BeanUtils.copyProperties(it, dto);
             dto.setBusOrderGoods(busOrderGoods);
             result.add(dto);
         });

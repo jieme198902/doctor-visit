@@ -85,38 +85,6 @@ public class FrontGoodsResource {
         return goodsService.listGoods(bus, pageable);
     }
 
-    /**
-     * 新增或者修改商品
-     *
-     * @param bus
-     * @return
-     */
-    @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusGoods.class)
-    })
-    @PostMapping("insertOrUpdateGoods")
-    @ApiOperation(value = "新增或者修改商品")
-    public Object insertOrUpdateGoods(BusGoods bus) {
-        return goodsService.insertOrUpdateGoods(bus);
-    }
-
-
-    /**
-     * 后台 - 获取评价列表
-     *
-     * @param bus
-     * @param pageable
-     * @return
-     */
-    @ApiImplicitParams({
-        @ApiImplicitParam(dataTypeClass = BusEvaluate.class),
-        @ApiImplicitParam(name = "id", value = "商品id")
-    })
-    @PostMapping("listEvaluateByGoodsId")
-    @ApiOperation(value = "后台 - 获取商品评价列表")
-    public Object listEvaluateByGoodsId(BusEvaluate bus, Pageable pageable) {
-        return evaluateService.listEvaluateByGoodsId(bus, pageable);
-    }
 
 
 }

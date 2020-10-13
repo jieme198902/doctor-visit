@@ -28,6 +28,15 @@ public interface OrderService {
     ComResponse<BusOrderGoodsTotalDto> insertOrderWithShoppingCart(String userShoppingCart, HttpServletRequest request) throws Exception;
 
     /**
+     * 更新订单，支付，回调
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    Object updateOrderStateForPay(BusOrderGoodsTotal bus,HttpServletRequest request)throws Exception;
+
+    /**
      * 获取用户的商品订单
      * @param bus
      * @param request

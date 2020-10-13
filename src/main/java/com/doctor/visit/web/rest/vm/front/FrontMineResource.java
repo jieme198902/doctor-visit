@@ -337,7 +337,7 @@ public class FrontMineResource {
     @PostMapping("updateOrderStateForPay")
     @ApiOperation(value = "更新订单，支付，回调")
     public Object updateOrderStateForPay(BusOrderGoodsTotal bus,HttpServletRequest request)throws Exception{
-        return null;
+        return orderService.updateOrderStateForPay(bus, request);
     }
 
 

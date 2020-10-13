@@ -9,6 +9,7 @@
     <result column="order_no" property="orderNo" jdbcType="CHAR" />
     <result column="total_price" property="totalPrice" jdbcType="INTEGER" />
     <result column="order_state" property="orderState" jdbcType="CHAR" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="create_by" property="createBy" jdbcType="BIGINT" />
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
