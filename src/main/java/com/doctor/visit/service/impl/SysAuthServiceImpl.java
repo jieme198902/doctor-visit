@@ -204,11 +204,11 @@ public class SysAuthServiceImpl implements com.doctor.visit.service.SysAuthServi
         List<String> ids = Lists.newArrayList();
         List<SysMenu> sysMenus = sysMenuMapper.selectMenuByRoleId(bus.getRoleId());
         if (null != sysMenus && !sysMenus.isEmpty()) {
-            sysMenus.forEach(it -> {
+            for (SysMenu it : sysMenus) {
                 if (null != it && null != it.getId()) {
                     ids.add(it.getId().toString());
                 }
-            });
+            }
         }
         //把这个集合处理成树状结构
         return ComResponse.ok(ids);
@@ -317,7 +317,7 @@ public class SysAuthServiceImpl implements com.doctor.visit.service.SysAuthServi
             SysPermission delRecord = new SysPermission();
             delRecord.setRoleId(bus.getRoleId());
             int count = sysPermissionMapper.delete(delRecord);
-//            logger.info("delete role's permission -->{}", count);
+            logger.info("delete role's permission -->{}", count);
             List<SysPermission> sysMenuDtos = Utils.fromJson(permissions, new TypeToken<List<SysPermission>>() {
             }.getType());
             if (null == sysMenuDtos || sysMenuDtos.isEmpty()) {
@@ -523,8 +523,8 @@ public class SysAuthServiceImpl implements com.doctor.visit.service.SysAuthServi
             //获取用户的菜单
             List<SysMenu> sysMenus = sysMenuMapper.selectMenuByAccount(usernameOptional.get());
             boolean hasMenuPermission = false;
-            for (SysMenu sysMenu:sysMenus){
-                if(sysMenu.getCode().equalsIgnoreCase(menuCode)){
+            for (SysMenu sysMenu : sysMenus) {
+                if (sysMenu.getCode().equalsIgnoreCase(menuCode)) {
                     hasMenuPermission = true;
                     break;
                 }

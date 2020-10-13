@@ -2,14 +2,13 @@ package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusSocketMessage;
-import com.doctor.visit.domain.BusUserShoppingCart;
 import com.doctor.visit.repository.BusSocketMessageMapper;
+import com.doctor.visit.service.WebSocketMessageService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,8 +20,7 @@ import java.util.List;
  * @author kuanwang
  */
 @Service
-@EnableAsync
-public class WebSocketMessageServiceImpl implements com.doctor.visit.service.WebSocketMessageService {
+public class WebSocketMessageServiceImpl implements WebSocketMessageService {
 
     private final BusSocketMessageMapper busSocketMessageMapper;
 
@@ -37,7 +35,6 @@ public class WebSocketMessageServiceImpl implements com.doctor.visit.service.Web
      * @param bus
      */
     @Override
-    @Async
     public void saveSocketMessage(BusSocketMessage bus) {
         bus.setSendTime(new Date());
         busSocketMessageMapper.insertSelective(bus);

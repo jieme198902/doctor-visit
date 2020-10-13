@@ -14,7 +14,6 @@ import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -48,12 +47,10 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
     //权限
     private final SysMenuMapper sysMenuMapper;
     private final SysButtonMapper sysButtonMapper;
-    private final SysPermissionMapper sysPermissionMapper;
     private final SysRelationUserRoleMapper sysRelationUserRoleMapper;
     //
-    private Gson gson = new Gson();
 
-    public UserServiceImpl(CommonService commonService, UploadService uploadService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper, SysMenuMapper sysMenuMapper, SysButtonMapper sysButtonMapper, SysPermissionMapper sysPermissionMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper) {
+    public UserServiceImpl(CommonService commonService, UploadService uploadService, BusUserMapper busUserMapper, BusDictMapper busDictMapper, BusLogMapper busLogMapper, SysMenuMapper sysMenuMapper, SysButtonMapper sysButtonMapper, SysRelationUserRoleMapper sysRelationUserRoleMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.busUserMapper = busUserMapper;
@@ -61,7 +58,6 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
         this.busLogMapper = busLogMapper;
         this.sysMenuMapper = sysMenuMapper;
         this.sysButtonMapper = sysButtonMapper;
-        this.sysPermissionMapper = sysPermissionMapper;
         this.sysRelationUserRoleMapper = sysRelationUserRoleMapper;
     }
 
@@ -115,24 +111,24 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
             loginLog.setModel("微信登录");
             loginLog.setOperation("登录");
             loginLog.setSys("0");
-            loginLog.setRequest(gson.toJson(requestMap));
+            loginLog.setRequest(Utils.toJson(requestMap));
             Response response = okHttpClient.newCall(request).execute();
             String result = response.body().string();
             if (StringUtils.isBlank(result)) {
                 //记录日志
                 requestMap.put("result", "请求微信服务器超时");
-                loginLog.setResponse(gson.toJson(requestMap));
+                loginLog.setResponse(Utils.toJson(requestMap));
                 busLogMapper.insertSelective(loginLog);
                 return ComResponse.fail("请求失败，请稍后重试");
             }
             loginLog.setResponse(result);
             logger.info("wx.response-->{}", result);
-            Map<String, String> resultMap = gson.fromJson(result, new TypeToken<Map<String, String>>() {
+            Map<String, String> resultMap = Utils.fromJson(result, new TypeToken<Map<String, String>>() {
             }.getType());
             if (null == resultMap) {
                 //记录日志
                 requestMap.put("result", "微信返回的数据解析失败");
-                loginLog.setResponse(gson.toJson(requestMap));
+                loginLog.setResponse(Utils.toJson(requestMap));
                 busLogMapper.insertSelective(loginLog);
                 return ComResponse.fail("解析失败，请稍后重试");
             }
@@ -166,7 +162,7 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
                     //更新
                     busUserMapper.updateByPrimaryKeySelective(busUser);
                 }
-                BusUserDto busUserDto = gson.fromJson(gson.toJson(busUser), BusUserDto.class);
+                BusUserDto busUserDto = Utils.fromJson(Utils.toJson(busUser), BusUserDto.class);
 
                 busUserDto.setToken(Utils.createToken(busUser.getId()));
                 //记录日志
@@ -177,13 +173,13 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
                     loginLog.setCreateName(busUser.getName());
                 }
                 requestMap.put("user", busUserDto);
-                loginLog.setResponse(gson.toJson(requestMap));
+                loginLog.setResponse(Utils.toJson(requestMap));
                 busLogMapper.insertSelective(loginLog);
-                logger.info("login-->{}", gson.toJson(busUserDto));
+                logger.info("login-->{}", Utils.toJson(busUserDto));
                 return ComResponse.ok(busUserDto);
             } else {
                 //记录日志
-                loginLog.setResponse(gson.toJson(resultMap));
+                loginLog.setResponse(Utils.toJson(resultMap));
                 busLogMapper.insertSelective(loginLog);
                 String errCode = resultMap.get(Constants.WX_ERR_CODE);
                 switch (errCode) {
