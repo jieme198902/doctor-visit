@@ -37,6 +37,11 @@ public class BusDict implements Serializable {
     private Integer dicSort;
 
     /**
+     * 备注
+     */
+    private String remark;
+
+    /**
      * 父级id
      */
     @JsonSerialize(using = ToStringSerializer.class)
@@ -169,5 +174,13 @@ public class BusDict implements Serializable {
      */
     public void setEnable(String enable) {
         this.enable = enable;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

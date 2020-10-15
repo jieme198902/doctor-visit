@@ -12,5 +12,6 @@
     <result column="dic_sort" property="dicSort" jdbcType="INTEGER" />
     <result column="pid" property="pid" jdbcType="BIGINT" />
     <result column="enable" property="enable" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
 </mapper>

@@ -4,6 +4,7 @@ package com.doctor.visit.service;
 import com.doctor.visit.domain.BusOrderGoods;
 import com.doctor.visit.domain.BusOrderGoodsTotal;
 import com.doctor.visit.domain.dto.BusOrderGoodsTotalDto;
+import com.doctor.visit.domain.param.UnifiedOrderParam;
 import com.doctor.visit.web.rest.util.ComResponse;
 import org.springframework.data.domain.Pageable;
 
@@ -28,13 +29,20 @@ public interface OrderService {
     ComResponse<BusOrderGoodsTotalDto> insertOrderWithShoppingCart(String userShoppingCart, HttpServletRequest request) throws Exception;
 
     /**
-     * 更新订单，支付，回调
-     * @param bus
+     * 统一下单:商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的预支付交易后调起支付
+     * @param param
      * @param request
      * @return
      * @throws Exception
      */
-    Object updateOrderStateForPay(BusOrderGoodsTotal bus,HttpServletRequest request)throws Exception;
+    Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request)throws Exception;
+    /**
+     * 更新订单，支付，回调
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    Object updateOrderStateForPay(HttpServletRequest request)throws Exception;
 
     /**
      * 获取用户的商品订单

@@ -2,6 +2,7 @@ package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
+import com.doctor.visit.domain.param.UnifiedOrderParam;
 import com.doctor.visit.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -328,16 +329,28 @@ public class FrontMineResource {
     }
 
     /**
+     * 统一下单:商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的预支付交易后调起支付。
+     * @param param
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("unifiedOrder")
+    @ApiOperation(value = "统一下单:商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的预支付交易后调起支付。")
+    public Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request)throws Exception{
+        return orderService.unifiedOrder(param, request);
+    }
+
+    /**
      * 更新订单，支付，回调
-     * @param bus
      * @param request
      * @return
      * @throws Exception
      */
     @PostMapping("updateOrderStateForPay")
     @ApiOperation(value = "更新订单，支付，回调")
-    public Object updateOrderStateForPay(BusOrderGoodsTotal bus,HttpServletRequest request)throws Exception{
-        return orderService.updateOrderStateForPay(bus, request);
+    public Object updateOrderStateForPay(HttpServletRequest request)throws Exception{
+        return orderService.updateOrderStateForPay( request);
     }
 
 

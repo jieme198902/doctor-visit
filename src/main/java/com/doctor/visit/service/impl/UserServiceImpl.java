@@ -85,15 +85,15 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
         //https://api.weixin.qq.com/sns/jscode2session?appid=${my.wx.appid}&secret=${my.wx.secret}&js_code=JSCODE&grant_type=authorization_code
         String authCode2Session = wxConfig.get("wx_auth_code_2_session");
         if (StringUtils.isBlank(authCode2Session)) {
-            return ComResponse.fail("微信小程序配置有问题，请联系管理员");
+            return ComResponse.fail("微信小程序配置【wx_auth_code_2_session】有问题，请联系管理员");
         }
         String wxAppid = wxConfig.get("wx_appid");
         if (StringUtils.isBlank(wxAppid)) {
-            return ComResponse.fail("微信小程序配置有问题，请联系管理员");
+            return ComResponse.fail("微信小程序配置【wx_appid】有问题，请联系管理员");
         }
         String wxSecret = wxConfig.get("wx_secret");
         if (StringUtils.isBlank(wxSecret)) {
-            return ComResponse.fail("微信小程序配置有问题，请联系管理员");
+            return ComResponse.fail("微信小程序配置【wx_secret】有问题，请联系管理员");
         }
         authCode2Session = authCode2Session.replace("JSCODE", jsCode).replace("${my.wx.appid}", wxAppid).replace("${my.wx.secret}", wxSecret);
         logger.debug(authCode2Session);

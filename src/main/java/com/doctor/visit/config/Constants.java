@@ -10,6 +10,9 @@ import java.util.Map;
  */
 public final class Constants {
 
+
+    public static final String SUCCESS = "SUCCESS";
+    public static final String FAIL = "FAIL";
     public static final String SYSTEM_ACCOUNT = "system";
 
     public static final String FXT = "fxt";
