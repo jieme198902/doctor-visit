@@ -86,7 +86,10 @@ public final class Utils {
     }
 
 
-    public static String toJson(Object obj){
+    public static String toJson(Object obj) {
+        if (null == obj) {
+            return "null";
+        }
         return gson.toJson(obj);
     }
 

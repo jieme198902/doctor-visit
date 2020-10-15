@@ -36,7 +36,9 @@
     </appender>
 
     <root level="${logging.level.root}">
-        <appender-ref ref="STDOUT"/>
+        <!--控制台打印日志-->
+<!--        <appender-ref ref="STDOUT"/>-->
+        <!--文件输出日志-->
         <appender-ref ref="ASYNC"/>
     </root>
 

@@ -14,11 +14,14 @@ import org.yeauty.pojo.Session;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author kuanwang
  * websock 的服务层
  * https://my.oschina.net/u/3580577/blog/2088114
+ * https://blog.csdn.net/qq_38455201/article/details/80374712
  * <p>
  * 所有的配置项都在这个注解的属性中
  * <p>
@@ -51,12 +54,16 @@ import java.util.Map;
 //ws.port=80
 
 @Component
-@ServerEndpoint(path = "/im/{sid}",port = "${ws.port}")
-public class WebSocketServer {
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
+@ServerEndpoint(path = "/im/{sid}", port = "${ws.port}")
+public class DoctorVisitWebSocketServer {
+    private static final Logger logger = LoggerFactory.getLogger(DoctorVisitWebSocketServer.class);
 
     @Autowired
     private WebSocketMessageService webSocketMessageService;
+
+    private static final AtomicInteger onLineCount = new AtomicInteger(0);
+    // concurrent包的线程安全Set，用来存放每个客户端对应的Session对象。
+    private static CopyOnWriteArraySet<Session> sessionSet = new CopyOnWriteArraySet<>();
 
     /**
      * 当有新的连接进入时，对该方法进行回调 注入参数的类型:Session、HttpHeaders ...
@@ -91,7 +98,12 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(Session session, HttpHeaders headers, @RequestParam String req, @RequestParam MultiValueMap reqMap, @PathVariable String arg, @PathVariable Map pathMap) {
         logger.debug("new connection");
+        session.setAttribute("sid", pathMap.get("sid"));
 
+        sessionSet.add(session);
+        int cnt = onLineCount.incrementAndGet();
+        logger.info("有连接加入，当前连接数为：{} ", cnt);
+        session.sendText("连接成功");
     }
 
     /**
@@ -104,6 +116,9 @@ public class WebSocketServer {
     @OnClose
     public void onClose(Session session) throws IOException {
         logger.debug("one connection closed");
+        sessionSet.remove(session);
+        int cnt = onLineCount.decrementAndGet();
+        logger.info("有连接关闭，当前连接数为：{}", cnt);
     }
 
     /**
@@ -129,9 +144,11 @@ public class WebSocketServer {
     @OnMessage
     public void onMessage(Session session, String message) {
         //收到消息
-        logger.debug(message);
+        logger.info("session-->{},message-->{}", session, message);
+
         //发送消息-想发给谁、单发还是群发、还是图片之类的
-        session.sendText("Hello Netty!");
+        session.sendText(message);
+
     }
 
     /**
@@ -145,6 +162,27 @@ public class WebSocketServer {
     public void onBinary(Session session, byte[] bytes) {
         logger.debug("byte message");
         session.sendBinary(bytes);
+    }
+
+    /**
+     * 发送消息
+     * @param id
+     * @param message
+     * @return
+     */
+    public static boolean sendMessage(String id, String message) {
+        Session session = null;
+        for (Session s : sessionSet) {
+            if (id.equalsIgnoreCase(s.getAttribute("sid"))) {
+                session = s;
+                break;
+            }
+        }
+        if (null != session) {
+            session.sendText(message);
+            return true;
+        }
+        return false;
     }
 
     /**
