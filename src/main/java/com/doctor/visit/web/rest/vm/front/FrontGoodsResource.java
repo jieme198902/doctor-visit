@@ -78,6 +78,7 @@ public class FrontGoodsResource {
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = BusGoods.class),
         @ApiImplicitParam(name = "classId", value = "分类id"),
+        @ApiImplicitParam(name = "name", value = "商品名称"),
     })
     @PostMapping("listGoods")
     @ApiOperation(value = "获取商品列表")
