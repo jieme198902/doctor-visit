@@ -98,6 +98,8 @@ public class OrderServiceImpl implements OrderService {
         //总价格
         Integer totalPrice = bus.getPrice() * bus.getNum();
         insertOrder.setTotalPrice(totalPrice);
+        //获取remark放在大订单里面
+        insertOrder.setRemark(bus.getRemark());
         busOrderGoodsTotalMapper.insertSelective(insertOrder);
         //新增小订单
         bus.setId(IDKeyUtil.generateId());
