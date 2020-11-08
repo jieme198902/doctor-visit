@@ -26,6 +26,7 @@ public class BusDoctor implements Serializable {
      * 医生职称 对应dict 的YSZC
      */
     @Column(name = "professional_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long professionalId;
     /**
      * 医生职称
@@ -91,6 +92,7 @@ public class BusDoctor implements Serializable {
      * 创建者id
      */
     @Column(name = "create_by")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long createBy;
 
     /**
@@ -111,6 +113,7 @@ public class BusDoctor implements Serializable {
      * 修改人
      */
     @Column(name = "edit_by")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long editBy;
 
     /**

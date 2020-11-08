@@ -191,6 +191,8 @@ public class OrderServiceImpl implements OrderService {
                 bus.setIsDel(Constants.EXIST);
                 busOrderGoodsMapper.insertSelective(bus);
                 busOrderGoods.add(bus);
+            }else{
+                throw new RuntimeException("商品没找到");
             }
         }
         insertOrder.setTotalPrice(totalPrice);

@@ -1,5 +1,8 @@
 package com.doctor.visit.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -7,6 +10,7 @@ import javax.persistence.*;
 public class JhiUserAuthority implements Serializable {
     @Id
     @Column(name = "user_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
 
     @Id

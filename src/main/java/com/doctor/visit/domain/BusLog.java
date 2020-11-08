@@ -34,6 +34,7 @@ public class BusLog implements Serializable {
      * 操作人id
      */
     @Column(name = "create_by")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long createBy;
 
     /**

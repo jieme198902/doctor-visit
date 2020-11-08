@@ -34,6 +34,7 @@ public class BusClincClass implements Serializable {
      * 创建者id
      */
     @Column(name = "create_by")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long createBy;
 
     /**
@@ -54,6 +55,7 @@ public class BusClincClass implements Serializable {
      * 修改人
      */
     @Column(name = "edit_by")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long editBy;
 
     /**

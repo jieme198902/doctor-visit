@@ -19,7 +19,8 @@ public class BusUserShoppingCart implements Serializable {
      * 商品id
      */
     @Column(name = "goods_id")
-    private Integer goodsId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long goodsId;
 
     /**
      * 商品标题
@@ -64,6 +65,7 @@ public class BusUserShoppingCart implements Serializable {
      * 修改人
      */
     @Column(name = "edit_by")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long editBy;
 
     /**
@@ -107,7 +109,7 @@ public class BusUserShoppingCart implements Serializable {
      *
      * @return goods_id - 商品id
      */
-    public Integer getGoodsId() {
+    public Long getGoodsId() {
         return goodsId;
     }
 
@@ -116,7 +118,7 @@ public class BusUserShoppingCart implements Serializable {
      *
      * @param goodsId 商品id
      */
-    public void setGoodsId(Integer goodsId) {
+    public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
     }
 
