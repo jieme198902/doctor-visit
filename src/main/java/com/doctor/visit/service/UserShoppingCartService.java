@@ -1,6 +1,7 @@
 package com.doctor.visit.service;
 
 import com.doctor.visit.domain.BusUserShoppingCart;
+import com.doctor.visit.domain.dto.BusUserShoppingCartDto;
 import com.doctor.visit.web.rest.util.ComResponse;
 import org.springframework.data.domain.Pageable;
 
@@ -15,7 +16,7 @@ public interface UserShoppingCartService {
      * @param pageable
      * @return
      */
-    ComResponse<List<BusUserShoppingCart>> listUserShoppingCart(BusUserShoppingCart bus, Pageable pageable, HttpServletRequest request) throws Exception;
+    ComResponse<List<BusUserShoppingCartDto>> listUserShoppingCart(BusUserShoppingCart bus, Pageable pageable, HttpServletRequest request) throws Exception;
     /**
      * 前台 - 新增或者更新用户购物车
      *

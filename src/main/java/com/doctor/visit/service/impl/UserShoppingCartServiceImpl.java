@@ -3,13 +3,19 @@ package com.doctor.visit.service.impl;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusUser;
 import com.doctor.visit.domain.BusUserShoppingCart;
+import com.doctor.visit.domain.dto.BusArticleDto;
+import com.doctor.visit.domain.dto.BusUserShoppingCartDto;
+import com.doctor.visit.repository.BusGoodsMapper;
+import com.doctor.visit.repository.BusGoodsSpecificationMapper;
 import com.doctor.visit.repository.BusUserShoppingCartMapper;
 import com.doctor.visit.service.common.CommonService;
+import com.doctor.visit.web.rest.util.BeanConversionUtil;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -25,11 +31,19 @@ import java.util.List;
 public class UserShoppingCartServiceImpl implements com.doctor.visit.service.UserShoppingCartService {
     private final CommonService commonService;
     private final BusUserShoppingCartMapper busUserShoppingCartMapper;
+    private final BusGoodsSpecificationMapper busGoodsSpecificationMapper;
 
-    public UserShoppingCartServiceImpl(CommonService commonService, BusUserShoppingCartMapper busUserShoppingCartMapper) {
+    private final BusGoodsMapper busGoodsMapper;
+
+    public UserShoppingCartServiceImpl(CommonService commonService, BusUserShoppingCartMapper busUserShoppingCartMapper, BusGoodsMapper busGoodsMapper, BusGoodsSpecificationMapper busGoodsSpecificationMapper) {
         this.commonService = commonService;
         this.busUserShoppingCartMapper = busUserShoppingCartMapper;
+        this.busGoodsMapper = busGoodsMapper;
+        this.busGoodsSpecificationMapper = busGoodsSpecificationMapper;
     }
+
+
+
 
     /**
      * 前台 - 获取用户购物车列表
@@ -39,7 +53,7 @@ public class UserShoppingCartServiceImpl implements com.doctor.visit.service.Use
      * @return
      */
     @Override
-    public ComResponse<List<BusUserShoppingCart>> listUserShoppingCart(BusUserShoppingCart bus, Pageable pageable, HttpServletRequest request) throws Exception {
+    public ComResponse<List<BusUserShoppingCartDto>> listUserShoppingCart(BusUserShoppingCart bus, Pageable pageable, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
             return ComResponse.failUnauthorized();
@@ -56,8 +70,13 @@ public class UserShoppingCartServiceImpl implements com.doctor.visit.service.Use
             criteria.andEqualTo("createBy", bus.getCreateBy());
         }
 
+        List<BusUserShoppingCartDto> busDtoList = Lists.newArrayList();
+
         Page<BusUserShoppingCart> busList = (Page<BusUserShoppingCart>) busUserShoppingCartMapper.selectByExample(example);
-        return ComResponse.ok(busList.getResult(), busList.getTotal());
+        busDtoList.forEach(it ->busDtoList.add(BeanConversionUtil.beanToDto(it,busGoodsMapper,busGoodsSpecificationMapper)));
+
+        return ComResponse.ok(busDtoList, busList.getTotal());
+
     }
 
     /**

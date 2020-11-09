@@ -2,14 +2,8 @@ package com.doctor.visit.web.rest.util;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
-import com.doctor.visit.domain.dto.BusArticleDto;
-import com.doctor.visit.domain.dto.BusDoctorDto;
-import com.doctor.visit.domain.dto.BusHospitalDto;
-import com.doctor.visit.domain.dto.BusOrderInquiryDto;
-import com.doctor.visit.repository.BusDoctorMapper;
-import com.doctor.visit.repository.BusFileMapper;
-import com.doctor.visit.repository.BusGoodsInquiryMapper;
-import com.doctor.visit.repository.BusPatientMapper;
+import com.doctor.visit.domain.dto.*;
+import com.doctor.visit.repository.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -98,6 +92,21 @@ public class BeanConversionUtil {
         return busDto;
     }
 
+
+    /**
+     * 文章转换
+     * 从 bean 转为 Dto
+     *
+     * @param bus
+     * @return
+     */
+    public static BusUserShoppingCartDto beanToDto(BusUserShoppingCart bus, BusGoodsMapper busGoodsMapper,BusGoodsSpecificationMapper busGoodsSpecificationMapper) {
+        BusUserShoppingCartDto busDto = new BusUserShoppingCartDto();
+        BeanUtils.copyProperties(bus, busDto);
+        busDto.setBusGoods(busGoodsMapper.selectByPrimaryKey(bus.getGoodsId()));
+        busDto.setBusGoodsSpecification(busGoodsSpecificationMapper.selectByPrimaryKey(bus.getGoodsSpecification()));
+        return busDto;
+    }
 
     /**
      * 问诊订单转换
