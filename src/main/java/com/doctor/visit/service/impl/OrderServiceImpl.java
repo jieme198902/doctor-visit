@@ -68,7 +68,6 @@ public class OrderServiceImpl implements OrderService {
         if (null == busUser) {
             return ComResponse.failUnauthorized();
         }
-
         //商品id，商品规格id 为空的时候
         if (null == bus.getGoodsId() ||
             null == bus.getGoodsSpecificationId() ||
@@ -84,11 +83,13 @@ public class OrderServiceImpl implements OrderService {
         //创建人
         insertOrder.setEditTime(new Date());
         insertOrder.setEditBy(busUser.getId());
-        insertOrder.setEditName(busUser.getName());
+        //这里放微信openid
+        insertOrder.setEditName(busUser.getWechatOpenid());
         //修改人
         insertOrder.setCreateTime(new Date());
         insertOrder.setCreateBy(busUser.getId());
-        insertOrder.setCreateName(busUser.getName());
+        //这里放微信openid
+        insertOrder.setCreateName(busUser.getWechatOpenid());
         //
         insertOrder.setIsDel(Constants.EXIST);
         //订单状态：`order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待发货；2已支付，已发货；4已评价；5已取消',
@@ -108,11 +109,13 @@ public class OrderServiceImpl implements OrderService {
         //创建人
         bus.setEditTime(new Date());
         bus.setEditBy(busUser.getId());
-        bus.setEditName(busUser.getName());
+        //这里放微信openid
+        bus.setEditName(busUser.getWechatOpenid());
         //修改人
         bus.setCreateTime(new Date());
         bus.setCreateBy(busUser.getId());
-        bus.setCreateName(busUser.getName());
+        //这里放微信openid
+        bus.setCreateName(busUser.getWechatOpenid());
         bus.setIsDel(Constants.EXIST);
         busOrderGoodsMapper.insertSelective(bus);
         //构建返回数据
@@ -154,11 +157,13 @@ public class OrderServiceImpl implements OrderService {
         //创建人
         insertOrder.setEditTime(new Date());
         insertOrder.setEditBy(busUser.getId());
-        insertOrder.setEditName(busUser.getName());
+        //这里放微信openid
+        insertOrder.setEditName(busUser.getWechatOpenid());
         //修改人
         insertOrder.setCreateTime(new Date());
         insertOrder.setCreateBy(busUser.getId());
-        insertOrder.setCreateName(busUser.getName());
+        //这里放微信openid
+        insertOrder.setCreateName(busUser.getWechatOpenid());
         //
         insertOrder.setIsDel(Constants.EXIST);
         //订单状态：`order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待发货；2已支付，已发货；4已评价；5已取消',
@@ -183,11 +188,13 @@ public class OrderServiceImpl implements OrderService {
                 //创建人
                 bus.setEditTime(new Date());
                 bus.setEditBy(busUser.getId());
-                bus.setEditName(busUser.getName());
+                //这里放微信openid
+                bus.setEditName(busUser.getWechatOpenid());
                 //修改人
                 bus.setCreateTime(new Date());
                 bus.setCreateBy(busUser.getId());
-                bus.setCreateName(busUser.getName());
+                //这里放微信openid
+                bus.setCreateName(busUser.getWechatOpenid());
                 bus.setIsDel(Constants.EXIST);
                 busOrderGoodsMapper.insertSelective(bus);
                 busOrderGoods.add(bus);
@@ -368,8 +375,10 @@ public class OrderServiceImpl implements OrderService {
             return ComResponse.failUnauthorized();
         }
         bus.setIsDel(Constants.EXIST);
+        //获取用户的订单列表
+        bus.setCreateBy(busUser.getId());
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-
+        logger.info("bus--->{}",bus);
         List<BusOrderGoodsTotal> orderGoodsTotals = busOrderGoodsTotalMapper.select(bus);
         List<BusOrderGoodsTotalDto> result = Lists.newArrayList();
         for (BusOrderGoodsTotal it : orderGoodsTotals) {

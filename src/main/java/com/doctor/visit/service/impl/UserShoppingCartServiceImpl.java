@@ -58,7 +58,6 @@ public class UserShoppingCartServiceImpl implements com.doctor.visit.service.Use
         if (null == busUser) {
             return ComResponse.failUnauthorized();
         }
-        busUser.setCreateBy(busUser.getId());
 
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         bus.setIsDel(Constants.EXIST);
@@ -66,8 +65,8 @@ public class UserShoppingCartServiceImpl implements com.doctor.visit.service.Use
         Example.Criteria criteria = example.createCriteria();
 
         //创建者
-        if (null != bus.getCreateBy()) {
-            criteria.andEqualTo("createBy", bus.getCreateBy());
+        if (null != busUser.getId()) {
+            criteria.andEqualTo("createBy", busUser.getId());
         }
 
         List<BusUserShoppingCartDto> busDtoList = Lists.newArrayList();

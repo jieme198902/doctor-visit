@@ -58,14 +58,15 @@
             a.class_id,
             a.class_name,
             a.forward_from,
+            a.content,
             a.url,
             a.create_name,
             a.create_time,
             a.edit_by,
             a.edit_name,
-            a.edit_time,
+            a.edit_time
             <if test="null!=userId">
-                (CASE
+                ,(CASE
                     WHEN rua.user_id = #{userId}
                     AND rua.is_del = "0" THEN
                         '1' ELSE '0'
@@ -74,7 +75,7 @@
             </if>
 
         FROM
-            bus_article AS a LEFT JOIN bus_relation_user_article AS rua ON a.id = rua.article_id
+            bus_article  a LEFT JOIN bus_relation_user_article rua ON a.id = rua.article_id
         WHERE a.is_del = '0'
       <if test="null!=classId">
           AND a.class_id = #{classId}

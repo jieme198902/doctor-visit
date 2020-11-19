@@ -73,9 +73,12 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
         if (StringUtils.isNotBlank(bus.getOrderNo())) {
             criteria.andEqualTo("orderNo", bus.getOrderNo());
         }
+        if (null != bus.getCreateBy()) {
+            criteria.andEqualTo("createBy", bus.getCreateBy());
+        }
         Page<BusOrderInquiry> busList = (Page<BusOrderInquiry>) busOrderInquiryMapper.selectByExample(example);
         List<BusOrderInquiryDto> busDtoList = Lists.newArrayList();
-        busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry, requestPath, busFileMapper, busPatientMapper, busGoodsInquiryMapper,busDoctorMapper)));
+        busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry, requestPath, busFileMapper, busPatientMapper, busGoodsInquiryMapper, busDoctorMapper)));
         return ComResponse.ok(busDtoList, busList.getTotal());
     }
 
@@ -164,7 +167,7 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
         busFile.setFileType(Constants.FILE_TYPE_IMG);
         uploadService.uploadFiles(busFile, request);
         //
-        BusOrderInquiryDto busOrderInquiryDto = BeanConversionUtil.beanToDto(bus, requestPath, busFileMapper, busPatientMapper,busGoodsInquiryMapper, busDoctorMapper);
+        BusOrderInquiryDto busOrderInquiryDto = BeanConversionUtil.beanToDto(bus, requestPath, busFileMapper, busPatientMapper, busGoodsInquiryMapper, busDoctorMapper);
         return ComResponse.ok(busOrderInquiryDto);
     }
 

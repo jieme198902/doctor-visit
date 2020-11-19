@@ -41,7 +41,7 @@ public class FrontOrderInquiryResource {
     @PostMapping("listOrderInquiry")
     @ApiOperation(value = "前端 - 获取问诊订单列表")
     public Object listOrderInquiry(BusOrderInquiry bus, Pageable pageable, HttpServletRequest request) throws Exception {
-        bus.setCreateBy(Utils.getUserId(request));
+        bus.setCreateBy(Utils.getUserIdWithoutException(request));
         return orderInquiryService.listOrderInquiry(bus, pageable);
     }
 
