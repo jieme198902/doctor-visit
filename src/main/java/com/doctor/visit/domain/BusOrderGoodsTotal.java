@@ -38,6 +38,26 @@ public class BusOrderGoodsTotal implements Serializable {
     @Column(name = "pay_time")
     private Date payTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
+    @Column(name = "receiving_time")
+    private Date receivingTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
+    @Column(name = "cancel_time")
+    private Date cancelTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
+    @Column(name = "del_time")
+    private Date delTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
+    @Column(name = "send_time")
+    private Date sendTime;
+
     /**
      * 下单备注
      */
@@ -312,5 +332,37 @@ public class BusOrderGoodsTotal implements Serializable {
      */
     public void setIsDel(String isDel) {
         this.isDel = isDel;
+    }
+
+    public Date getReceivingTime() {
+        return receivingTime;
+    }
+
+    public void setReceivingTime(Date receivingTime) {
+        this.receivingTime = receivingTime;
+    }
+
+    public Date getCancelTime() {
+        return cancelTime;
+    }
+
+    public void setCancelTime(Date cancelTime) {
+        this.cancelTime = cancelTime;
+    }
+
+    public Date getDelTime() {
+        return delTime;
+    }
+
+    public void setDelTime(Date delTime) {
+        this.delTime = delTime;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
     }
 }

@@ -198,7 +198,7 @@ public class OrderServiceImpl implements OrderService {
                 bus.setIsDel(Constants.EXIST);
                 busOrderGoodsMapper.insertSelective(bus);
                 busOrderGoods.add(bus);
-            }else{
+            } else {
                 throw new RuntimeException("商品没找到");
             }
         }
@@ -340,10 +340,10 @@ public class OrderServiceImpl implements OrderService {
         orderGoodsTotal.setOrderNo(paramMap.get("out_trade_no"));
         List<BusOrderGoodsTotal> busOrderGoodsTotals = busOrderGoodsTotalMapper.select(orderGoodsTotal);
         if (null == busOrderGoodsTotals || busOrderGoodsTotals.isEmpty()) {
-            logger.error("未找到该订单号");
+            logger.info("未找到该订单号");
             return Constants.FAIL;
         } else if (busOrderGoodsTotals.size() != 1) {
-            logger.error("找到多个订单，订单异常");
+            logger.info("找到多个订单，订单异常");
             return Constants.FAIL;
         } else {
             //  `order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待发货；2已支付，已发货；4已评价；5已取消',
@@ -352,7 +352,7 @@ public class OrderServiceImpl implements OrderService {
                 updateOrder.setOrderState("1");
                 updateOrder.setPayTime(new Date());
                 busOrderGoodsTotalMapper.updateByPrimaryKeySelective(updateOrder);
-                logger.error("已支付:正常支付");
+                logger.info("已支付:正常支付");
                 return Constants.SUCCESS;
             }
             logger.error("已支付:" + updateOrder.getOrderState());
@@ -378,7 +378,6 @@ public class OrderServiceImpl implements OrderService {
         //获取用户的订单列表
         bus.setCreateBy(busUser.getId());
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        logger.info("bus--->{}",bus);
         List<BusOrderGoodsTotal> orderGoodsTotals = busOrderGoodsTotalMapper.select(bus);
         List<BusOrderGoodsTotalDto> result = Lists.newArrayList();
         for (BusOrderGoodsTotal it : orderGoodsTotals) {
@@ -392,5 +391,91 @@ public class OrderServiceImpl implements OrderService {
             result.add(dto);
         }
         return ComResponse.ok(result);
+    }
+
+
+    /**
+     * 确认收货
+     *
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Object updateOrderReceiving(BusOrderGoodsTotal bus, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserIdWithoutException(request));
+        if (null == busUser || null == bus || null == bus.getId()) {
+            return ComResponse.failUnauthorized();
+        }
+        BusOrderGoodsTotal updateOrder = busOrderGoodsTotalMapper.selectByPrimaryKey(bus.getId());
+        if (null == updateOrder) {
+            return ComResponse.fail("未找到订单信息");
+        }
+        //  `order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待发货；2已支付，已发货；3已收货；4已评价；5已取消',
+        if ("2".equals(updateOrder.getOrderState())) {
+            updateOrder.setOrderState("3");
+            //收货时间
+            updateOrder.setReceivingTime(new Date());
+            busOrderGoodsTotalMapper.updateByPrimaryKeySelective(updateOrder);
+            return ComResponse.ok(updateOrder);
+        }
+        return ComResponse.fail("暂不能操作收货，或者已收货，请稍后重试。");
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Object updateOrderCancel(BusOrderGoodsTotal bus, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserIdWithoutException(request));
+        if (null == busUser || null == bus || null == bus.getId()) {
+            return ComResponse.failUnauthorized();
+        }
+        BusOrderGoodsTotal updateOrder = busOrderGoodsTotalMapper.selectByPrimaryKey(bus.getId());
+        if (null == updateOrder) {
+            return ComResponse.fail("未找到订单信息");
+        }
+        //  `order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待发货；2已支付，已发货；3已收货；4已评价；5已取消',
+        if ("0".equals(updateOrder.getOrderState()) || "1".equals(updateOrder.getOrderState())) {
+            updateOrder.setOrderState("5");
+            //取消时间
+            updateOrder.setCancelTime(new Date());
+            busOrderGoodsTotalMapper.updateByPrimaryKeySelective(updateOrder);
+            return ComResponse.ok(updateOrder);
+        }
+        return ComResponse.fail("订单已发货，请联系管理官退货");
+
+    }
+
+    /**
+     * 删除订单
+     *
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Object updateOrderDelete(BusOrderGoodsTotal bus, HttpServletRequest request) throws Exception {
+        BusUser busUser = commonService.getBusUser(Utils.getUserIdWithoutException(request));
+        if (null == busUser || null == bus || null == bus.getId()) {
+            return ComResponse.failUnauthorized();
+        }
+        BusOrderGoodsTotal updateOrder = busOrderGoodsTotalMapper.selectByPrimaryKey(bus.getId());
+        if (null == updateOrder) {
+            return ComResponse.fail("未找到订单信息");
+        }
+        //  `order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待发货；2已支付，已发货；3已收货；4已评价；5已取消',
+        updateOrder.setIsDel(Constants.DELETE);
+        //删除时间
+        updateOrder.setDelTime(new Date());
+        busOrderGoodsTotalMapper.updateByPrimaryKeySelective(updateOrder);
+        return ComResponse.ok("订单已删除");
     }
 }

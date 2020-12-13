@@ -60,10 +60,9 @@ public class UserShoppingCartServiceImpl implements com.doctor.visit.service.Use
         }
 
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
         Example example = new Example(BusUserShoppingCart.class);
         Example.Criteria criteria = example.createCriteria();
-
+        criteria.andEqualTo("isDel",Constants.EXIST);
         //创建者
         if (null != busUser.getId()) {
             criteria.andEqualTo("createBy", busUser.getId());
@@ -72,7 +71,7 @@ public class UserShoppingCartServiceImpl implements com.doctor.visit.service.Use
         List<BusUserShoppingCartDto> busDtoList = Lists.newArrayList();
 
         Page<BusUserShoppingCart> busList = (Page<BusUserShoppingCart>) busUserShoppingCartMapper.selectByExample(example);
-        busDtoList.forEach(it ->busDtoList.add(BeanConversionUtil.beanToDto(it,busGoodsMapper,busGoodsSpecificationMapper)));
+        busList.forEach(it ->busDtoList.add(BeanConversionUtil.beanToDto(it,busGoodsMapper,busGoodsSpecificationMapper)));
 
         return ComResponse.ok(busDtoList, busList.getTotal());
 

@@ -330,6 +330,7 @@ public class FrontMineResource {
 
     /**
      * 统一下单:商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的预支付交易后调起支付。
+     *
      * @param param
      * @param request
      * @return
@@ -337,25 +338,67 @@ public class FrontMineResource {
      */
     @PostMapping("unifiedOrder")
     @ApiOperation(value = "统一下单:商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的预支付交易后调起支付。")
-    public Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request)throws Exception{
+    public Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request) throws Exception {
         return orderService.unifiedOrder(param, request);
     }
 
     /**
      * 更新订单，支付，回调
+     *
      * @param request
      * @return
      * @throws Exception
      */
     @PostMapping("updateOrderStateForPay")
-    @ApiOperation(value = "更新订单，支付，回调")
-    public Object updateOrderStateForPay(HttpServletRequest request)throws Exception{
-        return orderService.updateOrderStateForPay( request);
+    @ApiOperation(value = "前端不用：微信异步通知，更新订单，支付，回调")
+    public Object updateOrderStateForPay(HttpServletRequest request) throws Exception {
+        return orderService.updateOrderStateForPay(request);
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("updateOrderCancel")
+    @ApiOperation(value = "取消订单")
+    public Object updateOrderCancel(BusOrderGoodsTotal bus, HttpServletRequest request) throws Exception {
+        return orderService.updateOrderCancel(bus, request);
+    }
+
+    /**
+     * 删除订单
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("updateOrderDelete")
+    @ApiOperation(value = "删除订单")
+    public Object updateOrderDelete(BusOrderGoodsTotal bus, HttpServletRequest request) throws Exception {
+        return orderService.updateOrderDelete(bus, request);
+    }
+
+
+    /**
+     * 取消订单
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("updateOrderReceiving")
+    @ApiOperation(value = "确认收货")
+    public Object updateOrderReceiving(BusOrderGoodsTotal bus, HttpServletRequest request) throws Exception {
+        return orderService.updateOrderReceiving(bus, request);
     }
 
 
     /**
      * 获取用户的商品订单列表
+     *
      * @param bus
      * @param request
      * @return
@@ -363,8 +406,8 @@ public class FrontMineResource {
      */
     @PostMapping("listOrder")
     @ApiOperation(value = "获取用户的商品订单列表")
-    public Object listOrder(BusOrderGoodsTotal bus,Pageable pageable,HttpServletRequest request)throws Exception{
-        return orderService.listOrder(bus, pageable,request);
+    public Object listOrder(BusOrderGoodsTotal bus, Pageable pageable, HttpServletRequest request) throws Exception {
+        return orderService.listOrder(bus, pageable, request);
     }
 
 }
