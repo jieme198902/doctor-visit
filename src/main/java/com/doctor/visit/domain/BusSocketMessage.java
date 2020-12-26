@@ -45,6 +45,10 @@ public class BusSocketMessage implements Serializable {
      * 消息内容，文字的话直接存储文字，其他的存储url
      */
     private String message;
+    /**
+     * 是否发送成功，0否1是
+     */
+    private String succ;
 
     /**
      * 发送时间
@@ -61,6 +65,14 @@ public class BusSocketMessage implements Serializable {
     private String isDel;
 
     private static final long serialVersionUID = 1L;
+
+    public String getSucc() {
+        return succ;
+    }
+
+    public void setSucc(String succ) {
+        this.succ = succ;
+    }
 
     /**
      * @return id

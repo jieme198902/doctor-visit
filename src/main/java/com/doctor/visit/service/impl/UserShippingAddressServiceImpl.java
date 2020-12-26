@@ -48,12 +48,12 @@ public class UserShippingAddressServiceImpl implements com.doctor.visit.service.
         bus.setCreateBy(busUser.getId());
 
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
-        bus.setIsDel(Constants.EXIST);
         Example example = new Example(BusPatient.class);
         Example.Criteria criteria = example.createCriteria();
 
         //创建者
         criteria.andEqualTo("createBy", bus.getCreateBy());
+        criteria.andEqualTo("isDel",Constants.EXIST);
 
         Page<BusUserShippingAddress> busList = (Page<BusUserShippingAddress>) busUserShippingAddressMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal());

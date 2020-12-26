@@ -4,10 +4,7 @@ import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusOrderGoodsTotalDto;
 import com.doctor.visit.domain.param.UnifiedOrderParam;
-import com.doctor.visit.repository.BusDictMapper;
-import com.doctor.visit.repository.BusGoodsMapper;
-import com.doctor.visit.repository.BusOrderGoodsMapper;
-import com.doctor.visit.repository.BusOrderGoodsTotalMapper;
+import com.doctor.visit.repository.*;
 import com.doctor.visit.service.OrderService;
 import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
@@ -46,13 +43,15 @@ public class OrderServiceImpl implements OrderService {
     private final BusGoodsMapper busGoodsMapper;
     private final BusOrderGoodsMapper busOrderGoodsMapper;
     private final BusOrderGoodsTotalMapper busOrderGoodsTotalMapper;
+    private final BusUserShippingAddressMapper busUserShippingAddressMapper;
 
-    public OrderServiceImpl(CommonService commonService, BusDictMapper busDictMapper, BusGoodsMapper busGoodsMapper, BusOrderGoodsMapper busOrderGoodsMapper, BusOrderGoodsTotalMapper busOrderGoodsTotalMapper) {
+    public OrderServiceImpl(CommonService commonService, BusDictMapper busDictMapper, BusGoodsMapper busGoodsMapper, BusOrderGoodsMapper busOrderGoodsMapper, BusOrderGoodsTotalMapper busOrderGoodsTotalMapper,BusUserShippingAddressMapper busUserShippingAddressMapper) {
         this.commonService = commonService;
         this.busDictMapper = busDictMapper;
         this.busGoodsMapper = busGoodsMapper;
         this.busOrderGoodsMapper = busOrderGoodsMapper;
         this.busOrderGoodsTotalMapper = busOrderGoodsTotalMapper;
+        this.busUserShippingAddressMapper = busUserShippingAddressMapper;
     }
 
     /**
@@ -63,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public ComResponse<BusOrderGoodsTotalDto> insertOrder(BusOrderGoods bus, HttpServletRequest request) throws Exception {
+    public ComResponse<BusOrderGoodsTotalDto> insertOrder(BusOrderGoods bus, BusUserShippingAddress address, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
             return ComResponse.failUnauthorized();
@@ -75,6 +74,9 @@ public class OrderServiceImpl implements OrderService {
             null == bus.getPrice() ||
             StringUtils.isBlank(bus.getGoodsSpecificationName())) {
             return ComResponse.failBadRequest();
+        }
+        if (null == address || null == address.getId() || StringUtils.isBlank(address.getAddressDetail())) {
+            return ComResponse.fail("请填写邮寄地址");
         }
 
         //新增大订单
@@ -99,6 +101,9 @@ public class OrderServiceImpl implements OrderService {
         //总价格
         Integer totalPrice = bus.getPrice() * bus.getNum();
         insertOrder.setTotalPrice(totalPrice);
+        //添加寄递地址信息
+        insertOrder.setAddressId(address.getId());
+        insertOrder.setAddressDetail(address.getAddressDetail());
         //获取remark放在大订单里面
         insertOrder.setRemark(bus.getRemark());
         busOrderGoodsTotalMapper.insertSelective(insertOrder);
@@ -137,7 +142,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public ComResponse<BusOrderGoodsTotalDto> insertOrderWithShoppingCart(String userShoppingCart, HttpServletRequest request) throws Exception {
+    public ComResponse<BusOrderGoodsTotalDto> insertOrderWithShoppingCart(String userShoppingCart, BusUserShippingAddress address, HttpServletRequest request) throws Exception {
         BusUser busUser = commonService.getBusUser(Utils.getUserId(request));
         if (null == busUser) {
             return ComResponse.failUnauthorized();
@@ -150,6 +155,9 @@ public class OrderServiceImpl implements OrderService {
         }.getType());
         if (null == userShoppingCarts || userShoppingCarts.isEmpty()) {
             return ComResponse.failBadRequest();
+        }
+        if (null == address || null == address.getId() || StringUtils.isBlank(address.getAddressDetail())) {
+            return ComResponse.fail("请填写邮寄地址");
         }
         //新增大订单
         BusOrderGoodsTotal insertOrder = new BusOrderGoodsTotal();
@@ -174,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
         Integer totalPrice = 0;
         //
         List<BusOrderGoods> busOrderGoods = Lists.newArrayList();
-
+        StringBuilder remark = new StringBuilder();
         for (BusUserShoppingCart cart : userShoppingCarts) {
             BusGoods busGoods = busGoodsMapper.selectByPrimaryKey(cart.getGoodsId());
             if (null != busGoods) {
@@ -196,6 +204,8 @@ public class OrderServiceImpl implements OrderService {
                 //这里放微信openid
                 bus.setCreateName(busUser.getWechatOpenid());
                 bus.setIsDel(Constants.EXIST);
+                remark.append(bus.getRemark());
+                remark.append(";");
                 busOrderGoodsMapper.insertSelective(bus);
                 busOrderGoods.add(bus);
             } else {
@@ -203,6 +213,11 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         insertOrder.setTotalPrice(totalPrice);
+        //设置备注
+        insertOrder.setRemark(remark.toString());
+        //添加寄递地址信息
+        insertOrder.setAddressDetail(address.getAddressDetail());
+        insertOrder.setAddressId(address.getId());
         busOrderGoodsTotalMapper.insertSelective(insertOrder);
         //构建返回数据
         BusOrderGoodsTotalDto result = new BusOrderGoodsTotalDto();
@@ -388,6 +403,9 @@ public class OrderServiceImpl implements OrderService {
             BusOrderGoodsTotalDto dto = new BusOrderGoodsTotalDto();
             BeanUtils.copyProperties(it, dto);
             dto.setBusOrderGoods(busOrderGoods);
+            //添加订单寄递地址信息
+            BusUserShippingAddress address = busUserShippingAddressMapper.selectByPrimaryKey(it.getAddressId());
+            dto.setShippingAddress(address);
             result.add(dto);
         }
         return ComResponse.ok(result);

@@ -124,6 +124,8 @@ public class UserShoppingCartServiceImpl implements com.doctor.visit.service.Use
             int i = busUserShoppingCartMapper.updateByPrimaryKeySelective(delRecord);
             if (1 == i) {
                 delIds.append(id);
+            }else{
+                throw new RuntimeException("未找到【"+id+"】购物车信息");
             }
         }
         return ComResponse.ok(delIds);

@@ -1,12 +1,10 @@
 package com.doctor.visit.web.rest.vm;
 
-import com.doctor.visit.service.WebSocketMessageService;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.yeauty.annotation.*;
@@ -58,8 +56,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DoctorVisitWebSocketServer {
     private static final Logger logger = LoggerFactory.getLogger(DoctorVisitWebSocketServer.class);
 
-    @Autowired
-    private WebSocketMessageService webSocketMessageService;
+
 
     private static final AtomicInteger onLineCount = new AtomicInteger(0);
     // concurrent包的线程安全Set，用来存放每个客户端对应的Session对象。

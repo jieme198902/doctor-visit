@@ -59,6 +59,19 @@ public class BusOrderGoodsTotal implements Serializable {
     private Date sendTime;
 
     /**
+     * 邮寄地址id
+     */
+    @Column(name = "address_id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long addressId;
+
+    /**
+     * 邮寄地址 详细
+     */
+    @Column(name = "address_detail")
+    private String addressDetail;
+
+    /**
      * 下单备注
      */
     private String remark;
@@ -364,5 +377,21 @@ public class BusOrderGoodsTotal implements Serializable {
 
     public void setSendTime(Date sendTime) {
         this.sendTime = sendTime;
+    }
+
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
+    }
+
+    public String getAddressDetail() {
+        return addressDetail;
+    }
+
+    public void setAddressDetail(String addressDetail) {
+        this.addressDetail = addressDetail;
     }
 }

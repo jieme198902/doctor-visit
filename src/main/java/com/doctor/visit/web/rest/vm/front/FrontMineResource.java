@@ -289,6 +289,9 @@ public class FrontMineResource {
      */
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = BusOrderGoods.class),
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class),
+        @ApiImplicitParam(name = "id", value = "邮寄地址id"),
+        @ApiImplicitParam(name = "addressDetail", value = "邮寄地址详情"),
         @ApiImplicitParam(name = "token", value = "header中的token"),
         @ApiImplicitParam(name = "goodsId", value = "商品id"),
         @ApiImplicitParam(name = "goodsSpecificationId", value = "商品规格id"),
@@ -301,8 +304,8 @@ public class FrontMineResource {
     })
     @PostMapping("insertOrder")
     @ApiOperation(value = "前台 - 单商品下单")
-    public Object insertOrder(BusOrderGoods goods, HttpServletRequest request) throws Exception {
-        return orderService.insertOrder(goods, request);
+    public Object insertOrder(BusOrderGoods goods, BusUserShippingAddress address,HttpServletRequest request) throws Exception {
+        return orderService.insertOrder(goods, address,request);
     }
 
     /**
@@ -314,6 +317,10 @@ public class FrontMineResource {
      */
     @ApiImplicitParams({
         @ApiImplicitParam(dataTypeClass = BusUserShoppingCart.class),
+        @ApiImplicitParam(dataTypeClass = BusUserShippingAddress.class),
+        @ApiImplicitParam(name = "id", value = "邮寄地址id"),
+        @ApiImplicitParam(name = "addressDetail", value = "邮寄地址详情"),
+
         @ApiImplicitParam(name = "token", value = "header中的token"),
         @ApiImplicitParam(name = "userShoppingCart", value = "json数组的购物车信息比如:[{'goodsId':'123456',},{}]"),
 
@@ -324,8 +331,8 @@ public class FrontMineResource {
     })
     @PostMapping("insertOrderWithShoppingCart")
     @ApiOperation(value = "前台 - 购物车下单")
-    public Object insertOrderWithShoppingCart(String userShoppingCart, HttpServletRequest request) throws Exception {
-        return orderService.insertOrderWithShoppingCart(userShoppingCart, request);
+    public Object insertOrderWithShoppingCart(String userShoppingCart,BusUserShippingAddress address, HttpServletRequest request) throws Exception {
+        return orderService.insertOrderWithShoppingCart(userShoppingCart, address,request);
     }
 
     /**
