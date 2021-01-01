@@ -72,7 +72,7 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
         if (StringUtils.isBlank(jsCode)) {
             return ComResponse.failBadRequest();
         }
-        logger.info("jsCode-->{}", jsCode);
+        logger.debug("jsCode-->{}", jsCode);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .readTimeout(120, TimeUnit.SECONDS)
             .writeTimeout(120, TimeUnit.SECONDS)
@@ -122,7 +122,7 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
                 return ComResponse.fail("请求失败，请稍后重试");
             }
             loginLog.setResponse(result);
-            logger.info("wx.response-->{}", result);
+            logger.debug("wx.response-->{}", result);
             Map<String, String> resultMap = Utils.fromJson(result, new TypeToken<Map<String, String>>() {
             }.getType());
             if (null == resultMap) {
@@ -175,7 +175,7 @@ public class UserServiceImpl implements com.doctor.visit.service.UserService {
                 requestMap.put("user", busUserDto);
                 loginLog.setResponse(Utils.toJson(requestMap));
                 busLogMapper.insertSelective(loginLog);
-                logger.info("login-->{}", Utils.toJson(busUserDto));
+                logger.debug("login-->{}", Utils.toJson(busUserDto));
                 return ComResponse.ok(busUserDto);
             } else {
                 //记录日志

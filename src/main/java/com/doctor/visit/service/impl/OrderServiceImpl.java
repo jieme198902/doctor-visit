@@ -3,6 +3,7 @@ package com.doctor.visit.service.impl;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusOrderGoodsTotalDto;
+import com.doctor.visit.domain.dto.BusUserShoppingCartDto;
 import com.doctor.visit.domain.param.UnifiedOrderParam;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.service.OrderService;
@@ -151,7 +152,8 @@ public class OrderServiceImpl implements OrderService {
         if (StringUtils.isBlank(userShoppingCart)) {
             return ComResponse.failBadRequest();
         }
-        List<BusUserShoppingCart> userShoppingCarts = Utils.fromJson(userShoppingCart, new TypeToken<List<BusUserShoppingCart>>() {
+        logger.debug("userShoppingCart-->{}",userShoppingCart);
+        List<BusUserShoppingCartDto> userShoppingCarts = Utils.fromJson(userShoppingCart, new TypeToken<List<BusUserShoppingCartDto>>() {
         }.getType());
         if (null == userShoppingCarts || userShoppingCarts.isEmpty()) {
             return ComResponse.failBadRequest();
@@ -183,7 +185,7 @@ public class OrderServiceImpl implements OrderService {
         //
         List<BusOrderGoods> busOrderGoods = Lists.newArrayList();
         StringBuilder remark = new StringBuilder();
-        for (BusUserShoppingCart cart : userShoppingCarts) {
+        for (BusUserShoppingCartDto cart : userShoppingCarts) {
             BusGoods busGoods = busGoodsMapper.selectByPrimaryKey(cart.getGoodsId());
             if (null != busGoods) {
                 //当前价格 * 购买数量
@@ -204,6 +206,15 @@ public class OrderServiceImpl implements OrderService {
                 //这里放微信openid
                 bus.setCreateName(busUser.getWechatOpenid());
                 bus.setIsDel(Constants.EXIST);
+                bus.setRemark(cart.getRemark());
+                bus.setGoodsId(cart.getGoodsId());
+                bus.setGoodsSpecificationId(cart.getGoodsSpecification());
+                bus.setGoodsSpecificationName(cart.getSpecificationName());
+                bus.setMarketPrice(busGoods.getOriginalPrice());
+                bus.setPrice(busGoods.getCurrentPrice());
+                bus.setNum(cart.getGoodsNum());
+
+                //总商品的描述
                 remark.append(bus.getRemark());
                 remark.append(";");
                 busOrderGoodsMapper.insertSelective(bus);
@@ -392,7 +403,8 @@ public class OrderServiceImpl implements OrderService {
         bus.setIsDel(Constants.EXIST);
         //获取用户的订单列表
         bus.setCreateBy(busUser.getId());
-        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        //排序
+        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize(),"create_time desc");
         List<BusOrderGoodsTotal> orderGoodsTotals = busOrderGoodsTotalMapper.select(bus);
         List<BusOrderGoodsTotalDto> result = Lists.newArrayList();
         for (BusOrderGoodsTotal it : orderGoodsTotals) {

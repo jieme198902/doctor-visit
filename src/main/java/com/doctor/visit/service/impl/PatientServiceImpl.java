@@ -46,6 +46,7 @@ public class PatientServiceImpl implements com.doctor.visit.service.PatientServi
         Example example = new Example(BusPatient.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDel", Constants.EXIST);
+        example.setOrderByClause("create_time desc");
         //患者名字
         if (StringUtils.isNotBlank(bus.getName())) {
             criteria.andLike("name", bus.getName() + "%");

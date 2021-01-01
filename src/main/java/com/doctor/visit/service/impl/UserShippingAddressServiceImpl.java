@@ -50,7 +50,7 @@ public class UserShippingAddressServiceImpl implements com.doctor.visit.service.
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Example example = new Example(BusPatient.class);
         Example.Criteria criteria = example.createCriteria();
-
+        example.setOrderByClause("default_address desc ,create_time desc");
         //创建者
         criteria.andEqualTo("createBy", bus.getCreateBy());
         criteria.andEqualTo("isDel",Constants.EXIST);

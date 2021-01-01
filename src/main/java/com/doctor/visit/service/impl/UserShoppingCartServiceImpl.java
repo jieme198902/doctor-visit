@@ -67,6 +67,8 @@ public class UserShoppingCartServiceImpl implements com.doctor.visit.service.Use
         if (null != busUser.getId()) {
             criteria.andEqualTo("createBy", busUser.getId());
         }
+        //按照时间排序
+        example.setOrderByClause("create_time desc");
 
         List<BusUserShoppingCartDto> busDtoList = Lists.newArrayList();
 

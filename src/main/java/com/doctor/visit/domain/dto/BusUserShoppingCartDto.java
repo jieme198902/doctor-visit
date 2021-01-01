@@ -6,7 +6,25 @@ import com.doctor.visit.domain.BusUserShoppingCart;
 
 public class BusUserShoppingCartDto extends BusUserShoppingCart {
     private BusGoods busGoods;
+    private String remark;
+    private String specificationName;
     private BusGoodsSpecification busGoodsSpecification;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public String getSpecificationName() {
+        return specificationName;
+    }
+
+    public void setSpecificationName(String specificationName) {
+        this.specificationName = specificationName;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public BusGoods getBusGoods() {
         return busGoods;
