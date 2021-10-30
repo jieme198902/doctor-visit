@@ -1,14 +1,12 @@
 package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusGoods;
-import com.doctor.visit.domain.BusGoodsClass;
-import com.doctor.visit.domain.BusGoodsSpecification;
-import com.doctor.visit.domain.JhiUser;
+import com.doctor.visit.domain.*;
 import com.doctor.visit.repository.BusGoodsClassMapper;
 import com.doctor.visit.repository.BusGoodsMapper;
 import com.doctor.visit.repository.BusGoodsSpecificationMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.DictService;
 import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -33,16 +31,20 @@ public class GoodsServiceImpl implements com.doctor.visit.service.GoodsService {
 
     @Value("${custom.rootPath}")
     private String rootPath;
+    //已修改
     @Value("${custom.requestPath}")
     private String requestPath;
 
     private final CommonService commonService;
+    private final DictService dictService;
+    //
     private final BusGoodsMapper busGoodsMapper;
     private final BusGoodsClassMapper busGoodsClassMapper;
     private final BusGoodsSpecificationMapper busGoodsSpecificationMapper;
 
-    public GoodsServiceImpl(CommonService commonService, BusGoodsClassMapper busGoodsClassMapper, BusGoodsMapper busGoodsMapper, BusGoodsSpecificationMapper busGoodsSpecificationMapper) {
+    public GoodsServiceImpl(CommonService commonService, DictService dictService,BusGoodsClassMapper busGoodsClassMapper, BusGoodsMapper busGoodsMapper, BusGoodsSpecificationMapper busGoodsSpecificationMapper) {
         this.commonService = commonService;
+        this.dictService = dictService;
         this.busGoodsClassMapper = busGoodsClassMapper;
         this.busGoodsMapper = busGoodsMapper;
         this.busGoodsSpecificationMapper = busGoodsSpecificationMapper;
@@ -156,6 +158,10 @@ public class GoodsServiceImpl implements com.doctor.visit.service.GoodsService {
             criteria.andEqualTo("classId", bus.getClassId());
         }
         Page<BusGoods> busList = (Page<BusGoods>) busGoodsMapper.selectByExample(example);
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
         return ComResponse.ok(busList.getResult(), busList.getTotal()).setStarDataListener(list -> {
             list.forEach(bean -> bean.setUrl(requestPath + bean.getUrl()));
             return list;

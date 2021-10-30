@@ -170,6 +170,7 @@ jhipster:
 # application:
 custom:
   rootPath: '/data/'
-  requestPath: 'https://wk.zhangfan.ink/'
+  #这里从数据库配置了
+  requestPath: 'https://www.syjk.vip/'
   excludeLogin: 'authenticate,api'
 

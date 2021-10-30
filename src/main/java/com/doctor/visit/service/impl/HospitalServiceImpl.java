@@ -7,6 +7,7 @@ import com.doctor.visit.repository.BusAreaMapper;
 import com.doctor.visit.repository.BusFileMapper;
 import com.doctor.visit.repository.BusHospitalMapper;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.DictService;
 import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
@@ -36,16 +37,19 @@ import java.util.Optional;
 public class HospitalServiceImpl implements com.doctor.visit.service.HospitalService {
     private final CommonService commonService;
     private final UploadService uploadService;
+    private final DictService  dictService;
     //
     private final BusHospitalMapper busHospitalMapper;
     private final BusAreaMapper busAreaMapper;
     private final BusFileMapper busFileMapper;
+    //已修改
     @Value("${custom.requestPath}")
     private String requestPath;
 
-    public HospitalServiceImpl(CommonService commonService, UploadService uploadService, BusHospitalMapper busHospitalMapper, BusAreaMapper busAreaMapper, BusFileMapper busFileMapper) {
+    public HospitalServiceImpl(CommonService commonService, UploadService uploadService,DictService dictService, BusHospitalMapper busHospitalMapper, BusAreaMapper busAreaMapper, BusFileMapper busFileMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
+        this.dictService = dictService;
         this.busHospitalMapper = busHospitalMapper;
         this.busAreaMapper = busAreaMapper;
         this.busFileMapper = busFileMapper;
@@ -76,6 +80,10 @@ public class HospitalServiceImpl implements com.doctor.visit.service.HospitalSer
         }
 
         List<BusHospitalDto> busHospitalDtoList = Lists.newArrayList();
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
         busList.getResult().forEach(busHospital -> busHospitalDtoList.add(BeanConversionUtil.beanToDto(busHospital, requestPath, busFileMapper)));
 
         return ComResponse.ok(busHospitalDtoList, busList.getTotal());

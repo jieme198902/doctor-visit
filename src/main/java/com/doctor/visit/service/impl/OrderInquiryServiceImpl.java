@@ -1,12 +1,10 @@
 package com.doctor.visit.service.impl;
 
 import com.doctor.visit.config.Constants;
-import com.doctor.visit.domain.BusFile;
-import com.doctor.visit.domain.BusOrderChangeRecord;
-import com.doctor.visit.domain.BusOrderInquiry;
-import com.doctor.visit.domain.BusUser;
+import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusOrderInquiryDto;
 import com.doctor.visit.repository.*;
+import com.doctor.visit.service.DictService;
 import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
@@ -32,12 +30,13 @@ import java.util.List;
 @Service
 public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderInquiryService {
 
+    //已修改
     @Value("${custom.requestPath}")
     private String requestPath;
 
     private final CommonService commonService;
     private final UploadService uploadService;
-
+    private final DictService dictService;
     //
     private final BusFileMapper busFileMapper;
     private final BusDoctorMapper busDoctorMapper;
@@ -46,9 +45,10 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
     private final BusGoodsInquiryMapper busGoodsInquiryMapper;
     private final BusOrderChangeRecordMapper busOrderChangeRecordMapper;
 
-    public OrderInquiryServiceImpl(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusOrderChangeRecordMapper busOrderChangeRecordMapper) {
+    public OrderInquiryServiceImpl(CommonService commonService, UploadService uploadService,DictService dictService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusOrderChangeRecordMapper busOrderChangeRecordMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
+        this.dictService = dictService;
         this.busFileMapper = busFileMapper;
         this.busDoctorMapper = busDoctorMapper;
         this.busPatientMapper = busPatientMapper;
@@ -78,6 +78,10 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
         }
         Page<BusOrderInquiry> busList = (Page<BusOrderInquiry>) busOrderInquiryMapper.selectByExample(example);
         List<BusOrderInquiryDto> busDtoList = Lists.newArrayList();
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
         busList.forEach(busOrderInquiry -> busDtoList.add(BeanConversionUtil.beanToDto(busOrderInquiry, requestPath, busFileMapper, busPatientMapper, busGoodsInquiryMapper, busDoctorMapper)));
         return ComResponse.ok(busDtoList, busList.getTotal());
     }
@@ -167,6 +171,10 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
         busFile.setFileType(Constants.FILE_TYPE_IMG);
         uploadService.uploadFiles(busFile, request);
         //
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
         BusOrderInquiryDto busOrderInquiryDto = BeanConversionUtil.beanToDto(bus, requestPath, busFileMapper, busPatientMapper, busGoodsInquiryMapper, busDoctorMapper);
         return ComResponse.ok(busOrderInquiryDto);
     }

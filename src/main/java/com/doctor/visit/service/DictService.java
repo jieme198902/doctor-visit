@@ -33,4 +33,7 @@ public interface DictService {
      * @return
      */
     ComResponse<StringBuilder> deleteDict(String ids);
+
+
+    ComResponse<List<BusDict>> listDistByType(String type);
 }

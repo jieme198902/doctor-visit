@@ -9,12 +9,14 @@ import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -118,4 +120,17 @@ public class DictServiceImpl implements com.doctor.visit.service.DictService {
         return ComResponse.ok(delIds);
     }
 
+
+    @Override
+    public ComResponse<List<BusDict>> listDistByType(String type) {
+        BusDict wxDict = new BusDict();
+        wxDict.setDicType(type);
+        List<BusDict> dataList = busDictMapper.select(wxDict);
+
+        if(null == dataList || dataList.isEmpty()){
+            return ComResponse.failBadRequest();
+        }
+        return ComResponse.ok(dataList);
+
+    }
 }

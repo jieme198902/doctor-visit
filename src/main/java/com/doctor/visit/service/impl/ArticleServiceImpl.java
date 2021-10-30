@@ -5,6 +5,7 @@ import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusArticleDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.DictService;
 import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
@@ -36,11 +37,13 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
 
     @Value("${custom.rootPath}")
     private String rootPath;
+    //已修改
     @Value("${custom.requestPath}")
     private String requestPath;
     //
     private final CommonService commonService;
     private final UploadService uploadService;
+    private final DictService dictService;
 
     //
     private final BusFileMapper busFileMapper;
@@ -49,11 +52,12 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
     private final BusRelationUserArticleMapper busRelationUserArticleMapper;
     private final BusRelationUserArticleShareMapper busRelationUserArticleShareMapper;
 
-    public ArticleServiceImpl(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusRelationUserArticleMapper busRelationUserArticleMapper, BusRelationUserArticleShareMapper busRelationUserArticleShareMapper) {
+    public ArticleServiceImpl(BusArticleClassMapper busArticleClassMapper, BusArticleMapper busArticleMapper, CommonService commonService, UploadService uploadService, DictService dictService,BusFileMapper busFileMapper, BusRelationUserArticleMapper busRelationUserArticleMapper, BusRelationUserArticleShareMapper busRelationUserArticleShareMapper) {
         this.busArticleClassMapper = busArticleClassMapper;
         this.busArticleMapper = busArticleMapper;
         this.commonService = commonService;
         this.uploadService = uploadService;
+        this.dictService = dictService;
         this.busFileMapper = busFileMapper;
         this.busRelationUserArticleMapper = busRelationUserArticleMapper;
         this.busRelationUserArticleShareMapper = busRelationUserArticleShareMapper;
@@ -170,6 +174,12 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
             Long userId = Utils.getUserIdWithoutException(request);
             busList = (Page<BusArticle>) busArticleMapper.selectArticleListWithFav(userId,bus.getClassId(),bus.getTitle());
         }
+
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
+
         List<BusArticleDto> busDtoList = Lists.newArrayList();
         busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath,busFileMapper)));
         return ComResponse.ok(busDtoList, busList.getTotal());
@@ -192,6 +202,10 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectFavArticle(bus.getCreateBy());
         List<BusArticleDto> busDtoList = Lists.newArrayList();
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
         busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath,busFileMapper)));
 
         return ComResponse.ok(busDtoList, busList.getTotal());
@@ -352,6 +366,10 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusArticle> busList = (Page<BusArticle>) busArticleMapper.selectShareArticle(bus.getCreateBy());
         List<BusArticleDto> busDtoList = Lists.newArrayList();
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
         busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath,busFileMapper)));
         return ComResponse.ok(busDtoList, busList.getTotal());
     }

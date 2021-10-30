@@ -7,6 +7,7 @@ import com.doctor.visit.domain.dto.BusDoctorHospitalDto;
 import com.doctor.visit.domain.dto.BusHospitalDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.DictService;
 import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
@@ -35,6 +36,7 @@ public class DoctorServiceImpl implements com.doctor.visit.service.DoctorService
 
     private final CommonService commonService;
     private final UploadService uploadService;
+    private final DictService dictService;
     //
     private final BusFileMapper busFileMapper;
     private final BusDoctorMapper busDoctorMapper;
@@ -42,13 +44,14 @@ public class DoctorServiceImpl implements com.doctor.visit.service.DoctorService
     private final BusClincClassMapper busClincClassMapper;
     private final BusGoodsInquiryMapper busGoodsInquiryMapper;
     private final BusRelationUserDoctorMapper busRelationUserDoctorMapper;
-    //
+    //已修改
     @Value("${custom.requestPath}")
     private String requestPath;
 
-    public DoctorServiceImpl(CommonService commonService, UploadService uploadService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusHospitalMapper busHospitalMapper, BusClincClassMapper busClincClassMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusRelationUserDoctorMapper busRelationUserDoctorMapper) {
+    public DoctorServiceImpl(CommonService commonService, UploadService uploadService, DictService dictService,BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusHospitalMapper busHospitalMapper, BusClincClassMapper busClincClassMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusRelationUserDoctorMapper busRelationUserDoctorMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
+        this.dictService = dictService;
         this.busFileMapper = busFileMapper;
         this.busDoctorMapper = busDoctorMapper;
         this.busHospitalMapper = busHospitalMapper;
@@ -91,6 +94,10 @@ public class DoctorServiceImpl implements com.doctor.visit.service.DoctorService
             busList = (Page<BusHospital>) busHospitalMapper.selectByExample(example);
         }
         List<BusHospitalDto> busHospitalDtoList = Lists.newArrayList();
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
         busList.getResult().forEach(busHospital -> busHospitalDtoList.add(BeanConversionUtil.beanToDto(busHospital, requestPath, busFileMapper)));
         doctorHospitalDto.setBusHospitalDtos(busHospitalDtoList);
         return ComResponse.ok(doctorHospitalDto, busDoctorList.getTotal() + busList.getTotal());
@@ -130,7 +137,10 @@ public class DoctorServiceImpl implements com.doctor.visit.service.DoctorService
         }
 
         List<BusDoctorDto> busDoctorDtoList = Lists.newArrayList();
-
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
         busList.getResult().forEach(busDoctor -> busDoctorDtoList.add(BeanConversionUtil.beanToDto(busDoctor, requestPath, busFileMapper, busGoodsInquiryMapper, sys)));
 
         return ComResponse.ok(busDoctorDtoList, busList.getTotal());
@@ -245,6 +255,10 @@ public class DoctorServiceImpl implements com.doctor.visit.service.DoctorService
         PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         Page<BusDoctor> busList = (Page<BusDoctor>) busDoctorMapper.selectFavDoctor(bus.getCreateBy());
         List<BusDoctorDto> busDoctorDtoList = Lists.newArrayList();
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
         busList.getResult().forEach(busDoctor -> busDoctorDtoList.add(BeanConversionUtil.beanToDto(busDoctor, requestPath, busFileMapper, busGoodsInquiryMapper, true)));
         return ComResponse.ok(busDoctorDtoList, busList.getTotal());
     }
