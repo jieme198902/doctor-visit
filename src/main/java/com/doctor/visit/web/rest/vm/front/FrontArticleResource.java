@@ -68,6 +68,22 @@ public class FrontArticleResource {
     }
 
     /**
+     * 获取文章列表
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusArticle.class),
+        @ApiImplicitParam(name = "id",value = "文章id"),
+    })
+    @PostMapping("oneArticle")
+    @ApiOperation(value = "文章详情")
+    public Object oneArticle(BusArticle bus, HttpServletRequest request) throws Exception {
+        return articleService.oneArticle(bus, request);
+    }
+
+    /**
      * 获取收藏的文章列表
      *
      * @param bus

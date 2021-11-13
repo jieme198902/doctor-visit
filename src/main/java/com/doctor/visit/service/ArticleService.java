@@ -46,6 +46,15 @@ public interface ArticleService {
      */
     ComResponse<List<BusArticleDto>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception;
 
+
+    /**
+     * 前台 - 获取文章列表
+     *
+     * @param bus
+     * @return
+     */
+    ComResponse<BusArticleDto> oneArticle(BusArticle bus, HttpServletRequest request) throws Exception;
+
     /**
      * 前台 - 获取我收藏的文章列表
      *

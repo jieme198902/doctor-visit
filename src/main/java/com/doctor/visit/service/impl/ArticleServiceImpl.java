@@ -186,6 +186,22 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
     }
 
     /**
+     * 获取文章详情
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public ComResponse<BusArticleDto> oneArticle(BusArticle bus, HttpServletRequest request) throws Exception {
+        BusArticle busArticle = busArticleMapper.selectByPrimaryKey(bus.getId());
+        if(Constants.EXIST.equals(busArticle.getIsDel())){
+            return ComResponse.ok(BeanConversionUtil.beanToDto(busArticle,requestPath,busFileMapper));
+        }
+        return ComResponse.fail("文章已不存在！");
+    }
+
+    /**
      * 前台 - 获取我收藏的文章列表
      *
      * @param bus
