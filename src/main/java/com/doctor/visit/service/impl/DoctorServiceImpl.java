@@ -156,6 +156,9 @@ public class DoctorServiceImpl implements com.doctor.visit.service.DoctorService
      */
     @Override
     public ComResponse<BusDoctorDto> oneDoctor(BusDoctor bus, HttpServletRequest request) throws Exception {
+        if(null==bus||bus.getId()==null){
+            return ComResponse.failBadRequest();
+        }
         ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
         if(requestPathCom.isSuccess()){
             requestPath = requestPathCom.getData().get(0).getDicValue();

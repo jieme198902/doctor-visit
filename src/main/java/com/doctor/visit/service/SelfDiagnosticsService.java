@@ -44,6 +44,14 @@ public interface SelfDiagnosticsService {
      */
     ComResponse<List<BusSelfDiagnosis>> listSelfDiagnosis(BusSelfDiagnosis bus, Pageable pageable);
 
+
+    /**
+     * 根据id获取问诊结果
+     * @param bus
+     * @return
+     */
+    ComResponse<BusSelfDiagnosis> oneGSelfDiagnosis(BusSelfDiagnosis bus);
+
     /**
      * 新增或者更新自诊结果
      *

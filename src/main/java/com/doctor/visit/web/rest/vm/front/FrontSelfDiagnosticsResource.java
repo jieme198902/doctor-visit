@@ -64,4 +64,21 @@ public class FrontSelfDiagnosticsResource {
     public Object listGSelfDiagnosis(BusSelfDiagnosis bus, Pageable pageable) {
         return selfDiagnosticsService.listSelfDiagnosis(bus, pageable);
     }
+
+
+    /**
+     * 根据id获取自诊结果
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusSelfDiagnosis.class),
+        @ApiImplicitParam(name = "id",value = "id"),
+    })
+    @PostMapping("oneGSelfDiagnosis")
+    @ApiOperation(value = "根据id获取自诊结果")
+    public Object oneGSelfDiagnosis(BusSelfDiagnosis bus) {
+        return selfDiagnosticsService.oneGSelfDiagnosis(bus);
+    }
 }

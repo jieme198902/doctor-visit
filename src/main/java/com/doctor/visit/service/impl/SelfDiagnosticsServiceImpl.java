@@ -140,6 +140,20 @@ public class SelfDiagnosticsServiceImpl implements com.doctor.visit.service.Self
     }
 
     /**
+     * 根据id获取问诊结果
+     * @param bus
+     * @return
+     */
+    @Override
+    public ComResponse<BusSelfDiagnosis> oneGSelfDiagnosis(BusSelfDiagnosis bus) {
+        if(null==bus||bus.getId()==null){
+            return ComResponse.failBadRequest();
+        }
+        BusSelfDiagnosis busSelfDiagnosis = busSelfDiagnosisMapper.selectByPrimaryKey(bus.getId());
+        return ComResponse.ok(busSelfDiagnosis);
+    }
+
+    /**
      * 新增或者更新自诊结果
      *
      * @param bus
