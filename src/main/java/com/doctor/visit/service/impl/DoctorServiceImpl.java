@@ -148,6 +148,25 @@ public class DoctorServiceImpl implements com.doctor.visit.service.DoctorService
 
 
     /**
+     * 获取医生详情
+     * @param bus
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public ComResponse<BusDoctorDto> oneDoctor(BusDoctor bus, HttpServletRequest request) throws Exception {
+        ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");
+        if(requestPathCom.isSuccess()){
+            requestPath = requestPathCom.getData().get(0).getDicValue();
+        }
+        BusDoctor doctor = busDoctorMapper.selectByPrimaryKey(bus.getId());
+        BusDoctorDto busDoctorDto = BeanConversionUtil.beanToDto(doctor, requestPath, busFileMapper, busGoodsInquiryMapper,false);
+
+        return ComResponse.ok(busDoctorDto);
+    }
+
+    /**
      * 新增或者更新医生
      *
      * @param bus

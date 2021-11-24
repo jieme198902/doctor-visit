@@ -32,6 +32,15 @@ public interface DoctorService {
      */
     ComResponse<List<BusDoctorDto>> listDoctor(BusDoctor bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception;
 
+
+    /**
+     * 获取医生详情
+     *
+     * @param bus
+     * @return
+     */
+    ComResponse<BusDoctorDto> oneDoctor(BusDoctor bus,  HttpServletRequest request) throws Exception;
+
     /**
      * 新增或者更新医生
      *

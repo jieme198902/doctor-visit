@@ -89,6 +89,15 @@ public class BusSelfDiagnosis implements Serializable {
     @Column(name = "is_del")
     private String isDel;
 
+
+    /**
+     * 推荐医生id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @Column(name = "advice_doctor_id")
+    private Long adviceDoctorId;
+
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -317,5 +326,17 @@ public class BusSelfDiagnosis implements Serializable {
      */
     public void setIsDel(String isDel) {
         this.isDel = isDel;
+    }
+    /**
+     * 推荐医生id
+     */
+    public Long getAdviceDoctorId() {
+        return adviceDoctorId;
+    }
+    /**
+     * 推荐医生id
+     */
+    public void setAdviceDoctorId(Long adviceDoctorId) {
+        this.adviceDoctorId = adviceDoctorId;
     }
 }

@@ -67,6 +67,24 @@ public class FrontDoctorResource {
         return doctorService.listDoctor(bus, pageable,request,false);
     }
 
+
+    /**
+     * 获取医生列表
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusDoctor.class),
+        @ApiImplicitParam(name = "id",value = "医生id"),
+    })
+    @PostMapping("oneDoctor")
+    @ApiOperation(value = "根据id获取医生详情")
+    public Object oneDoctor(BusDoctor bus, HttpServletRequest request) throws Exception {
+        return doctorService.oneDoctor(bus,request);
+    }
+
+
     /**
      * 获取关注的医生列表
      *
@@ -83,6 +101,9 @@ public class FrontDoctorResource {
     public Object getFavDoctorList(BusDoctor bus, Pageable pageable, HttpServletRequest request) throws Exception {
         return doctorService.listFavDoctor(bus, pageable,request);
     }
+
+
+
 
     /**
      * 关注医生
