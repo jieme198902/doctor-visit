@@ -18,6 +18,7 @@ import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -155,7 +156,26 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
      */
     @Override
     public ComResponse<List<BusArticleDto>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
-        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        if(pageable.getSort().isSorted()){
+            StringBuffer stringBuffer = new StringBuffer();
+            pageable.getSort().forEach(order ->
+                {
+                    Sort.Direction direction = order.getDirection();
+                    String property = order.getProperty();
+                    stringBuffer.append(property);
+                    stringBuffer.append(" ");
+                    stringBuffer.append(direction.name());
+                    stringBuffer.append(" , ");
+                }
+            );
+            String orderBy = stringBuffer.toString();
+            if(orderBy.endsWith(", ")){
+                orderBy = orderBy.substring(0,orderBy.length()-2);
+            }
+            PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize(),orderBy);
+        }else{
+            PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        }
         Page<BusArticle> busList = null;
         if (sys) {
             //后台
@@ -181,7 +201,12 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
         }
 
         List<BusArticleDto> busDtoList = Lists.newArrayList();
-        busList.getResult().forEach(busArticle -> busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath,busFileMapper)));
+        busList.getResult().forEach(busArticle -> {
+            if(!sys){
+                busArticle.setContent(null);
+            }
+            busDtoList.add(BeanConversionUtil.beanToDto(busArticle, requestPath,busFileMapper));
+        });
         return ComResponse.ok(busDtoList, busList.getTotal());
     }
 

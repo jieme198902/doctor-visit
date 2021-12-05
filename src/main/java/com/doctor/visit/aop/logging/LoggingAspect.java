@@ -136,7 +136,10 @@ public class LoggingAspect {
             if (log.isDebugEnabled()) {
                 log.debug("Exit: {}() with result = {}", joinPoint.getSignature().getName(), result);
             }
-            busLog.setResponse(gson.toJson(result));
+            String resp = gson.toJson(result);
+            if(resp.length()<10000){
+                busLog.setResponse(gson.toJson(result));
+            }
             busLogMapper.insertSelective(busLog);
             return result;
         } catch (IllegalArgumentException e) {
