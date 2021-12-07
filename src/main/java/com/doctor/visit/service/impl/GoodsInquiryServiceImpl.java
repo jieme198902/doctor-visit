@@ -52,10 +52,18 @@ public class GoodsInquiryServiceImpl implements com.doctor.visit.service.GoodsIn
         Example example = new Example(BusGoodsInquiry.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDel",Constants.EXIST);
+        //医生名称
         if(StringUtils.isNotBlank(bus.getDoctorName())){
             criteria.andEqualTo("doctorName",bus.getDoctorName());
         }
-
+        //医生id
+        if(null!=bus.getDoctorId()){
+            criteria.andEqualTo("doctorId",bus.getDoctorId());
+        }
+        //问诊类型
+        if(StringUtils.isNotBlank(bus.getAskType())){
+            criteria.andEqualTo("askType",bus.getAskType());
+        }
         Page<BusGoodsInquiry> busList = (Page<BusGoodsInquiry>) busGoodsInquiryMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
