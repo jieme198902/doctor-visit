@@ -2,6 +2,7 @@ package com.doctor.visit.web.rest.vm.front;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusOrderInquiry;
+import com.doctor.visit.domain.param.UnifiedOrderParam;
 import com.doctor.visit.service.OrderInquiryService;
 import com.doctor.visit.web.rest.util.Utils;
 import io.swagger.annotations.Api;
@@ -76,4 +77,37 @@ public class FrontOrderInquiryResource {
     public Object deleteOrderInquiry(String ids) {
         return orderInquiryService.deleteOrderInquiry(ids);
     }
+
+
+    /**
+     * 统一下单:商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的预支付交易后调起支付。
+     *
+     * @param param
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("unifiedOrder")
+    @ApiOperation(value = "问诊统一下单:商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的预支付交易后调起支付。")
+    public Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request) throws Exception {
+        return orderInquiryService.unifiedOrder(param, request);
+    }
+
+    /**
+     * 更新订单，支付，回调
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("updateOrderStateForPay")
+    @ApiOperation(value = "问诊前端不用：微信异步通知，更新订单，支付，回调")
+    public Object updateOrderStateForPay(HttpServletRequest request) throws Exception {
+        return orderInquiryService.updateOrderStateForPay(request);
+    }
+
+
+
+
+
 }

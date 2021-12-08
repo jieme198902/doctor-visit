@@ -3,8 +3,10 @@ package com.doctor.visit.service.impl;
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusOrderInquiryDto;
+import com.doctor.visit.domain.param.UnifiedOrderParam;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.service.DictService;
+import com.doctor.visit.service.OrderInquiryService;
 import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.service.common.UploadService;
 import com.doctor.visit.web.rest.util.BeanConversionUtil;
@@ -13,22 +15,34 @@ import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.wxpay.sdk.WXPayUtil;
+import com.google.common.collect.Maps;
+import com.google.gson.reflect.TypeToken;
+import okhttp3.*;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 问诊订单
  */
 @Service
 public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderInquiryService {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderInquiryService.class);
+
 
     //已修改
     @Value("${custom.requestPath}")
@@ -38,6 +52,7 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
     private final UploadService uploadService;
     private final DictService dictService;
     //
+    private final BusDictMapper busDictMapper;
     private final BusFileMapper busFileMapper;
     private final BusDoctorMapper busDoctorMapper;
     private final BusPatientMapper busPatientMapper;
@@ -45,10 +60,11 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
     private final BusGoodsInquiryMapper busGoodsInquiryMapper;
     private final BusOrderChangeRecordMapper busOrderChangeRecordMapper;
 
-    public OrderInquiryServiceImpl(CommonService commonService, UploadService uploadService,DictService dictService, BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusOrderChangeRecordMapper busOrderChangeRecordMapper) {
+    public OrderInquiryServiceImpl(CommonService commonService, UploadService uploadService,DictService dictService, BusDictMapper busDictMapper,BusFileMapper busFileMapper, BusDoctorMapper busDoctorMapper, BusPatientMapper busPatientMapper, BusOrderInquiryMapper busOrderInquiryMapper, BusGoodsInquiryMapper busGoodsInquiryMapper, BusOrderChangeRecordMapper busOrderChangeRecordMapper) {
         this.commonService = commonService;
         this.uploadService = uploadService;
         this.dictService = dictService;
+        this.busDictMapper = busDictMapper;
         this.busFileMapper = busFileMapper;
         this.busDoctorMapper = busDoctorMapper;
         this.busPatientMapper = busPatientMapper;
@@ -200,5 +216,181 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
             }
         }
         return ComResponse.ok(delIds);
+    }
+
+
+    /**
+     * 统一下单:商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的预支付交易后调起支付
+     *
+     * @param param
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request) throws Exception {
+
+        logger.info("jsCode-->{}", Utils.toJson(param));
+        //订单号，产品id，支付描述
+        if (StringUtils.isAnyBlank(param.getOut_trade_no(), param.getProduct_id(), param.getBody())) {
+            return ComResponse.failBadRequest();
+        }
+        if (null == param.getTotal_fee()) {
+            return ComResponse.failBadRequest();
+        }
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            .readTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .hostnameVerifier((s, sslSession) -> true)
+            .build();
+
+        BusDict wxDict = new BusDict();
+        wxDict.setDicType("WXPZ");
+        Map<String, String> wxConfig = Maps.newHashMap();
+        busDictMapper.select(wxDict).forEach(dict -> wxConfig.put(dict.getDicName(), dict.getDicValue()));
+
+//      unifiedorder 统一支付请求地址 https://api.mch.weixin.qq.com/pay/unifiedorder
+        BusDict unifiedOrderDict = new BusDict();
+        unifiedOrderDict.setDicName("unifiedorder");
+        BusDict unifiedOrder = busDictMapper.selectOne(unifiedOrderDict);
+        if (null == unifiedOrder || StringUtils.isBlank(unifiedOrder.getDicValue())) {
+            return ComResponse.fail("微信小程序配置【unifiedorder】有问题，请联系管理员");
+        }
+        //支付回调地址  https://www.syjk.vip/doctorvisit/front/order/inquiry/updateOrderStateForPay
+        BusDict notifyUrlDict = new BusDict();
+        notifyUrlDict.setDicName("notify_url_wz");
+        BusDict notifyUrl = busDictMapper.selectOne(notifyUrlDict);
+        if (null == notifyUrl || StringUtils.isBlank(notifyUrl.getDicValue())) {
+            return ComResponse.fail("微信小程序配置【notify_url_wz】有问题，请联系管理员");
+        }
+
+        BusDict apiKeyDict = new BusDict();
+        apiKeyDict.setDicName("api_key");
+        BusDict apiKey = busDictMapper.selectOne(apiKeyDict);
+        if (null == apiKey || StringUtils.isBlank(apiKey.getDicValue())) {
+            return ComResponse.fail("微信小程序配置【api_key】有问题，请联系管理员");
+        }
+
+        //微信appid
+        String wxAppid = wxConfig.get("wx_appid");
+        if (StringUtils.isBlank(wxAppid)) {
+            return ComResponse.fail("微信小程序配置【wx_appid】有问题，请联系管理员");
+        }
+        //微信secret
+        String wxSecret = wxConfig.get("wx_secret");
+        if (StringUtils.isBlank(wxSecret)) {
+            return ComResponse.fail("微信小程序配置【wx_secret】有问题，请联系管理员");
+        }
+
+        logger.debug("统一下单url-->{}", unifiedOrder.getDicValue());
+        //设置其他参数
+        param.setAppid(wxAppid);
+        param.setNonce_str(WXPayUtil.generateNonceStr());
+        param.setNotify_url(notifyUrl.getDicValue());
+//        param.setTrade_type("MWEB");//H5支付类型
+
+        Map<String, String> paramMap = Utils.fromJson(param, new TypeToken<Map<String, String>>() {
+        }.getType());
+        //// 生成签名,官方默认MD5+商户秘钥+参数信息
+        String sign = WXPayUtil.generateSignature(paramMap, apiKey.getDicValue());
+        paramMap.put("sign", sign);
+        String xmlParam = WXPayUtil.mapToXml(paramMap);
+
+        RequestBody body = RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), xmlParam);
+        Request req = new Request.Builder()
+            .url(unifiedOrder.getDicValue())
+            .post(body).build();
+
+        Response response = okHttpClient.newCall(req).execute();
+        String xmlResult = response.body().string();
+        if (StringUtils.isBlank(xmlResult)) {
+            return ComResponse.fail("请求支付超时");
+        }
+        Map<String, String> resultMap = WXPayUtil.xmlToMap(xmlResult);
+        if (Constants.SUCCESS.equalsIgnoreCase(resultMap.get("return_code")) &&
+            Constants.SUCCESS.equalsIgnoreCase(resultMap.get("result_code"))) {
+            return ComResponse.ok(resultMap);
+        } else {
+            return ComResponse.fail(resultMap.get("err_code") + ":" + resultMap.get("err_code_des"));
+        }
+    }
+
+    /**
+     * 处理支付信息
+     * 更新订单，支付，回调，判断金额是否正确
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Object updateOrderStateForPay(HttpServletRequest request) throws Exception {
+        //接受参数
+        StringBuffer xmlStr = new StringBuffer();
+        BufferedReader reader = null;
+        try {
+            reader = request.getReader();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                xmlStr.append(line);
+            }
+        } catch (Exception e) {
+            logger.error("支付回调异常-->{}", e.getMessage());
+        } finally {
+            if (null != reader) {
+                reader.close();
+            }
+        }
+        //
+        /**
+         * CREATE TABLE `bus_order_inquiry` (
+         *   `id` bigint(20) NOT NULL,
+         *   `order_no` varchar(24) DEFAULT NULL COMMENT '问诊方式：0电话，1图文，2视频咨询',
+         *   `doctor_id` bigint(20) DEFAULT NULL COMMENT '医生id',
+         *   `patient_id` bigint(20) DEFAULT NULL COMMENT '患者id',
+         *   `ask_type` char(1) DEFAULT NULL COMMENT '问诊方式：0电话，1图文，2视频咨询',
+         *   `price` int(10) DEFAULT NULL COMMENT '价格',
+         *   `up_limit` int(11) DEFAULT NULL COMMENT '上限次数',
+         *   `time_limit` int(11) DEFAULT NULL COMMENT '有效时间-分钟',
+         *   `order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待接诊；2已支付，已接诊；4已评价；5已取消',
+         *   `condition` varchar(500) NOT NULL COMMENT '病情描述',
+         *   `see_doctor_yet` char(1) NOT NULL COMMENT '是否去医院就诊过：1是；0否',
+         *   `sick_time` char(1) NOT NULL COMMENT '本次患病时长：0一周内；1一月内；2半年内；3大于半年',
+         *   `remark` varchar(255) NOT NULL COMMENT '下单备注',
+         *   `create_by` bigint(255) NOT NULL COMMENT '创建者id',
+         *   `create_name` varchar(255) DEFAULT NULL COMMENT '创建者姓名',
+         *   `create_time` datetime NOT NULL COMMENT '创建时间',
+         *   `edit_by` bigint(255) NOT NULL COMMENT '修改人',
+         *   `edit_name` varchar(255) DEFAULT NULL COMMENT '修改人姓名',
+         *   `edit_time` datetime NOT NULL COMMENT '修改时间',
+         *   `pay_time` datetime DEFAULT NULL COMMENT '支付时间',
+         *   `is_del` char(1) NOT NULL DEFAULT '0' COMMENT '是否删除，1是0否',
+         *   PRIMARY KEY (`id`)
+         * ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='问诊的订单';
+         */
+        Map<String, String> paramMap = WXPayUtil.xmlToMap(xmlStr.toString());
+        BusOrderInquiry orderInquiry = new BusOrderInquiry();
+        orderInquiry.setOrderNo(paramMap.get("out_trade_no"));
+        List<BusOrderInquiry> busOrderInquiries = busOrderInquiryMapper.select(orderInquiry);
+        if (null == busOrderInquiries || busOrderInquiries.isEmpty()) {
+            logger.info("未找到该订单号");
+            return Constants.FAIL;
+        } else if (busOrderInquiries.size() != 1) {
+            logger.info("找到多个订单，订单异常");
+            return Constants.FAIL;
+        } else {
+            //  `order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待接诊；2已支付，已接诊；4已评价；5已取消',
+            BusOrderInquiry updateOrder = busOrderInquiries.get(0);
+            if ("0".equals(updateOrder.getOrderState())) {
+                updateOrder.setOrderState("1");
+                updateOrder.setPayTime(new Date());
+                busOrderInquiryMapper.updateByPrimaryKeySelective(updateOrder);
+                logger.info("已支付:正常支付");
+                return Constants.SUCCESS;
+            }
+            logger.error("已支付:" + updateOrder.getOrderState());
+            return Constants.SUCCESS;
+        }
     }
 }

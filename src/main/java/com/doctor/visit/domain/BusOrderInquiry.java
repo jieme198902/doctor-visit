@@ -129,6 +129,15 @@ public class BusOrderInquiry implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
     private Date editTime;
 
+
+    /**
+     * 支付时间
+     */
+    @Column(name = "pay_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")  //取日期时使用
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")//存日期时使用
+    private Date payTime;
+
     /**
      * 是否删除，1是0否
      */
@@ -473,6 +482,18 @@ public class BusOrderInquiry implements Serializable {
      */
     public void setEditTime(Date editTime) {
         this.editTime = editTime;
+    }
+    /**
+     * 支付时间
+     */
+    public Date getPayTime() {
+        return payTime;
+    }
+    /**
+     * 支付时间
+     */
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
     }
 
     /**
