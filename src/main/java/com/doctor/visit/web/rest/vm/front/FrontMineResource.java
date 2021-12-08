@@ -343,6 +343,15 @@ public class FrontMineResource {
      * @return
      * @throws Exception
      */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = UnifiedOrderParam.class),
+        @ApiImplicitParam(name = "out_trade_no", value = "订单号"),
+        @ApiImplicitParam(name = "product_id", value = "产品id"),
+
+        @ApiImplicitParam(name = "body", value = "支付描述"),
+        @ApiImplicitParam(name = "total_fee", value = "支付钱数"),
+
+    })
     @PostMapping("unifiedOrder")
     @ApiOperation(value = "统一下单:商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的预支付交易后调起支付。")
     public Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request) throws Exception {
