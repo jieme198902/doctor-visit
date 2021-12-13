@@ -230,13 +230,22 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
     @Override
     public Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request) throws Exception {
 
-        logger.info("jsCode-->{}", Utils.toJson(param));
+        logger.info("OrderInquiry.unifiedOrder.param-->{}", Utils.toJson(param));
         //订单号，产品id，支付描述
         if (StringUtils.isAnyBlank(param.getOut_trade_no(), param.getProduct_id(), param.getBody())) {
             return ComResponse.failBadRequest();
         }
         if (null == param.getTotal_fee()) {
             return ComResponse.failBadRequest();
+        }
+        //判断totalFee
+        BusGoodsInquiry busGoodsInquiry = busGoodsInquiryMapper.selectByPrimaryKey(param.getProduct_id());
+        if(null==busGoodsInquiry){
+            return ComResponse.fail("该商品不存在，请联系管理员！");
+        }else{
+            if(!busGoodsInquiry.getPrice().equals(param.getTotal_fee())){
+                return ComResponse.fail("该商品价格已过期，请获取最新商品信息下单！");
+            }
         }
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -283,7 +292,7 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
             return ComResponse.fail("微信小程序配置【wx_secret】有问题，请联系管理员");
         }
 
-        logger.debug("统一下单url-->{}", unifiedOrder.getDicValue());
+        logger.debug("问诊统一下单url-->{}", unifiedOrder.getDicValue());
         //设置其他参数
         param.setAppid(wxAppid);
         param.setNonce_str(WXPayUtil.generateNonceStr());
@@ -304,9 +313,12 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
 
         Response response = okHttpClient.newCall(req).execute();
         String xmlResult = response.body().string();
+        logger.info("OrderInquiry.unifiedOrder.result-->{}", Utils.toJson(param));
+
         if (StringUtils.isBlank(xmlResult)) {
             return ComResponse.fail("请求支付超时");
         }
+
         Map<String, String> resultMap = WXPayUtil.xmlToMap(xmlResult);
         if (Constants.SUCCESS.equalsIgnoreCase(resultMap.get("return_code")) &&
             Constants.SUCCESS.equalsIgnoreCase(resultMap.get("result_code"))) {

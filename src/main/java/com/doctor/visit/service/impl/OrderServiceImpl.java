@@ -248,7 +248,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request) throws Exception {
 
-        logger.info("jsCode-->{}", Utils.toJson(param));
+        logger.info("Order.unifiedOrder.param-->{}", Utils.toJson(param));
         //订单号，产品id，支付描述
         if (StringUtils.isAnyBlank(param.getOut_trade_no(), param.getProduct_id(), param.getBody())) {
             return ComResponse.failBadRequest();
@@ -256,6 +256,7 @@ public class OrderServiceImpl implements OrderService {
         if (null == param.getTotal_fee()) {
             return ComResponse.failBadRequest();
         }
+        //TODO 判断totalFee
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .readTimeout(120, TimeUnit.SECONDS)
@@ -322,6 +323,7 @@ public class OrderServiceImpl implements OrderService {
 
         Response response = okHttpClient.newCall(req).execute();
         String xmlResult = response.body().string();
+        logger.info("Order.unifiedOrder.result-->{}", Utils.toJson(param));
         if (StringUtils.isBlank(xmlResult)) {
             return ComResponse.fail("请求支付超时");
         }
