@@ -284,6 +284,14 @@ public class OrderServiceImpl implements OrderService {
             return ComResponse.fail("微信小程序配置【notify_url】有问题，请联系管理员");
         }
 
+        //mch_id 商家id
+        BusDict mchIdDict = new BusDict();
+        mchIdDict.setDicName("mch_id");
+        BusDict mchId = busDictMapper.selectOne(mchIdDict);
+        if (null == mchId || StringUtils.isBlank(mchId.getDicValue())) {
+            return ComResponse.fail("微信小程序配置【mch_id】有问题，请联系管理员");
+        }
+
         BusDict apiKeyDict = new BusDict();
         apiKeyDict.setDicName("api_key");
         BusDict apiKey = busDictMapper.selectOne(apiKeyDict);
@@ -302,12 +310,14 @@ public class OrderServiceImpl implements OrderService {
             return ComResponse.fail("微信小程序配置【wx_secret】有问题，请联系管理员");
         }
 
+
         logger.debug("统一下单url-->{}", unifiedOrder.getDicValue());
         //设置其他参数
         param.setAppid(wxAppid);
         param.setNonce_str(WXPayUtil.generateNonceStr());
         param.setNotify_url(notifyUrl.getDicValue());
-//        param.setTrade_type("MWEB");//H5支付类型
+        param.setMch_id(mchId.getDicValue());
+        param.setTrade_type("MWEB");//H5支付类型
 
         Map<String, String> paramMap = Utils.fromJson(param, new TypeToken<Map<String, String>>() {
         }.getType());
@@ -315,7 +325,7 @@ public class OrderServiceImpl implements OrderService {
         String sign = WXPayUtil.generateSignature(paramMap, apiKey.getDicValue());
         paramMap.put("sign", sign);
         String xmlParam = WXPayUtil.mapToXml(paramMap);
-
+        logger.info("Order.unifiedOrder.xmlParam-->{}", xmlParam);
         RequestBody body = RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), xmlParam);
         Request req = new Request.Builder()
             .url(unifiedOrder.getDicValue())
@@ -323,16 +333,18 @@ public class OrderServiceImpl implements OrderService {
 
         Response response = okHttpClient.newCall(req).execute();
         String xmlResult = response.body().string();
-        logger.info("Order.unifiedOrder.result-->{}", Utils.toJson(param));
+        logger.info("Order.unifiedOrder.result-->{}", Utils.toJson(xmlResult));
         if (StringUtils.isBlank(xmlResult)) {
             return ComResponse.fail("请求支付超时");
         }
         Map<String, String> resultMap = WXPayUtil.xmlToMap(xmlResult);
+        logger.info("Order.unifiedOrder.resultMap-->{}", resultMap);
+
         if (Constants.SUCCESS.equalsIgnoreCase(resultMap.get("return_code")) &&
             Constants.SUCCESS.equalsIgnoreCase(resultMap.get("result_code"))) {
             return ComResponse.ok(resultMap);
         } else {
-            return ComResponse.fail(resultMap.get("err_code") + ":" + resultMap.get("err_code_des"));
+            return ComResponse.fail(resultMap.get("return_code")+":"+resultMap.get("return_msg")+resultMap.get("err_code") + ":" + resultMap.get("err_code_des"));
         }
     }
 
