@@ -232,10 +232,10 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
 
         logger.info("OrderInquiry.unifiedOrder.param-->{}", Utils.toJson(param));
         //订单号，产品id，支付描述
-        if (StringUtils.isAnyBlank(param.getOut_trade_no(), param.getProduct_id(), param.getBody())) {
+        if (StringUtils.isAnyBlank(param.getOut_trade_no(),  param.getBody())) {
             return ComResponse.failBadRequest();
         }
-        if (null == param.getTotal_fee()) {
+        if (null == param.getTotal_fee() || null == param.getProduct_id()) {
             return ComResponse.failBadRequest();
         }
         //判断totalFee

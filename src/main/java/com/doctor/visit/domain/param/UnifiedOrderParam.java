@@ -44,7 +44,7 @@ public class UnifiedOrderParam implements Serializable {
     private String notify_url;
 
     private String trade_type;
-    private String product_id;
+    private Long product_id;
     private String limit_pay;
     private String openid;
     private String receipt;
@@ -194,11 +194,11 @@ public class UnifiedOrderParam implements Serializable {
         this.trade_type = trade_type;
     }
 
-    public String getProduct_id() {
+    public Long getProduct_id() {
         return product_id;
     }
 
-    public void setProduct_id(String product_id) {
+    public void setProduct_id(Long product_id) {
         this.product_id = product_id;
     }
 
