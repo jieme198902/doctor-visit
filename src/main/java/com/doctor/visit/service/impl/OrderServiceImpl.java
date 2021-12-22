@@ -8,10 +8,13 @@ import com.doctor.visit.domain.param.UnifiedOrderParam;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.service.OrderService;
 import com.doctor.visit.service.common.CommonService;
+import com.doctor.visit.service.common.MyWXPayConfig;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
 import com.doctor.visit.web.rest.util.Utils;
 import com.github.pagehelper.PageHelper;
+import com.github.wxpay.sdk.WXPay;
+import com.github.wxpay.sdk.WXPayConfig;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
@@ -27,9 +30,12 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import static com.doctor.visit.config.Constants.SUCCESS;
 
 /**
  * 订单
@@ -248,7 +254,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Object unifiedOrder(UnifiedOrderParam param, HttpServletRequest request) throws Exception {
 
-        logger.info("Order.unifiedOrder.param-->{}", Utils.toJson(param));
         //订单号，产品id，支付描述
         if (StringUtils.isAnyBlank(param.getOut_trade_no(), param.getBody())) {
             return ComResponse.failBadRequest();
@@ -257,25 +262,22 @@ public class OrderServiceImpl implements OrderService {
             return ComResponse.failBadRequest();
         }
         //TODO 判断totalFee
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .readTimeout(120, TimeUnit.SECONDS)
-            .writeTimeout(120, TimeUnit.SECONDS)
-            .hostnameVerifier((s, sslSession) -> true)
-            .build();
-
         BusDict wxDict = new BusDict();
         wxDict.setDicType("WXPZ");
         Map<String, String> wxConfig = Maps.newHashMap();
         busDictMapper.select(wxDict).forEach(dict -> wxConfig.put(dict.getDicName(), dict.getDicValue()));
 
-//      unifiedorder 统一支付请求地址 https://api.mch.weixin.qq.com/pay/unifiedorder
-        BusDict unifiedOrderDict = new BusDict();
-        unifiedOrderDict.setDicName("unifiedorder");
-        BusDict unifiedOrder = busDictMapper.selectOne(unifiedOrderDict);
-        if (null == unifiedOrder || StringUtils.isBlank(unifiedOrder.getDicValue())) {
-            return ComResponse.fail("微信小程序配置【unifiedorder】有问题，请联系管理员");
+        //微信appid
+        String wxAppid = wxConfig.get("wx_appid");
+        if (StringUtils.isBlank(wxAppid)) {
+            return ComResponse.fail("微信小程序配置【wx_appid】有问题，请联系管理员");
         }
+        //微信secret
+        String wxSecret = wxConfig.get("wx_secret");
+        if (StringUtils.isBlank(wxSecret)) {
+            return ComResponse.fail("微信小程序配置【wx_secret】有问题，请联系管理员");
+        }
+
         //支付回调地址  https://wk.zhangfan.ink/doctorvisit/front/mine/updateOrderStateForPay
         BusDict notifyUrlDict = new BusDict();
         notifyUrlDict.setDicName("notify_url");
@@ -291,60 +293,55 @@ public class OrderServiceImpl implements OrderService {
         if (null == mchId || StringUtils.isBlank(mchId.getDicValue())) {
             return ComResponse.fail("微信小程序配置【mch_id】有问题，请联系管理员");
         }
-
+        // apiKey
         BusDict apiKeyDict = new BusDict();
         apiKeyDict.setDicName("api_key");
         BusDict apiKey = busDictMapper.selectOne(apiKeyDict);
         if (null == apiKey || StringUtils.isBlank(apiKey.getDicValue())) {
             return ComResponse.fail("微信小程序配置【api_key】有问题，请联系管理员");
         }
+        //创建支付配置文件
+        WXPayConfig config = new MyWXPayConfig(wxAppid,apiKey.getDicValue(),mchId.getDicValue());
+        WXPay wxPay = new WXPay(config);
 
-        //微信appid
-        String wxAppid = wxConfig.get("wx_appid");
-        if (StringUtils.isBlank(wxAppid)) {
-            return ComResponse.fail("微信小程序配置【wx_appid】有问题，请联系管理员");
-        }
-        //微信secret
-        String wxSecret = wxConfig.get("wx_secret");
-        if (StringUtils.isBlank(wxSecret)) {
-            return ComResponse.fail("微信小程序配置【wx_secret】有问题，请联系管理员");
-        }
-
-
-        logger.debug("统一下单url-->{}", unifiedOrder.getDicValue());
         //设置其他参数
         param.setAppid(wxAppid);
         param.setNonce_str(WXPayUtil.generateNonceStr());
         param.setNotify_url(notifyUrl.getDicValue());
         param.setMch_id(mchId.getDicValue());
-        param.setTrade_type("MWEB");//H5支付类型
+        param.setTrade_type("JSAPI");//此处指定支付类型 H5支付类型 JSAPI小程序支付  NATIVE扫码支付
 
         Map<String, String> paramMap = Utils.fromJson(param, new TypeToken<Map<String, String>>() {
         }.getType());
         //// 生成签名,官方默认MD5+商户秘钥+参数信息
         String sign = WXPayUtil.generateSignature(paramMap, apiKey.getDicValue());
         paramMap.put("sign", sign);
-        String xmlParam = WXPayUtil.mapToXml(paramMap);
-        logger.info("Order.unifiedOrder.xmlParam-->{}", xmlParam);
-        RequestBody body = RequestBody.create(MediaType.parse("text/x-markdown; charset=utf-8"), xmlParam);
-        Request req = new Request.Builder()
-            .url(unifiedOrder.getDicValue())
-            .post(body).build();
 
-        Response response = okHttpClient.newCall(req).execute();
-        String xmlResult = response.body().string();
-        logger.info("Order.unifiedOrder.result-->{}", Utils.toJson(xmlResult));
-        if (StringUtils.isBlank(xmlResult)) {
-            return ComResponse.fail("请求支付超时");
-        }
-        Map<String, String> resultMap = WXPayUtil.xmlToMap(xmlResult);
-        logger.info("Order.unifiedOrder.resultMap-->{}", resultMap);
+        //参数组装
+        logger.info("Order.unifiedOrder.param-->{}", paramMap);
+        //发起请求
+        Map<String,String> resp = wxPay.unifiedOrder(paramMap);
+        //返回数据
+        logger.info("Order.unifiedOrder.resp-->{}", resp);
 
-        if (Constants.SUCCESS.equalsIgnoreCase(resultMap.get("return_code")) &&
-            Constants.SUCCESS.equalsIgnoreCase(resultMap.get("result_code"))) {
-            return ComResponse.ok(resultMap);
-        } else {
-            return ComResponse.fail(resultMap.get("return_code")+":"+resultMap.get("return_msg")+resultMap.get("err_code") + ":" + resultMap.get("err_code_des"));
+        if (SUCCESS.equals(resp.get("return_code"))) {
+            //再次签名
+            /** 重要的事情说三遍  小程序支付 所有的字段必须大写 驼峰模式 严格按照小程序支付文档
+             * https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=3#
+             */
+            Map<String, String> reData = new HashMap<>();
+            reData.put("appId", config.getAppID());
+            reData.put("nonceStr", resp.get("nonce_str"));
+            String newPackage = "prepay_id=" + resp.get("prepay_id");
+            reData.put("package", newPackage);
+            reData.put("signType","MD5");
+            reData.put("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
+            String newSign = WXPayUtil.generateSignature(reData, config.getKey());
+            resp.put("paySign",newSign);
+            resp.put("timeStamp", reData.get("timeStamp"));
+            return ComResponse.ok(resp);
+        }else{
+            return ComResponse.fail(resp.get("return_msg"));
         }
     }
 
@@ -393,10 +390,10 @@ public class OrderServiceImpl implements OrderService {
                 updateOrder.setPayTime(new Date());
                 busOrderGoodsTotalMapper.updateByPrimaryKeySelective(updateOrder);
                 logger.info("已支付:正常支付");
-                return Constants.SUCCESS;
+                return SUCCESS;
             }
             logger.error("已支付:" + updateOrder.getOrderState());
-            return Constants.SUCCESS;
+            return SUCCESS;
         }
     }
 

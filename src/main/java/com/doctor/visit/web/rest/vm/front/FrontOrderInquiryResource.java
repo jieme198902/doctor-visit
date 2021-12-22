@@ -92,6 +92,7 @@ public class FrontOrderInquiryResource {
         @ApiImplicitParam(dataTypeClass = UnifiedOrderParam.class),
         @ApiImplicitParam(name = "out_trade_no", value = "订单号"),
         @ApiImplicitParam(name = "product_id", value = "产品id"),
+        @ApiImplicitParam(name = "openid", value = "用户openid"),
 
         @ApiImplicitParam(name = "body", value = "支付描述"),
         @ApiImplicitParam(name = "total_fee", value = "支付钱数"),
