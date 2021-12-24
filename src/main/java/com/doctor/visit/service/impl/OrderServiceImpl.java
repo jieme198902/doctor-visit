@@ -293,15 +293,15 @@ public class OrderServiceImpl implements OrderService {
         if (null == mchId || StringUtils.isBlank(mchId.getDicValue())) {
             return ComResponse.fail("微信小程序配置【mch_id】有问题，请联系管理员");
         }
-        // apiKey
-        BusDict apiKeyDict = new BusDict();
-        apiKeyDict.setDicName("api_key");
-        BusDict apiKey = busDictMapper.selectOne(apiKeyDict);
-        if (null == apiKey || StringUtils.isBlank(apiKey.getDicValue())) {
-            return ComResponse.fail("微信小程序配置【api_key】有问题，请联系管理员");
+        // mch_key 商户秘钥
+        BusDict mchKeyDict = new BusDict();
+        mchKeyDict.setDicName("mch_key");
+        BusDict mchKey = busDictMapper.selectOne(mchKeyDict);
+        if (null == mchKey || StringUtils.isBlank(mchKey.getDicValue())) {
+            return ComResponse.fail("微信小程序配置【mch_key】有问题，请联系管理员");
         }
         //创建支付配置文件
-        WXPayConfig config = new MyWXPayConfig(wxAppid,apiKey.getDicValue(),mchId.getDicValue());
+        WXPayConfig config = new MyWXPayConfig(wxAppid,mchKey.getDicValue(),mchId.getDicValue());
         WXPay wxPay = new WXPay(config);
 
         //设置其他参数
@@ -314,7 +314,7 @@ public class OrderServiceImpl implements OrderService {
         Map<String, String> paramMap = Utils.fromJson(param, new TypeToken<Map<String, String>>() {
         }.getType());
         //// 生成签名,官方默认MD5+商户秘钥+参数信息
-        String sign = WXPayUtil.generateSignature(paramMap, apiKey.getDicValue());
+        String sign = WXPayUtil.generateSignature(paramMap, config.getKey());
         paramMap.put("sign", sign);
 
         //参数组装
