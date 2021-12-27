@@ -309,6 +309,8 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
         param.setNotify_url(notifyUrl.getDicValue());
         param.setMch_id(mchId.getDicValue());
         param.setTrade_type("JSAPI");//此处指定支付类型 H5支付类型 JSAPI小程序支付  NATIVE扫码支付
+        param.setFee_type("CNY");
+        param.setSpbill_create_ip(Utils.getIpAddress(request));
 
         Map<String, String> paramMap = Utils.fromJson(param, new TypeToken<Map<String, String>>() {
         }.getType());
