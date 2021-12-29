@@ -308,7 +308,7 @@ public class OrderServiceImpl implements OrderService {
         param.setAppid(wxAppid);
         param.setNonce_str(WXPayUtil.generateNonceStr());
         param.setNotify_url(notifyUrl.getDicValue());
-        param.setMch_id(mchId.getDicValue());
+        param.setMch_id(config.getMchID());
         param.setTrade_type("JSAPI");//此处指定支付类型 H5支付类型 JSAPI小程序支付  NATIVE扫码支付
         param.setFee_type("CNY");
         param.setSpbill_create_ip(Utils.getIpAddress(request));
