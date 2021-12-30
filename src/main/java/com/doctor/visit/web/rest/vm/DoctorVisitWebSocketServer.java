@@ -167,7 +167,7 @@ public class DoctorVisitWebSocketServer {
      * @param message
      * @return
      */
-    public static boolean sendMessage(String id, String message) {
+    public boolean sendMessage(String id, String message) {
         Session session = null;
         for (Session s : sessionSet) {
             if (id.equalsIgnoreCase(s.getAttribute("sid"))) {

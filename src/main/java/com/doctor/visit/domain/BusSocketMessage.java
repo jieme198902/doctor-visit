@@ -18,16 +18,28 @@ public class BusSocketMessage implements Serializable {
     /**
      * 消息来自哪个用户
      */
+    @Column(name = "from_user_name")
+    private String fromUserName;
+    /**
+     * 消息来自哪个用户id
+     */
     @Column(name = "from_user_id")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long fromUserId;
 
     /**
-     * 消息发送到哪个用户
+     * 消息发送到哪个用户id
      */
     @Column(name = "to_user_id")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long toUserId;
+
+
+    /**
+     * 消息发送到哪个用户
+     */
+    @Column(name = "to_user_name")
+    private String toUserName;
 
     /**
      * 是否是从后台发送到前端客户端：1是，0否
@@ -86,6 +98,22 @@ public class BusSocketMessage implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFromUserName() {
+        return fromUserName;
+    }
+
+    public void setFromUserName(String fromUserName) {
+        this.fromUserName = fromUserName;
+    }
+
+    public String getToUserName() {
+        return toUserName;
+    }
+
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
     }
 
     /**
