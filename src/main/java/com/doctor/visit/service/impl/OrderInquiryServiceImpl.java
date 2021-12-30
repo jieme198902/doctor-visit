@@ -172,9 +172,41 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
             return ComResponse.failBadRequest();
         }
         BusUser busUser = commonService.getBusUser(bus.getCreateBy());
-        if (null == busUser || null == bus.getDoctorId() || null == bus.getPatientId()) {
-            return ComResponse.failUnauthorized();
+        if (null == busUser || null == bus.getDoctorId() || null == bus.getPatientId() || null == bus.getGoodsId()) {
+            return ComResponse.fail("请检查参数！");
         }
+        if(StringUtils.isAnyBlank(bus.getAskType(),bus.getCondition(),bus.getSeeDoctorYet(),bus.getSickTime())){
+            return ComResponse.fail("请检查参数！");
+        }
+        BusGoodsInquiry goodsInquiry = busGoodsInquiryMapper.selectByPrimaryKey(bus.getGoodsId());
+        if(null == goodsInquiry){
+            return ComResponse.fail("商品已不存在，请刷新后重新下单！");
+        }
+
+        /**
+         * `id` bigint(20) NOT NULL,
+         *   `order_no` varchar(24) DEFAULT NULL COMMENT '问诊方式：0电话，1图文，2视频咨询',
+         *   `doctor_id` bigint(20) DEFAULT NULL COMMENT '医生id',
+         *   `patient_id` bigint(20) DEFAULT NULL COMMENT '患者id',
+         *
+         *   `ask_type` char(1) DEFAULT NULL COMMENT '问诊方式：0电话，1图文，2视频咨询',
+         *   `price` int(10) DEFAULT NULL COMMENT '价格',
+         *   `up_limit` int(11) DEFAULT NULL COMMENT '上限次数',
+         *   `time_limit` int(11) DEFAULT NULL COMMENT '有效时间-分钟',
+         *   `order_state` char(1) DEFAULT NULL COMMENT '订单状态：0已提交，待支付；1已支付，待接诊；2已支付，已接诊；4已评价；5已取消',
+         *   `condition` varchar(500) NOT NULL COMMENT '病情描述',
+         *   `see_doctor_yet` char(1) NOT NULL COMMENT '是否去医院就诊过：1是；0否',
+         *   `sick_time` char(1) NOT NULL COMMENT '本次患病时长：0一周内；1一月内；2半年内；3大于半年',
+         *   `remark` varchar(255) NOT NULL COMMENT '下单备注',
+         *   `create_by` bigint(255) NOT NULL COMMENT '创建者id',
+         *   `create_name` varchar(255) DEFAULT NULL COMMENT '创建者姓名',
+         *   `create_time` datetime NOT NULL COMMENT '创建时间',
+         *   `edit_by` bigint(255) NOT NULL COMMENT '修改人',
+         *   `edit_name` varchar(255) DEFAULT NULL COMMENT '修改人姓名',
+         *   `edit_time` datetime NOT NULL COMMENT '修改时间',
+         *   `pay_time` datetime DEFAULT NULL COMMENT '支付时间',
+         *   `is_del` char(1) NOT NULL DEFAULT '0' COMMENT '是否删除，1是0否',
+         */
         bus.setEditTime(new Date());
         bus.setEditBy(busUser.getId());
         bus.setEditName(busUser.getName());
@@ -187,6 +219,10 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
             bus.setCreateName(busUser.getName());
             bus.setOrderNo(Utils.orderNo());
             bus.setOrderState("0");
+            bus.setUpLimit(goodsInquiry.getUpLimit());
+            bus.setTimeLimit(goodsInquiry.getTimeLimit());
+            bus.setPrice(goodsInquiry.getCurrentPrice());
+
             busOrderInquiryMapper.insertSelective(bus);
         }
         //上传咨询订单
@@ -309,7 +345,7 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
         param.setNotify_url(notifyUrl.getDicValue());
         param.setMch_id(config.getMchID());
         param.setTrade_type("JSAPI");//此处指定支付类型 H5支付类型 JSAPI小程序支付  NATIVE扫码支付
-        param.setFee_type("CNY");
+//        param.setFee_type("CNY");
         param.setSpbill_create_ip(Utils.getIpAddress(request));
 
         Map<String, String> paramMap = Utils.fromJson(param, new TypeToken<Map<String, String>>() {

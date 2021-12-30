@@ -3,9 +3,10 @@ package com.doctor.visit.repository;
 import com.doctor.visit.config.CommMapper;
 import com.doctor.visit.domain.BusFile;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.Map;
 
+@Repository
 public interface BusFileMapper extends CommMapper<BusFile> {
 
     /**
@@ -22,7 +23,6 @@ public interface BusFileMapper extends CommMapper<BusFile> {
      * @param tableName
      * @param idField
      * @param busLongId
-     * @param busStringId
      * @return
      */
     int selectBusByIdExist(@Param("tableName") String tableName, @Param("idField")String idField, @Param("busLongId") Long busLongId);

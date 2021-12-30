@@ -36,6 +36,14 @@ public class BusOrderInquiry implements Serializable {
     private Long patientId;
 
     /**
+     * 问诊商品 id
+     */
+    @Column(name = "goods_id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long goodsId;
+
+
+    /**
      * 问诊方式：0电话，1图文，2视频咨询
      */
     @Column(name = "ask_type")
@@ -212,6 +220,18 @@ public class BusOrderInquiry implements Serializable {
      */
     public void setPatientId(Long patientId) {
         this.patientId = patientId;
+    }
+    /**
+     * 问诊商品 id
+     */
+    public Long getGoodsId() {
+        return goodsId;
+    }
+    /**
+     * 问诊商品 id
+     */
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
     }
 
     /**
