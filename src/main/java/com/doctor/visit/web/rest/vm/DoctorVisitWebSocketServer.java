@@ -11,6 +11,7 @@ import org.yeauty.annotation.*;
 import org.yeauty.pojo.Session;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -76,7 +77,7 @@ public class DoctorVisitWebSocketServer {
     public void handshake(Session session, HttpHeaders headers, @RequestParam String req, @RequestParam MultiValueMap reqMap, @PathVariable String arg, @PathVariable Map pathMap) {
         session.setSubprotocols("stomp");
         if (StringUtils.isNotBlank(req) && !req.equals("ok")) {
-            logger.debug("Authentication failed!");
+            logger.info("Authentication failed!");
             session.close();
         }
     }
@@ -94,12 +95,14 @@ public class DoctorVisitWebSocketServer {
      */
     @OnOpen
     public void onOpen(Session session, HttpHeaders headers, @RequestParam String req, @RequestParam MultiValueMap reqMap, @PathVariable String arg, @PathVariable Map pathMap) {
-        logger.debug("new connection");
+
+        logger.debug("new conn-->{}",pathMap.get("sid"));
+
         session.setAttribute("sid", pathMap.get("sid"));
 
         sessionSet.add(session);
         int cnt = onLineCount.incrementAndGet();
-        logger.info("有连接加入，当前连接数为：{} ", cnt);
+        logger.debug("new conn join , now total conn : {} ", cnt);
         session.sendText("连接成功");
     }
 
@@ -115,7 +118,7 @@ public class DoctorVisitWebSocketServer {
         logger.debug("one connection closed");
         sessionSet.remove(session);
         int cnt = onLineCount.decrementAndGet();
-        logger.info("有连接关闭，当前连接数为：{}", cnt);
+        logger.debug("conn close , now total conn  ：{}", cnt);
     }
 
     /**
@@ -141,11 +144,10 @@ public class DoctorVisitWebSocketServer {
     @OnMessage
     public void onMessage(Session session, String message) {
         //收到消息
-        logger.info("session-->{},message-->{}", session, message);
+        logger.debug("onMessage.message-->{} , sid-->{}",  message,session.getAttribute("sid")+"");
 
         //发送消息-想发给谁、单发还是群发、还是图片之类的
-        session.sendText(message);
-
+        //session.sendText(message);
     }
 
     /**
@@ -176,8 +178,11 @@ public class DoctorVisitWebSocketServer {
             }
         }
         if (null != session) {
+            logger.debug("sendMessage.session-->{}",session.getAttribute("sid")+"");
             session.sendText(message);
             return true;
+        }else{
+            logger.debug("sendMessage can not find session , id -->{}",id);
         }
         return false;
     }
@@ -194,13 +199,13 @@ public class DoctorVisitWebSocketServer {
             IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
             switch (idleStateEvent.state()) {
                 case READER_IDLE:
-                    logger.debug("read idle");
+                    logger.info("read idle");
                     break;
                 case WRITER_IDLE:
-                    logger.debug("write idle");
+                    logger.info("write idle");
                     break;
                 case ALL_IDLE:
-                    logger.debug("all idle");
+                    logger.info("all idle");
                     break;
                 default:
                     break;

@@ -5,6 +5,7 @@ import com.doctor.visit.domain.*;
 import com.doctor.visit.domain.dto.BusArticleDto;
 import com.doctor.visit.repository.*;
 import com.doctor.visit.security.SecurityUtils;
+import com.doctor.visit.service.ArticleService;
 import com.doctor.visit.service.DictService;
 import com.doctor.visit.service.common.CommonService;
 import com.doctor.visit.service.common.UploadService;
@@ -18,7 +19,6 @@ import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -34,7 +34,7 @@ import java.util.Optional;
  * @date 2020-06-29
  */
 @Service
-public class ArticleServiceImpl implements com.doctor.visit.service.ArticleService {
+public class ArticleServiceImpl implements ArticleService {
 
     @Value("${custom.rootPath}")
     private String rootPath;
@@ -149,7 +149,7 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
 
     /**
      * 前台 - 获取文章列表
-     *
+     * 排序: url?sort=edit_time,desc&sort=id,asc
      * @param bus
      * @param pageable
      * @return
@@ -157,22 +157,7 @@ public class ArticleServiceImpl implements com.doctor.visit.service.ArticleServi
     @Override
     public ComResponse<List<BusArticleDto>> listArticle(BusArticle bus, Pageable pageable, HttpServletRequest request, boolean sys) throws Exception {
         if(pageable.getSort().isSorted()){
-            StringBuffer stringBuffer = new StringBuffer();
-            pageable.getSort().forEach(order ->
-                {
-                    Sort.Direction direction = order.getDirection();
-                    String property = order.getProperty();
-                    stringBuffer.append(property);
-                    stringBuffer.append(" ");
-                    stringBuffer.append(direction.name());
-                    stringBuffer.append(" , ");
-                }
-            );
-            String orderBy = stringBuffer.toString();
-            if(orderBy.endsWith(", ")){
-                orderBy = orderBy.substring(0,orderBy.length()-2);
-            }
-            PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize(),orderBy);
+            PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize(),Utils.orderBy(pageable));
         }else{
             PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
         }

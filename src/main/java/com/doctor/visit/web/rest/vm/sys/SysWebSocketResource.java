@@ -2,6 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.BusSocketMessage;
+import com.doctor.visit.service.SocketMessageService;
 import com.doctor.visit.service.WebSocketMessageService;
 import com.doctor.visit.web.rest.util.ComResponse;
 import com.doctor.visit.web.rest.util.IDKeyUtil;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +27,10 @@ import java.util.Date;
 public class SysWebSocketResource {
     @Autowired
     private WebSocketMessageService webSocketMessageService;
-
+    @Autowired
+    private SocketMessageService socketMessageService;
+    @Autowired
+    private DoctorVisitWebSocketServer doctorVisitWebSocketServer;
     /**
      * 聊天接口
      * @param request
@@ -65,12 +70,43 @@ public class SysWebSocketResource {
         busSocketMessage.setSysToClient(sysToClient);
         //消息类型：0文字；1图片；2语音；3视频
         busSocketMessage.setMessageType(messageType);
-        DoctorVisitWebSocketServer webSocketServer = new DoctorVisitWebSocketServer();
 
-        boolean succ = webSocketServer.sendMessage(toUserId, message) ;
+        boolean succ = doctorVisitWebSocketServer.sendMessage(toUserId, message) ;
         busSocketMessage.setSucc(succ?"1":"0");
         webSocketMessageService.saveSocketMessage(busSocketMessage);
         return succ? ComResponse.ok() : ComResponse.fail("发送失败");
+    }
+
+
+    /**
+     * 查询聊天记录
+     * 排序: url?sort=edit_time,desc&sort=id,asc
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusSocketMessage.class)
+    })
+    @PostMapping("listSocketMessage")
+    @ApiOperation(value = "查询聊天记录")
+    public Object listSocketMessage(BusSocketMessage bus, Pageable pageable) {
+        return socketMessageService.listSocketMessage(bus, pageable);
+    }
+
+    /**
+     * 根据id删除聊天记录
+     *
+     * @param ids
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusSocketMessage.class)
+    })
+    @PostMapping("deleteSocketMessage")
+    @ApiOperation(value = "查询聊天记录")
+    public Object deleteSocketMessage(String ids) {
+        return socketMessageService.deleteSocketMessage(ids);
     }
 
 }

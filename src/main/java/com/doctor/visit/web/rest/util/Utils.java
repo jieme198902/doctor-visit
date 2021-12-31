@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -23,6 +25,33 @@ public final class Utils {
     private Utils() {
     }
 
+    /**
+     * 排序: url?sort=edit_time,desc&sort=id,asc
+     * @param pageable
+     * @return
+     */
+    public static String orderBy (Pageable pageable){
+        if(pageable.getSort().isSorted()) {
+            StringBuffer stringBuffer = new StringBuffer();
+            pageable.getSort().forEach(order ->
+                {
+                    Sort.Direction direction = order.getDirection();
+                    String property = order.getProperty();
+                    stringBuffer.append(property);
+                    stringBuffer.append(" ");
+                    stringBuffer.append(direction.name());
+                    stringBuffer.append(" , ");
+                }
+            );
+            String orderBy = stringBuffer.toString();
+            if (orderBy.endsWith(", ")) {
+                orderBy = orderBy.substring(0, orderBy.length() - 2);
+            }
+            return orderBy;
+        }else{
+            return null;
+        }
+    }
 
     /**
      * 获取Ip地址
