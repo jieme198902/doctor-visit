@@ -43,6 +43,22 @@ public class SocketMessageServiceImpl implements SocketMessageService {
             criteria.andLike("message", bus.getMessage() + "%");
         }
 
+        if (StringUtils.isNotBlank(bus.getFromUserName())) {
+            criteria.andLike("fromUserName", bus.getFromUserName() + "%");
+        }
+
+        if (StringUtils.isNotBlank(bus.getToUserName())) {
+            criteria.andLike("toUserName", bus.getToUserName() + "%");
+        }
+
+        if (null != bus.getFromUserId()) {
+            criteria.andEqualTo("fromUserId", bus.getFromUserId());
+        }
+
+        if (null != bus.getToUserId()) {
+            criteria.andEqualTo("toUserId", bus.getToUserId());
+        }
+
         Page<BusSocketMessage> busList = (Page<BusSocketMessage>) busSocketMessageMapper.selectByExample(example);
         return ComResponse.ok(busList.getResult(), busList.getTotal());
     }
