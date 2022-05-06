@@ -94,6 +94,22 @@ public class SysArticleResource {
     }
 
     /**
+     * 获取文章列表
+     *
+     * @param bus
+     * @param request
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = BusArticle.class)
+    })
+    @PostMapping("oneArticle")
+    @ApiOperation(value = "获取文章详情")
+    public Object oneArticle(BusArticle bus,  HttpServletRequest request) throws Exception {
+        return articleService.oneArticle(bus,request);
+    }
+
+    /**
      * 新增或者修改文章
      *
      * @param bus

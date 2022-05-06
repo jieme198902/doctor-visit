@@ -372,7 +372,8 @@ public final class Utils {
             if (!file.exists() || !file.isDirectory()) {
                 file.createNewFile();
             }
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "utf-8"));
+            //// true to append   false to overwrite.
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), "utf-8"));
             writer.write(html);
             writer.flush();
             writer.close();

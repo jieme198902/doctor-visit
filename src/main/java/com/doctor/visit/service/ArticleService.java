@@ -48,7 +48,7 @@ public interface ArticleService {
 
 
     /**
-     * 前台 - 获取文章列表
+     * 前台 - 获取文章详情
      *
      * @param bus
      * @return
