@@ -101,6 +101,9 @@ public class OrderInquiryServiceImpl implements com.doctor.visit.service.OrderIn
         if (null != bus.getCreateBy()) {
             criteria.andEqualTo("createBy", bus.getCreateBy());
         }
+        if(null!=bus.getDoctorId()){
+            criteria.andEqualTo("doctorId",bus.getDoctorId());
+        }
         Page<BusOrderInquiry> busList = (Page<BusOrderInquiry>) busOrderInquiryMapper.selectByExample(example);
         List<BusOrderInquiryDto> busDtoList = Lists.newArrayList();
         ComResponse<List<BusDict>> requestPathCom = dictService.listDistByType("requestPath");

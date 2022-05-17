@@ -22,4 +22,20 @@
     <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
     <result column="last_modified_date" property="lastModifiedDate" jdbcType="TIMESTAMP" />
   </resultMap>
+
+
+    <update id="updateUserIdToDoctorIdBefore">
+        update jhi_user_authority set
+        user_id = #{doctorId}
+        where user_id = #{userId}
+    </update>
+
+
+    <update id="updateUserIdToDoctorId">
+        update jhi_user set
+        id = #{doctorId}
+        where id = #{userId}
+    </update>
+
+
 </mapper>

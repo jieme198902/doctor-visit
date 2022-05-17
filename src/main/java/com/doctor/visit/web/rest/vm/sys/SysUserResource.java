@@ -2,6 +2,7 @@ package com.doctor.visit.web.rest.vm.sys;
 
 import com.doctor.visit.config.Constants;
 import com.doctor.visit.domain.*;
+import com.doctor.visit.domain.param.UserDoctorParam;
 import com.doctor.visit.service.FeedbackService;
 import com.doctor.visit.service.JhiUserService;
 import com.doctor.visit.service.UserService;
@@ -141,4 +142,32 @@ public class SysUserResource {
         return jhiUserService.listJhiUser(bus, pageable);
     }
 
+    /**
+     * 获取系统用户列表
+     *
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = JhiUser.class)
+    })
+    @PostMapping("oneJhiUser")
+    @ApiOperation(value = "获取系统用户信息")
+    public Object oneJhiUser(JhiUser bus) {
+        return jhiUserService.oneJhiUser(bus);
+    }
+
+    /**
+     * 把用户id置为医生id
+     * @param bus
+     * @return
+     */
+    @ApiImplicitParams({
+        @ApiImplicitParam(dataTypeClass = UserDoctorParam.class)
+    })
+    @PostMapping("updateUserIdToDoctorId")
+    @ApiOperation(value = "把用户id置为医生id")
+    public Object updateUserIdToDoctorId(UserDoctorParam bus){
+        return jhiUserService.updateUserIdToDoctorId(bus);
+    }
 }

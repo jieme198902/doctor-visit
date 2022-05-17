@@ -3,6 +3,7 @@ package com.doctor.visit.service.impl;
 import com.doctor.visit.domain.JhiUser;
 import com.doctor.visit.domain.SysRole;
 import com.doctor.visit.domain.dto.JhiUserDto;
+import com.doctor.visit.domain.param.UserDoctorParam;
 import com.doctor.visit.repository.JhiUserMapper;
 import com.doctor.visit.repository.SysRoleMapper;
 import com.doctor.visit.web.rest.util.ComResponse;
@@ -53,8 +54,34 @@ public class JhiUserServiceImpl implements com.doctor.visit.service.JhiUserServi
             BeanUtils.copyProperties(jhiUser, jhiUserDto);
             List<SysRole> sysRoles = sysRoleMapper.selectUserRole(jhiUserDto.getId());
             jhiUserDto.setSysRoles(sysRoles);
+            jhiUserDto.setPasswordHash(null);
             jhiUserDtos.add(jhiUserDto);
         });
         return ComResponse.ok(jhiUserDtos, busList.getTotal());
     }
+
+    /**
+     * 获取系统用户信息
+     *
+     * @param bus
+     * @return
+     */
+    @Override
+    public ComResponse<JhiUser> oneJhiUser(JhiUser bus) {
+        JhiUser jhiUser = jhiUserMapper.selectOne(bus);
+        jhiUser.setPasswordHash(null);
+        return ComResponse.ok(jhiUser);
+    }
+
+    /**
+     * 把用户id置为医生id
+     * @param bus
+     * @return
+     */
+    @Override
+    public ComResponse updateUserIdToDoctorId(UserDoctorParam bus){
+        jhiUserMapper.updateUserIdToDoctorIdBefore(bus.getUserId(), bus.getDoctorId());
+        return 1==jhiUserMapper.updateUserIdToDoctorId(bus.getUserId(),bus.getDoctorId())?ComResponse.ok():ComResponse.fail();
+    }
+
 }
